@@ -1,0 +1,31 @@
+---
+interface Props {
+  title?: string;
+}
+
+const { title = 'ポイント' } = Astro.props;
+---
+
+<aside class="callout">
+  <strong>{title}</strong>
+  <div><slot /></div>
+</aside>
+
+<style>
+  .callout {
+    margin: 1.75rem 0;
+    padding: 1rem 1.2rem;
+    border-left: 4px solid var(--accent);
+    border-radius: 0.5rem;
+    background: var(--accent-soft);
+  }
+
+  .callout strong {
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+
+  .callout :global(p:last-child) {
+    margin-bottom: 0;
+  }
+</style>

@@ -1,0 +1,79 @@
+---
+import type { BlogPost } from '../lib/posts';
+import { formatDate, getPostUrl } from '../lib/posts';
+
+interface Props {
+  post: BlogPost;
+}
+
+const { post } = Astro.props;
+---
+
+<article class="post-card">
+  <div class="post-card__meta">
+    <a class="category" href={`/category/${post.data.category}/`}>
+      {post.data.category}
+    </a>
+    <time datetime={post.data.pubDate.toISOString()}>
+      {formatDate(post.data.pubDate)}
+    </time>
+  </div>
+  <h2><a href={getPostUrl(post)}>{post.data.title}</a></h2>
+  <p>{post.data.description}</p>
+  {
+    post.data.tags.length > 0 && (
+      <ul class="tag-list" aria-label="タグ">
+        {post.data.tags.map((tag) => (
+          <li>
+            <a href={`/tag/${encodeURIComponent(tag)}/`}>#{tag}</a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</article>
+
+<style>
+  .post-card {
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: var(--surface);
+    transition:
+      transform 160ms ease,
+      border-color 160ms ease;
+  }
+
+  .post-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+  }
+
+  .post-card__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+
+  .category {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h2 {
+    margin: 0.8rem 0 0.5rem;
+    font-size: clamp(1.2rem, 3vw, 1.5rem);
+  }
+
+  h2 a {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  p {
+    margin: 0;
+    color: var(--muted);
+  }
+</style>

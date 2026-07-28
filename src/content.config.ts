@@ -3,28 +3,24 @@ import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
 const blog = defineCollection({
-	// Load Markdown and MDX files in the `src/content/blog/` directory.
-	loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
+  loader: glob({
+    base: './src/content/blog',
+    pattern: '**/*.{md,mdx}',
+  }),
 
-	// Type-check frontmatter using a schema
-	schema: ({ image }) =>
-		z.object({
-			title: z.string(),
-			description: z.string(),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    pubDate: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
 
-			// Transform string to Date object
-			pubDate: z.coerce.date(),
-			updatedDate: z.coerce.date().optional(),
+    category: z.string().trim().default('Dev'),
+    tags: z.array(z.string()).default([]),
 
-			heroImage: z.optional(image()),
-
-			// taha.log()
-			category: z
-				.enum(['Games', 'AI', 'Dev', 'Gadgets', 'Other'])
-				.default('Other'),
-
-			tags: z.array(z.string()).default([]),
-		}),
+    author: z.string().default('taha'),
+    draft: z.boolean().default(false),
+    ogImage: z.string().optional(),
+  }),
 });
 
 export const collections = { blog };

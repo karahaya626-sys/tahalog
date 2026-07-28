@@ -20,18 +20,21 @@ import HeaderLink from './HeaderLink.astro';
 
 <style>
 	header {
-		border-bottom: 1px solid rgba(128, 128, 128, 0.18);
-		background: white;
+		margin: 0;
+		padding: 0 1em;
+		background: #101112;
+		border-bottom: 1px solid #303236;
+		box-shadow: none;
 	}
 
 	nav {
-		width: min(900px, calc(100% - 2rem));
-		height: 72px;
-		margin: 0 auto;
-
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+
+		width: min(900px, calc(100% - 2rem));
+		height: 72px;
+		margin: 0 auto;
 	}
 
 	.logo {
@@ -39,15 +42,20 @@ import HeaderLink from './HeaderLink.astro';
 		align-items: center;
 		gap: 0.35rem;
 
-		color: var(--black);
+		color: #f2f2ef;
 		font-family: monospace;
 		font-size: 1.15rem;
 		font-weight: 700;
 		text-decoration: none;
 	}
 
+	.logo:hover {
+		color: #ffffff;
+	}
+
 	.prompt {
-		opacity: 0.45;
+		color: #ff8a63;
+		opacity: 0.8;
 	}
 
 	.internal-links {
@@ -58,28 +66,45 @@ import HeaderLink from './HeaderLink.astro';
 
 	.internal-links :global(a) {
 		padding: 0.6rem 0.75rem;
-		color: var(--black);
+
+		color: #d8d8d5;
 		font-family: monospace;
 		font-size: 0.9rem;
 		text-decoration: none;
+
 		border-radius: 6px;
+		transition:
+			color 150ms ease,
+			background-color 150ms ease;
 	}
 
 	.internal-links :global(a:hover) {
-		background: rgba(128, 128, 128, 0.08);
+		color: #ffffff;
+		background: rgba(255, 255, 255, 0.08);
 	}
 
 	.internal-links :global(a.active) {
+		color: #ff8a63;
 		font-weight: 700;
+		background: rgba(255, 138, 99, 0.12);
 	}
 
 	@media (max-width: 600px) {
+		header {
+			padding: 0 0.5rem;
+		}
+
 		nav {
+			width: min(100%, calc(100% - 1rem));
 			height: 64px;
 		}
 
 		.logo {
 			font-size: 1rem;
+		}
+
+		.internal-links {
+			gap: 0;
 		}
 
 		.internal-links :global(a) {

@@ -1,0 +1,116 @@
+---
+interface Props {
+  title: string;
+  headline?: string;
+  description: string;
+  canonical?: URL;
+  type?: 'website' | 'article';
+  publishedDate?: Date;
+  updatedDate?: Date;
+  category?: string;
+  tags?: string[];
+  author?: string;
+  image?: string;
+}
+
+const {
+  title,
+  headline,
+  description,
+  canonical,
+  type = 'website',
+  publishedDate,
+  updatedDate,
+  category,
+  tags = [],
+  author = 'taha',
+  image,
+} = Astro.props;
+
+const siteName = 'taha.log()';
+const siteOrigin = Astro.site ?? new URL(Astro.url.origin);
+const canonicalUrl =
+  canonical ?? new URL(Astro.url.pathname.replace(/\/?$/, '/'), siteOrigin);
+const imageUrl = image ? new URL(image, siteOrigin) : undefined;
+
+const structuredData =
+  type === 'article'
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: headline ?? title,
+        description,
+        datePublished: publishedDate?.toISOString(),
+        dateModified: (updatedDate ?? publishedDate)?.toISOString(),
+        mainEntityOfPage: canonicalUrl.toString(),
+        author: {
+          '@type': 'Person',
+          name: author,
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: siteName,
+          url: new URL('/', siteOrigin).toString(),
+        },
+        ...(category ? { articleSection: category } : {}),
+        ...(tags.length > 0 ? { keywords: tags.join(', ') } : {}),
+        ...(imageUrl ? { image: imageUrl.toString() } : {}),
+      }
+    : {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: siteName,
+        url: new URL('/', siteOrigin).toString(),
+        inLanguage: 'ja-JP',
+      };
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<meta name="description" content={description} />
+<meta name="generator" content={Astro.generator} />
+
+<link rel="canonical" href={canonicalUrl} />
+<link rel="sitemap" href="/sitemap.xml" />
+
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:locale" content="ja_JP" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalUrl} />
+{imageUrl && <meta property="og:image" content={imageUrl} />}
+
+<meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+{imageUrl && <meta name="twitter:image" content={imageUrl} />}
+
+{
+  type === 'article' && publishedDate && (
+    <meta
+      property="article:published_time"
+      content={publishedDate.toISOString()}
+    />
+  )
+}
+{
+  type === 'article' && updatedDate && (
+    <meta
+      property="article:modified_time"
+      content={updatedDate.toISOString()}
+    />
+  )
+}
+{type === 'article' && category && (
+  <meta property="article:section" content={category} />
+)}
+{type === 'article' && tags.map((tag) => (
+  <meta property="article:tag" content={tag} />
+))}
+
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={JSON.stringify(structuredData)}
+/>

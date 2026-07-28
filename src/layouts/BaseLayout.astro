@@ -1,0 +1,48 @@
+---
+import SeoHead from '../components/SeoHead.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  seo?: {
+    canonical?: URL;
+    headline?: string;
+    type?: 'website' | 'article';
+    publishedDate?: Date;
+    updatedDate?: Date;
+    category?: string;
+    tags?: string[];
+    author?: string;
+    image?: string;
+  };
+}
+
+const { title, description, seo = {} } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <SeoHead title={title} description={description} {...seo} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">taha.log()</a>
+      <nav aria-label="メインナビゲーション">
+        <a href="/blog/">Blog</a>
+        <a href="/category/Games/">Games</a>
+        <a href="/category/AI/">AI</a>
+        <a href="/category/Dev/">Dev</a>
+        <a href="/category/Gadgets/">Gadgets</a>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <p>© {new Date().getFullYear()} taha.log()</p>
+    </footer>
+  </body>
+</html>

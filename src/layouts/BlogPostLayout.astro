@@ -1,0 +1,161 @@
+---
+import type { BlogPost } from '../lib/posts';
+import { formatDate } from '../lib/posts';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  post: BlogPost;
+}
+
+const { post } = Astro.props;
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  category,
+  tags,
+  author,
+  ogImage,
+} = post.data;
+const pageTitle = `${title} | taha.log()`;
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={description}
+  seo={{
+    type: 'article',
+    headline: title,
+    publishedDate: pubDate,
+    updatedDate,
+    category,
+    tags,
+    author,
+    image: ogImage,
+  }}
+>
+  <article class="post">
+    <header class="post__header">
+      <a class="category" href={`/category/${category}/`}>{category}</a>
+      <h1>{title}</h1>
+      <p class="lead">{description}</p>
+      <div class="dates">
+        <span>
+          公開：
+          <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+        </span>
+        {
+          updatedDate && (
+            <span>
+              更新：
+              <time datetime={updatedDate.toISOString()}>
+                {formatDate(updatedDate)}
+              </time>
+            </span>
+          )
+        }
+      </div>
+    </header>
+
+    <div class="prose">
+      <slot />
+    </div>
+
+    {
+      tags.length > 0 && (
+        <footer class="post__footer">
+          <ul class="tag-list" aria-label="タグ">
+            {tags.map((tag) => (
+              <li>
+                <a href={`/tag/${encodeURIComponent(tag)}/`}>#{tag}</a>
+              </li>
+            ))}
+          </ul>
+        </footer>
+      )
+    }
+  </article>
+</BaseLayout>
+
+<style>
+  .post {
+    width: min(100% - 2rem, 760px);
+    margin-inline: auto;
+    padding-block: 4rem;
+  }
+
+  .post__header {
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .category {
+    color: var(--accent);
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  h1 {
+    margin: 0.7rem 0 1rem;
+    font-size: clamp(2rem, 7vw, 3.5rem);
+    line-height: 1.15;
+    letter-spacing: -0.035em;
+  }
+
+  .lead {
+    color: var(--muted);
+    font-size: 1.1rem;
+  }
+
+  .dates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem 1.25rem;
+    margin-top: 1rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .prose {
+    padding-block: 1.5rem;
+  }
+
+  .prose :global(h2) {
+    margin-top: 2.8rem;
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.65rem;
+  }
+
+  .prose :global(h3) {
+    margin-top: 2rem;
+    font-size: 1.3rem;
+  }
+
+  .prose :global(p),
+  .prose :global(li) {
+    line-height: 1.9;
+  }
+
+  .prose :global(a) {
+    color: var(--accent);
+  }
+
+  .prose :global(pre) {
+    overflow-x: auto;
+    padding: 1rem;
+    border-radius: 0.75rem;
+  }
+
+  .prose :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+  }
+
+  .post__footer {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+</style>

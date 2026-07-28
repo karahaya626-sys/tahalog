@@ -5,32 +5,32 @@ import { getPublishedPosts, type BlogPost } from '../../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getPublishedPosts();
-  const categories = [...new Set(posts.map((post) => post.data.category))];
+  const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
 
-  return categories.map((category) => ({
-    params: { category },
+  return tags.map((tag) => ({
+    params: { tag },
     props: {
-      category,
-      posts: posts.filter((post) => post.data.category === category),
+      tag,
+      posts: posts.filter((post) => post.data.tags.includes(tag)),
     },
   }));
 }
 
 interface Props {
-  category: string;
+  tag: string;
   posts: BlogPost[];
 }
 
-const { category, posts } = Astro.props;
+const { tag, posts } = Astro.props;
 ---
 
 <BaseLayout
-  title={`${category}の記事 | taha.log()`}
-  description={`taha.log()の${category}カテゴリーの記事一覧です。`}
+  title={`#${tag}の記事 | taha.log()`}
+  description={`taha.log()の「${tag}」タグが付いた記事一覧です。`}
 >
   <section class="archive">
     <p class="back"><a href="/blog/">← すべての記事</a></p>
-    <h1>{category}</h1>
+    <h1>#{tag}</h1>
     <div class="post-grid">
       {posts.map((post) => <PostCard post={post} />)}
     </div>
