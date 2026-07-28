@@ -8,19 +8,23 @@ const blog = defineCollection({
     pattern: '**/*.{md,mdx}',
   }),
 
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    pubDate: z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      description: z.string(),
 
-    category: z.string().trim().default('Dev'),
-    tags: z.array(z.string()).default([]),
+      pubDate: z.coerce.date(),
+      updatedDate: z.coerce.date().optional(),
 
-    author: z.string().default('taha'),
-    draft: z.boolean().default(false),
-    ogImage: z.string().optional(),
-  }),
+      heroImage: image().optional(),
+      ogImage: z.string().optional(),
+
+      category: z.string().trim().default('Dev'),
+      tags: z.array(z.string()).default([]),
+
+      author: z.string().default('taha'),
+      draft: z.boolean().default(false),
+    }),
 });
 
 export const collections = { blog };
