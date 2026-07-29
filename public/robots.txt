@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://tahalog.com/sitemap.xml
+Sitemap: https://tahalog.com/sitemap-index.xml
