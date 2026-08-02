@@ -35,7 +35,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: min(100% - 2rem, 1120px);
+  width: min(1040px, calc(100% - 2rem));
   margin-inline: auto;
   padding-block: 1.25rem;
 }
@@ -80,7 +80,7 @@ a {
 }
 
 .site-footer {
-  width: min(100% - 2rem, 1120px);
+  width: min(1040px, calc(100% - 2rem));
   margin-inline: auto;
   padding-block: 2rem;
   color: var(--muted);
