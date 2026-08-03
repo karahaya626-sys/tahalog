@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import AboutImage from '../assets/blog-placeholder-about.jpg';
+import AboutImage from '../assets/about-tahalog-desk.jpg';
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
@@ -16,7 +16,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     <div class="about__grid">
       <figure class="profile-image">
-        <Image src={AboutImage} alt="taha.log()のマスコット風イメージ" />
+        <Image
+          src={AboutImage}
+          alt="ゲームコントローラーやキーボード、ノートが並ぶtaha.log()のデスクイラスト"
+        />
         <figcaption>owner / taha</figcaption>
       </figure>
 
