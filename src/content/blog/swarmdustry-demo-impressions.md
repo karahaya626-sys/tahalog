@@ -6,7 +6,7 @@ heroImage: '../../assets/images/swarmdustry/title-screen.webp'
 category: "Games"
 tags: ["Swarmdustry", "工場自動化", "Steam", "Factorio"]
 author: "taha"
-draft: true
+draft: false
 ---
 
 ## はじめに
