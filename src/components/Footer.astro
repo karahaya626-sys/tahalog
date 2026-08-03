@@ -1,35 +1,74 @@
 ---
-const today = new Date();
+const year = new Date().getFullYear();
 ---
 
-<footer>
-	<div class="footer-inner">
-		<p>&copy; {today.getFullYear()} taha.log()</p>
-		<p class="sub">games / ai / dev / whatever.</p>
-	</div>
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div>
+      <a class="footer-brand" href="/">taha.log()</a>
+      <p>ゲームを中心に、気になったことをログに残す。</p>
+    </div>
+
+    <div class="footer-meta">
+      <p>GAMES / AI / DEV / GADGETS</p>
+      <p>&copy; {year} taha.log()</p>
+    </div>
+  </div>
 </footer>
 
 <style>
-	footer {
-		border-top: 1px solid rgba(128, 128, 128, 0.18);
-		margin-top: 6rem;
-	}
+  .site-footer {
+    margin-top: 7rem;
+    border-top: 1px solid var(--line-strong);
+  }
 
-	.footer-inner {
-		width: min(1040px, calc(100% - 2rem));
-		margin: 0 auto;
-		padding: 2.5rem 0 4rem;
-		text-align: center;
-		font-family: monospace;
-	}
+  .site-footer__inner {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: min(1180px, calc(100% - 3rem));
+    margin-inline: auto;
+    padding-block: 2.6rem 3.2rem;
+    gap: 2rem;
+  }
 
-	p {
-		margin: 0;
-	}
+  .footer-brand {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    font-weight: 800;
+    text-decoration: none;
+  }
 
-	.sub {
-		margin-top: 0.5rem;
-		font-size: 0.8rem;
-		opacity: 0.45;
-	}
+  p {
+    margin: 0.6rem 0 0;
+    color: var(--muted);
+    font-size: 0.86rem;
+  }
+
+  .footer-meta {
+    text-align: right;
+    font-family: var(--font-mono);
+  }
+
+  .footer-meta p:first-child {
+    color: var(--accent);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+  }
+
+  @media (max-width: 640px) {
+    .site-footer {
+      margin-top: 5rem;
+    }
+
+    .site-footer__inner {
+      align-items: flex-start;
+      flex-direction: column;
+      width: min(100% - 2rem, 1180px);
+    }
+
+    .footer-meta {
+      text-align: left;
+    }
+  }
 </style>

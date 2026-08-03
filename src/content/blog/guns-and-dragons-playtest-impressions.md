@@ -2,6 +2,7 @@
 title: "『Guns & Dragons』プレイテスト感想｜Gunfire Rebornに近い？日本語対応も確認"
 description: "新作ローグライトFPS『Guns & Dragons』の初回プレイテストを約1時間プレイ。Gunfire Rebornとの共通点、武器・キャラクターごとのビルド、日本語対応、拠点建築についてまとめます。"
 pubDate: 2026-08-02
+heroImage: '../../assets/images/guns-and-dragons/battle.png'
 category: Games
 ---
 

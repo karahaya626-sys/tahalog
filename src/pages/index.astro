@@ -1,260 +1,459 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
+import PostCard from '../components/PostCard.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPublishedPosts } from '../lib/posts';
 
-const posts = (await getCollection('blog'))
-	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-	.slice(0, 5);
+const allPosts = await getPublishedPosts();
+const posts = allPosts.slice(0, 3);
+const now = new Date();
+const currentYear = now.getFullYear();
+const fieldDate = new Intl.DateTimeFormat('ja-JP', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+}).format(now);
+
+const categories = [
+  { label: 'Games', href: '/category/Games/' },
+  { label: 'AI', href: '/category/AI/' },
+  { label: 'Dev', href: '/category/Dev/' },
+  { label: 'Gadgets', href: '/category/Gadgets/' },
+];
 ---
 
-<!doctype html>
-<html lang="ja">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
+<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+  <section class="hero page-shell">
+    <div class="hero__main">
+      <p class="hero__eyebrow">PERSONAL LOG / {currentYear}</p>
 
-	<body>
-		<Header />
+      <h1><span aria-hidden="true">&gt;</span>taha.log()</h1>
 
-		<main>
-			<section class="hero">
-				<p class="prompt">&gt; taha.log()</p>
+      <p class="hero__copy">
+        ゲームを中心に、<br />
+        気になったことをログに残す。
+      </p>
 
-				<h1>
-					ゲームを中心に、<br />
-					気になったことをログに残す。 
-				</h1>
+      <p class="hero__description">
+        Steamのインディーゲーム、AI、開発、ガジェットなど。<br />
+        実際に遊んだこと・試したことを、自分の言葉で記録する個人ブログです。
+      </p>
 
-				<p class="description">
-					Steam、インディーゲーム、AI、開発、ガジェットなど。<br />
-					管理人「たは」が気になったことを自由に記録する個人ブログです。
-				</p>
+      <a class="hero__cta" href="#latest-logs">
+        <span>最新の記事を読む</span>
+        <span aria-hidden="true">→</span>
+      </a>
 
-				<div class="categories">
-					<a href="/category/games">Games</a>
-					<a href="/category/ai">AI</a>
-					<a href="/category/dev">Dev</a>
-					<a href="/category/gadgets">Gadgets</a>
-				</div>
-			</section>
+      <nav id="categories" class="category-nav" aria-label="カテゴリー">
+        {
+          categories.map((category, index) => (
+            <>
+              {index > 0 && <span aria-hidden="true">/</span>}
+              <a href={category.href}>{category.label}</a>
+            </>
+          ))
+        }
+      </nav>
+    </div>
 
-			<section class="latest">
-				<div class="latest-header">
-					<p class="section-label">// latest logs</p>
+    <aside class="field-note" aria-label="このブログについて">
+      <p class="field-note__title">// field note</p>
 
-					<a href="/blog/" class="view-all">
-						all logs →
-					</a>
-				</div>
+      <dl>
+        <div>
+          <dt>date:</dt>
+          <dd>{fieldDate}</dd>
+        </div>
+        <div>
+          <dt>location:</dt>
+          <dd>home, japan</dd>
+        </div>
+        <div>
+          <dt>focus:</dt>
+          <dd>games, ai tools,<br />dev notes</dd>
+        </div>
+      </dl>
 
-				<div class="post-list">
-					{
-						posts.map((post) => (
-							<a class="post" href={`/blog/${post.id}/`}>
-								<div class="meta">
-									<span class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</span>
+      <span class="field-note__mark" aria-hidden="true">＋</span>
+    </aside>
+  </section>
 
-									<span class="category">
-										{post.data.category}
-									</span>
-								</div>
+  <section id="latest-logs" class="latest page-shell">
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">// latest logs</p>
+        <h2 class="section-title">新しい記録</h2>
+      </div>
+      <a class="all-logs" href="/blog/">すべての記事 <span aria-hidden="true">→</span></a>
+    </div>
 
-								<h2>{post.data.title}</h2>
+    {
+      posts.length > 0 ? (
+        <div class="post-grid">
+          {posts.map((post, index) => <PostCard post={post} index={index} />)}
+        </div>
+      ) : (
+        <p>公開中の記事はまだありません。</p>
+      )
+    }
+  </section>
 
-								<p>{post.data.description}</p>
-
-								{
-									post.data.tags.length > 0 && (
-										<div class="tags">
-											{post.data.tags.map((tag) => (
-												<span>#{tag}</span>
-											))}
-										</div>
-									)
-								}
-
-								<span class="read-more">read →</span>
-							</a>
-						))
-					}
-				</div>
-			</section>
-		</main>
-
-		<Footer />
-	</body>
-</html>
+  <section class="about-note page-shell">
+    <p class="about-note__number" aria-hidden="true">LOG / 001</p>
+    <div>
+      <p class="section-kicker">// about this log</p>
+      <h2>遊んだこと、作ったこと、<br />迷ったことまで残していく。</h2>
+    </div>
+    <div class="about-note__copy">
+      <p>
+        管理人の「たは」です。SEとして働きながら、Steamのインディーゲームを中心に、AIやWeb開発で試したことを記録しています。
+      </p>
+      <a href="/about/">プロフィールを見る <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+</BaseLayout>
 
 <style>
-	main {
-		width: min(1040px, calc(100% - 2rem));
-		margin: 0 auto;
-		padding: 6rem 0;
-	}
+  .hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 270px);
+    gap: clamp(3rem, 8vw, 7rem);
+    padding-block: clamp(4.5rem, 10vw, 8.5rem) clamp(5rem, 10vw, 8rem);
+  }
 
-	.hero {
-		padding: 4rem 0 6rem;
-	}
+  .hero::before,
+  .hero::after {
+    position: absolute;
+    left: -0.2rem;
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 1.4rem;
+    font-weight: 300;
+    content: "+";
+    opacity: 0.55;
+  }
 
-	.prompt,
-	.section-label {
-		margin: 0;
-		font-family: monospace;
-		font-size: 0.9rem;
-		opacity: 0.6;
-	}
+  .hero::before {
+    top: 3.5rem;
+  }
 
-	h1 {
-		max-width: 750px;
-		margin: 1rem 0 1.5rem;
-		font-size: clamp(2.3rem, 6vw, 4.5rem);
-		line-height: 1.15;
-		letter-spacing: -0.04em;
-	}
+  .hero::after {
+    bottom: 4.8rem;
+  }
 
-	.description {
-		max-width: 650px;
-		font-size: 1.1rem;
-		line-height: 2;
-		opacity: 0.75;
-	}
+  .hero__main {
+    position: relative;
+    padding-left: clamp(1rem, 5vw, 4.5rem);
+  }
 
-	.categories {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.7rem;
-		margin-top: 2rem;
-	}
+  .hero__main::before {
+    position: absolute;
+    top: -1.4rem;
+    bottom: 0;
+    left: 0;
+    width: 3rem;
+    background-image: radial-gradient(var(--line) 0.7px, transparent 0.7px);
+    background-size: 8px 8px;
+    content: "";
+    opacity: 0.65;
+  }
 
-	.categories a {
-		padding: 0.4rem 0.8rem;
-		border: 1px solid currentColor;
-		border-radius: 999px;
-		font-family: monospace;
-		font-size: 0.85rem;
-		opacity: 0.7;
-	}
+  .hero__eyebrow {
+    position: relative;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
 
-	.latest {
-		border-top: 1px solid rgba(128, 128, 128, 0.25);
-		padding-top: 3rem;
-	}
+  h1 {
+    position: relative;
+    margin: 1.2rem 0 1.3rem;
+    font-family: var(--font-mono);
+    font-size: clamp(3.45rem, 8vw, 7.2rem);
+    line-height: 0.95;
+    letter-spacing: -0.09em;
+  }
 
-	.latest-header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 1rem;
-	}
+  h1 span {
+    margin-right: 0.08em;
+    color: var(--accent);
+  }
 
-	.view-all {
-		color: inherit;
-		font-family: monospace;
-		font-size: 0.85rem;
-		text-decoration: none;
-		opacity: 0.55;
-	}
+  .hero__copy {
+    margin: 0;
+    font-size: clamp(1.25rem, 2.25vw, 1.75rem);
+    font-weight: 700;
+    line-height: 1.7;
+    letter-spacing: 0.04em;
+  }
 
-	.view-all:hover {
-		opacity: 1;
-	}
+  .hero__description {
+    max-width: 44rem;
+    margin: 1.3rem 0 0;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    line-height: 1.95;
+  }
 
-	.post-list {
-		margin-top: 2rem;
-		border-top: 1px solid rgba(128, 128, 128, 0.2);
-	}
+  .hero__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: min(100%, 23rem);
+    margin-top: 2.1rem;
+    padding: 1rem 1.2rem;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    text-decoration: none;
+    transition:
+      background-color 160ms ease,
+      color 160ms ease;
+  }
 
-	.post {
-		display: block;
-		padding: 2.5rem 0;
-		border-bottom: 1px solid rgba(128, 128, 128, 0.2);
-		color: inherit;
-		text-decoration: none;
-	}
+  .hero__cta:hover {
+    background: var(--accent);
+    color: var(--paper-light);
+  }
 
-	.meta {
-		display: flex;
-		align-items: center;
-		gap: 0.8rem;
-		font-family: monospace;
-		font-size: 0.8rem;
-	}
+  .category-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 2.7rem;
+    font-family: var(--font-mono);
+    font-size: clamp(0.8rem, 1.7vw, 1rem);
+  }
 
-	.date {
-		opacity: 0.45;
-	}
+  .category-nav a {
+    text-decoration: none;
+  }
 
-	.category {
-		padding: 0.2rem 0.5rem;
-		border: 1px solid rgba(128, 128, 128, 0.3);
-		border-radius: 999px;
-		font-size: 0.75rem;
-		opacity: 0.7;
-	}
+  .category-nav a:hover {
+    color: var(--accent);
+  }
 
-	.post h2 {
-		margin: 0.7rem 0 0.8rem;
-		font-size: clamp(1.4rem, 4vw, 1.9rem);
-		letter-spacing: -0.02em;
-	}
+  .category-nav span {
+    color: var(--accent);
+  }
 
-	.post p {
-		max-width: 650px;
-		margin: 0;
-		line-height: 1.8;
-		opacity: 0.7;
-	}
+  .field-note {
+    position: relative;
+    align-self: center;
+    padding-left: 1.6rem;
+    border-left: 1px dashed var(--line);
+    font-family: var(--font-mono);
+  }
 
-	.tags {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.6rem;
-		margin-top: 1rem;
-		font-family: monospace;
-		font-size: 0.8rem;
-		opacity: 0.5;
-	}
+  .field-note__title {
+    margin: 0;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--accent);
+    font-size: 0.75rem;
+  }
 
-	.read-more {
-		display: inline-block;
-		margin-top: 1rem;
-		font-family: monospace;
-		font-size: 0.85rem;
-		opacity: 0.65;
-		transition: transform 0.2s ease;
-	}
+  dl {
+    margin: 0;
+  }
 
-	.post:hover .read-more {
-		transform: translateX(5px);
-	}
+  dl div {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--line);
+  }
 
-	.post:hover h2 {
-		text-decoration: underline;
-		text-decoration-thickness: 1px;
-		text-underline-offset: 5px;
-	}
+  dt,
+  dd {
+    margin: 0;
+    font-size: 0.72rem;
+    line-height: 1.7;
+  }
 
-	@media (max-width: 600px) {
-		main {
-			padding-top: 2rem;
-		}
+  dt {
+    color: var(--muted);
+  }
 
-		.hero {
-			padding: 3rem 0 4rem;
-		}
+  dd {
+    margin-top: 0.25rem;
+  }
 
-		.description br {
-			display: none;
-		}
+  .field-note__mark {
+    position: absolute;
+    right: -0.55rem;
+    bottom: -0.65rem;
+    color: var(--accent);
+    font-size: 1.25rem;
+  }
 
-		.post {
-			padding: 2rem 0;
-		}
-	}
+  .latest {
+    padding-block: 0 4rem;
+  }
+
+  .section-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding-top: 2.4rem;
+    border-top: 1px solid var(--line-strong);
+    gap: 2rem;
+  }
+
+  .all-logs {
+    flex: none;
+    padding-bottom: 0.4rem;
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .all-logs:hover span {
+    display: inline-block;
+    transform: translateX(4px);
+  }
+
+  .post-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.35rem;
+    margin-top: 2rem;
+  }
+
+  .about-note {
+    position: relative;
+    display: grid;
+    grid-template-columns: 0.3fr 1.15fr 1fr;
+    align-items: start;
+    gap: clamp(1.5rem, 4vw, 4rem);
+    margin-top: 4rem;
+    padding-block: 3rem;
+    border-top: 1px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .about-note__number {
+    margin: 0;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+  }
+
+  .about-note h2 {
+    margin: 0.7rem 0 0;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    line-height: 1.55;
+    letter-spacing: -0.03em;
+  }
+
+  .about-note__copy p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    line-height: 1.95;
+  }
+
+  .about-note__copy a {
+    display: inline-flex;
+    gap: 0.55rem;
+    margin-top: 1.3rem;
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  @media (max-width: 920px) {
+    .hero {
+      grid-template-columns: minmax(0, 1fr) 210px;
+      gap: 2.5rem;
+    }
+
+    .post-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .post-grid :global(article:last-child) {
+      grid-column: 1 / -1;
+      width: calc(50% - 0.675rem);
+    }
+
+    .about-note {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .about-note__number {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .hero {
+      display: block;
+      padding-block: 4rem 5rem;
+    }
+
+    .hero__main {
+      padding-left: 1rem;
+    }
+
+    .hero__main::before {
+      width: 1.35rem;
+      transform: translateX(-0.7rem);
+    }
+
+    .hero__description br {
+      display: none;
+    }
+
+    .field-note {
+      display: none;
+    }
+
+    .section-heading {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .post-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .post-grid :global(article:last-child) {
+      grid-column: auto;
+      width: auto;
+    }
+
+    .about-note {
+      grid-template-columns: 1fr;
+      margin-top: 2rem;
+    }
+
+    .about-note__number {
+      grid-column: auto;
+    }
+  }
+
+  @media (max-width: 430px) {
+    h1 {
+      font-size: clamp(2.45rem, 12vw, 3.4rem);
+      letter-spacing: -0.11em;
+    }
+
+    .hero__copy br {
+      display: none;
+    }
+
+    .hero__cta {
+      width: 100%;
+    }
+  }
 </style>
