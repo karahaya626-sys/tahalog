@@ -1,4 +1,6 @@
 ---
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
 import SeoHead from '../components/SeoHead.astro';
 import '../styles/global.css';
 
@@ -28,21 +30,11 @@ const { title, description, seo = {} } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
-    <header class="site-header">
-      <a class="brand" href="/">taha.log()</a>
-      <nav aria-label="メインナビゲーション">
-        <a href="/blog/">Blog</a>
-        <a href="/category/Games/">Games</a>
-        <a href="/category/AI/">AI</a>
-        <a href="/category/Dev/">Dev</a>
-        <a href="/category/Gadgets/">Gadgets</a>
-      </nav>
-    </header>
-    <main>
+    <a class="skip-link" href="#main-content">本文へ移動</a>
+    <Header />
+    <main id="main-content">
       <slot />
     </main>
-    <footer class="site-footer">
-      <p>© {new Date().getFullYear()} taha.log()</p>
-    </footer>
+    <Footer />
   </body>
 </html>

@@ -1,115 +1,114 @@
 ---
 import { SITE_TITLE } from '../consts';
-import HeaderLink from './HeaderLink.astro';
+
+const pathname = Astro.url.pathname;
+const isArticles =
+  pathname.startsWith('/blog') ||
+  pathname.startsWith('/category') ||
+  pathname.startsWith('/tag');
 ---
 
-<header>
-	<nav>
-		<a class="logo" href="/">
-			<span class="prompt">&gt;</span>
-			{SITE_TITLE}
-		</a>
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="logo" href="/" aria-label={`${SITE_TITLE} ホーム`}>
+      {SITE_TITLE}
+    </a>
 
-		<div class="internal-links">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/blog">Blog</HeaderLink>
-			<HeaderLink href="/about">About</HeaderLink>
-		</div>
-	</nav>
+    <nav aria-label="メインナビゲーション">
+      <a class:list={{ active: isArticles }} href="/blog/">Articles</a>
+      <a href="/#categories">Categories</a>
+      <a class:list={{ active: pathname.startsWith('/about') }} href="/about/">
+        About
+      </a>
+    </nav>
+  </div>
 </header>
 
 <style>
-	header {
-		margin: 0;
-		padding: 0 1em;
-		background: #101112;
-		border-bottom: 1px solid #303236;
-		box-shadow: none;
-	}
+  .site-header {
+    border-bottom: 1px solid var(--line-strong);
+    background: rgba(245, 238, 223, 0.86);
+    backdrop-filter: blur(12px);
+  }
 
-	nav {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: min(1180px, calc(100% - 3rem));
+    min-height: 76px;
+    margin-inline: auto;
+    gap: 2rem;
+  }
 
-		width: min(1040px, calc(100% - 2rem));
-		height: 72px;
-		margin: 0 auto;
-	}
+  .logo {
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 1.42rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    text-decoration: none;
+  }
 
-	.logo {
-		display: flex;
-		align-items: center;
-		gap: 0.35rem;
+  nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 3vw, 2.8rem);
+  }
 
-		color: #f2f2ef;
-		font-family: monospace;
-		font-size: 1.15rem;
-		font-weight: 700;
-		text-decoration: none;
-	}
+  nav a {
+    position: relative;
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    text-decoration: none;
+  }
 
-	.logo:hover {
-		color: #ffffff;
-	}
+  nav a::after {
+    position: absolute;
+    right: 0;
+    bottom: -0.45rem;
+    left: 0;
+    height: 1px;
+    transform: scaleX(0);
+    transform-origin: left;
+    background: var(--accent);
+    content: "";
+    transition: transform 160ms ease;
+  }
 
-	.prompt {
-		color: #ff8a63;
-		opacity: 0.8;
-	}
+  nav a:hover::after,
+  nav a.active::after {
+    transform: scaleX(1);
+  }
 
-	.internal-links {
-		display: flex;
-		align-items: center;
-		gap: 0.25rem;
-	}
+  nav a.active {
+    color: var(--accent);
+  }
 
-	.internal-links :global(a) {
-		padding: 0.6rem 0.75rem;
+  @media (max-width: 720px) {
+    .site-header__inner {
+      width: min(100% - 2rem, 1180px);
+      min-height: 66px;
+      gap: 0.75rem;
+    }
 
-		color: #d8d8d5;
-		font-family: monospace;
-		font-size: 0.9rem;
-		text-decoration: none;
+    .logo {
+      font-size: 1.08rem;
+    }
 
-		border-radius: 6px;
-		transition:
-			color 150ms ease,
-			background-color 150ms ease;
-	}
+    nav {
+      gap: 0.8rem;
+    }
 
-	.internal-links :global(a:hover) {
-		color: #ffffff;
-		background: rgba(255, 255, 255, 0.08);
-	}
+    nav a {
+      font-size: 0.7rem;
+    }
+  }
 
-	.internal-links :global(a.active) {
-		color: #ff8a63;
-		font-weight: 700;
-		background: rgba(255, 138, 99, 0.12);
-	}
-
-	@media (max-width: 600px) {
-		header {
-			padding: 0 0.5rem;
-		}
-
-		nav {
-			width: min(1040px, calc(100% - 2rem));
-			height: 64px;
-		}
-
-		.logo {
-			font-size: 1rem;
-		}
-
-		.internal-links {
-			gap: 0;
-		}
-
-		.internal-links :global(a) {
-			padding: 0.5rem;
-			font-size: 0.8rem;
-		}
-	}
+  @media (max-width: 390px) {
+    nav a:nth-child(2) {
+      display: none;
+    }
+  }
 </style>

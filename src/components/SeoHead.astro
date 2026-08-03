@@ -1,4 +1,6 @@
 ---
+import { Font } from 'astro:assets';
+
 interface Props {
   title: string;
   headline?: string;
@@ -66,9 +68,22 @@ const structuredData =
 ---
 
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="description" content={description} />
 <meta name="generator" content={Astro.generator} />
+<meta name="theme-color" content="#f5eedf" />
+
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" href="/favicon.ico" />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title="taha.log()"
+  href={new URL('/rss.xml', siteOrigin)}
+/>
+
+<Font cssVariable="--font-atkinson" preload />
 
 <link rel="canonical" href={canonicalUrl} />
 <link rel="sitemap" href="/sitemap.xml" />

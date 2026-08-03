@@ -7,59 +7,76 @@ const posts = await getPublishedPosts();
 ---
 
 <BaseLayout
-  title="ブログ | taha.log()"
+  title="記事一覧 | taha.log()"
   description="ゲーム、AI、Web開発、ガジェットを実体験ベースで記録する個人ブログです。"
 >
-  <section class="page">
-    <header class="page__header">
-      <p class="eyebrow">TAHA.LOG()</p>
-      <h1>Blog</h1>
-      <p>ゲーム、AI、開発、ガジェットの試行錯誤を残します。</p>
+  <section class="archive page-shell">
+    <header class="archive__header">
+      <div>
+        <p class="section-kicker">// all logs</p>
+        <h1 class="section-title">Articles</h1>
+      </div>
+      <p>ゲーム、AI、開発、ガジェット。<br />実際に遊んだこと・試したことを記録しています。</p>
     </header>
 
     {
       posts.length > 0 ? (
         <div class="post-grid">
-          {posts.map((post) => <PostCard post={post} />)}
+          {posts.map((post, index) => <PostCard post={post} index={index} />)}
         </div>
       ) : (
-        <p>公開中の記事はまだありません。</p>
+        <p class="empty">公開中の記事はまだありません。</p>
       )
     }
   </section>
 </BaseLayout>
 
 <style>
-  .page {
-    width: min(100% - 2rem, 1040px);
-    margin-inline: auto;
-    padding-block: 4rem;
+  .archive {
+    padding-block: clamp(4rem, 8vw, 7rem) 2rem;
   }
 
-  .page__header {
-    margin-bottom: 2rem;
+  .archive__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--line-strong);
+    gap: 2rem;
   }
 
-  .eyebrow {
+  .archive__header > p {
+    max-width: 31rem;
     margin: 0;
-    color: var(--accent);
-    font-family: var(--font-mono);
-    font-weight: 800;
-    letter-spacing: 0.08em;
-  }
-
-  h1 {
-    margin: 0.25rem 0 0.5rem;
-    font-size: clamp(2.5rem, 8vw, 4.5rem);
-    letter-spacing: -0.04em;
-  }
-
-  .page__header > p:last-child {
-    color: var(--muted);
+    color: var(--ink-soft);
+    line-height: 1.8;
   }
 
   .post-grid {
     display: grid;
-    gap: 1rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.35rem;
+    margin-top: 2rem;
+  }
+
+  .empty {
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 920px) {
+    .post-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 650px) {
+    .archive__header {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .post-grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

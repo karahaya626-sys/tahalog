@@ -2,6 +2,7 @@
 title: "Emberwardはどんなゲーム？10時間遊んで感じた魅力と気になる点"
 description: "テトリスのようなブロックで迷路を作るローグライトTD『Emberward』を約10時間プレイ。ゲームの流れや遊んだ感想をまとめます。"
 pubDate: 2026-07-31
+heroImage: '../../assets/images/emberward/maze-building.png'
 category: "Games"
 tags: ["Emberward", "ローグライト", "タワーディフェンス", "Steam"]
 author: "taha"

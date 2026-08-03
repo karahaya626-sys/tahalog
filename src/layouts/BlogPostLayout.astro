@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import type { BlogPost } from '../lib/posts';
 import { formatDate } from '../lib/posts';
 import BaseLayout from './BaseLayout.astro';
@@ -17,6 +18,7 @@ const {
   tags,
   author,
   ogImage,
+  heroImage,
 } = post.data;
 const pageTitle = `${title} | taha.log()`;
 ---
@@ -32,23 +34,29 @@ const pageTitle = `${title} | taha.log()`;
     category,
     tags,
     author,
-    image: ogImage,
+    image: ogImage ?? heroImage?.src,
   }}
 >
   <article class="post">
-    <header class="post__header">
-      <a class="category" href={`/category/${category}/`}>{category}</a>
+    <header class="post__header page-shell">
+      <div class="post__topline">
+        <a class="category" href={`/category/${category}/`}>{category}</a>
+        <span aria-hidden="true">/</span>
+        <span>LOG ENTRY</span>
+      </div>
+
       <h1>{title}</h1>
       <p class="lead">{description}</p>
+
       <div class="dates">
         <span>
-          公開：
+          published:
           <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
         </span>
         {
           updatedDate && (
             <span>
-              更新：
+              updated:
               <time datetime={updatedDate.toISOString()}>
                 {formatDate(updatedDate)}
               </time>
@@ -58,6 +66,14 @@ const pageTitle = `${title} | taha.log()`;
       </div>
     </header>
 
+    {
+      heroImage && (
+        <figure class="hero-image page-shell">
+          <Image src={heroImage} alt={`${title}のメイン画像`} loading="eager" />
+        </figure>
+      )
+    }
+
     <div class="prose">
       <slot />
     </div>
@@ -65,6 +81,7 @@ const pageTitle = `${title} | taha.log()`;
     {
       tags.length > 0 && (
         <footer class="post__footer">
+          <p>// tags</p>
           <ul class="tag-list" aria-label="タグ">
             {tags.map((tag) => (
               <li>
@@ -75,87 +92,295 @@ const pageTitle = `${title} | taha.log()`;
         </footer>
       )
     }
+
+    <nav class="post__back" aria-label="記事ナビゲーション">
+      <a href="/blog/">← 記事一覧へ戻る</a>
+    </nav>
   </article>
 </BaseLayout>
 
 <style>
   .post {
-    width: min(900px, calc(100% - 2rem));
-    margin-inline: auto;
-    padding-block: 4rem;
+    padding-top: clamp(4rem, 8vw, 7rem);
   }
 
   .post__header {
-    padding-bottom: 2rem;
-    border-bottom: 1px solid var(--border);
+    position: relative;
+    padding-right: min(12vw, 8rem);
+  }
+
+  .post__header::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: min(8vw, 5rem);
+    height: 7.5rem;
+    background-image: radial-gradient(var(--line) 0.75px, transparent 0.75px);
+    background-size: 8px 8px;
+    content: "";
+  }
+
+  .post__topline {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+
+  .post__topline span[aria-hidden='true'] {
+    color: var(--accent);
   }
 
   .category {
     color: var(--accent);
-    font-weight: 800;
     text-decoration: none;
   }
 
   h1 {
-    margin: 0.7rem 0 1rem;
-    font-size: clamp(2rem, 7vw, 3.5rem);
-    line-height: 1.15;
-    letter-spacing: -0.035em;
+    max-width: 65rem;
+    margin: 1rem 0 1.2rem;
+    font-size: clamp(2.15rem, 5.8vw, 4.6rem);
+    line-height: 1.23;
+    letter-spacing: -0.055em;
   }
 
   .lead {
-    color: var(--muted);
-    font-size: 1.1rem;
+    max-width: 47rem;
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: clamp(1rem, 1.8vw, 1.14rem);
+    line-height: 1.9;
   }
 
   .dates {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.8rem 1.25rem;
-    margin-top: 1rem;
+    gap: 0.65rem 1.5rem;
+    margin-top: 1.6rem;
     color: var(--muted);
-    font-size: 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+  }
+
+  .dates time {
+    margin-left: 0.35rem;
+    color: var(--ink);
+  }
+
+  .hero-image {
+    position: relative;
+    margin-block: 3rem 4.5rem;
+    padding: 0.7rem;
+    border: 1px solid var(--line-strong);
+    background: rgba(251, 247, 237, 0.72);
+    box-shadow: var(--shadow);
+  }
+
+  .hero-image::before {
+    position: absolute;
+    z-index: 1;
+    top: -0.55rem;
+    left: 50%;
+    width: 5.5rem;
+    height: 1.1rem;
+    transform: translateX(-50%) rotate(-1deg);
+    background: rgba(224, 197, 151, 0.58);
+    content: "";
+  }
+
+  .hero-image :global(img) {
+    display: block;
+    width: 100%;
+    max-height: 38rem;
+    object-fit: cover;
+  }
+
+  .prose,
+  .post__footer,
+  .post__back {
+    width: min(760px, calc(100% - 2rem));
+    margin-inline: auto;
   }
 
   .prose {
-    padding-block: 1.5rem;
+    color: #25344a;
+    font-size: clamp(1rem, 1.5vw, 1.07rem);
+    line-height: 2;
   }
 
   .prose :global(h2) {
-    margin-top: 2.8rem;
-    padding-bottom: 0.45rem;
-    border-bottom: 1px solid var(--border);
-    font-size: 1.65rem;
+    position: relative;
+    margin: 4rem 0 1.4rem;
+    padding: 0 0 0.75rem 1.05rem;
+    border-bottom: 1px solid var(--line-strong);
+    color: var(--ink);
+    font-size: clamp(1.55rem, 3.5vw, 2rem);
+    line-height: 1.45;
+    letter-spacing: -0.035em;
+  }
+
+  .prose :global(h2)::before {
+    position: absolute;
+    top: 0.16em;
+    bottom: 0.95rem;
+    left: 0;
+    width: 3px;
+    background: var(--accent);
+    content: "";
   }
 
   .prose :global(h3) {
-    margin-top: 2rem;
-    font-size: 1.3rem;
+    margin: 2.8rem 0 1rem;
+    color: var(--ink);
+    font-size: 1.32rem;
+    line-height: 1.5;
   }
 
-  .prose :global(p),
-  .prose :global(li) {
-    line-height: 1.9;
+  .prose :global(p) {
+    margin: 1.4rem 0;
   }
 
   .prose :global(a) {
-    color: var(--accent);
+    color: #b9462e;
+    font-weight: 700;
+  }
+
+  .prose :global(strong) {
+    color: var(--ink);
+  }
+
+  .prose :global(blockquote) {
+    margin: 2.4rem 0;
+    padding: 1.1rem 1.35rem;
+    border-left: 3px solid var(--accent);
+    background: rgba(251, 247, 237, 0.72);
+    color: var(--ink-soft);
+  }
+
+  .prose :global(blockquote p) {
+    margin: 0;
+  }
+
+  .prose :global(code) {
+    padding: 0.15rem 0.35rem;
+    border: 1px solid rgba(18, 35, 61, 0.13);
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.46);
+    font-family: var(--font-mono);
+    font-size: 0.88em;
   }
 
   .prose :global(pre) {
     overflow-x: auto;
-    padding: 1rem;
-    border-radius: 0.75rem;
+    margin: 2.25rem 0;
+    padding: 1.25rem;
+    border: 1px solid rgba(18, 35, 61, 0.32);
+    border-radius: 0;
+    background: #18283e !important;
+    box-shadow: 0 12px 30px rgba(18, 35, 61, 0.12);
+  }
+
+  .prose :global(pre code) {
+    padding: 0;
+    border: 0;
+    background: transparent;
   }
 
   .prose :global(img) {
-    max-width: 100%;
+    display: block;
+    width: 100%;
     height: auto;
-    border-radius: 0.75rem;
+    margin: 2.6rem auto 0.7rem;
+    padding: 0.45rem;
+    border: 1px solid var(--line);
+    background: var(--paper-light);
+    box-shadow: 0 12px 35px rgba(48, 39, 24, 0.09);
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-left: 1.5rem;
+  }
+
+  .prose :global(li) {
+    margin: 0.6rem 0;
+    padding-left: 0.2rem;
+  }
+
+  .prose :global(li::marker) {
+    color: var(--accent);
+  }
+
+  .prose :global(table) {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+    margin: 2rem 0;
+    border-collapse: collapse;
+  }
+
+  .prose :global(th),
+  .prose :global(td) {
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--line);
+    text-align: left;
+  }
+
+  .prose :global(th) {
+    background: rgba(221, 92, 62, 0.09);
+    color: var(--ink);
   }
 
   .post__footer {
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border);
+    margin-top: 4.5rem;
+    padding-block: 1.5rem;
+    border-top: 1px solid var(--line-strong);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .post__footer > p {
+    margin: 0;
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+
+  .post__back {
+    margin-top: 2.5rem;
+  }
+
+  .post__back a {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-decoration: none;
+  }
+
+  .post__back a:hover {
+    color: var(--accent);
+  }
+
+  @media (max-width: 720px) {
+    .post__header {
+      padding-right: 1rem;
+    }
+
+    .post__header::after {
+      display: none;
+    }
+
+    .hero-image {
+      margin-block: 2.4rem 3.5rem;
+      padding: 0.4rem;
+    }
+
+    .prose :global(h2) {
+      margin-top: 3.3rem;
+    }
   }
 </style>

@@ -1,79 +1,194 @@
 ---
+import { Image } from 'astro:assets';
+import FallbackImage from '../assets/blog-placeholder-2.jpg';
 import type { BlogPost } from '../lib/posts';
 import { formatDate, getPostUrl } from '../lib/posts';
 
 interface Props {
   post: BlogPost;
+  index?: number;
 }
 
-const { post } = Astro.props;
+const { post, index = 0 } = Astro.props;
+const image = post.data.heroImage ?? FallbackImage;
+const entryNumber = String(index + 1).padStart(2, '0');
 ---
 
 <article class="post-card">
-  <div class="post-card__meta">
-    <a class="category" href={`/category/${post.data.category}/`}>
-      {post.data.category}
+  <a class="post-card__image" href={getPostUrl(post)} tabindex="-1" aria-hidden="true">
+    <Image src={image} alt="" loading="lazy" />
+  </a>
+
+  <div class="post-card__body">
+    <div class="post-card__meta">
+      <span class="entry-number">{entryNumber}</span>
+      <a class="category" href={`/category/${post.data.category}/`}>
+        {post.data.category}
+      </a>
+      <time datetime={post.data.pubDate.toISOString()}>
+        {formatDate(post.data.pubDate)}
+      </time>
+    </div>
+
+    <h2><a href={getPostUrl(post)}>{post.data.title}</a></h2>
+    <p>{post.data.description}</p>
+
+    <a class="read-more" href={getPostUrl(post)}>
+      記事を読む <span aria-hidden="true">→</span>
     </a>
-    <time datetime={post.data.pubDate.toISOString()}>
-      {formatDate(post.data.pubDate)}
-    </time>
   </div>
-  <h2><a href={getPostUrl(post)}>{post.data.title}</a></h2>
-  <p>{post.data.description}</p>
-  {
-    post.data.tags.length > 0 && (
-      <ul class="tag-list" aria-label="タグ">
-        {post.data.tags.map((tag) => (
-          <li>
-            <a href={`/tag/${encodeURIComponent(tag)}/`}>#{tag}</a>
-          </li>
-        ))}
-      </ul>
-    )
-  }
 </article>
 
 <style>
   .post-card {
-    padding: 1.5rem;
-    border: 1px solid var(--border);
-    border-radius: 1rem;
-    background: var(--surface);
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+    border: 1px solid var(--line-strong);
+    background: rgba(251, 247, 237, 0.72);
+    box-shadow: 0 8px 28px rgba(48, 39, 24, 0.04);
     transition:
-      transform 160ms ease,
-      border-color 160ms ease;
+      transform 180ms ease,
+      box-shadow 180ms ease;
+  }
+
+  .post-card::after {
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    width: 1.15rem;
+    height: 1.15rem;
+    border-bottom: 1px solid var(--line-strong);
+    border-left: 1px solid var(--line-strong);
+    background: var(--paper);
+    content: "";
   }
 
   .post-card:hover {
-    transform: translateY(-2px);
-    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow);
+  }
+
+  .post-card__image {
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    border-bottom: 1px solid var(--line-strong);
+    background: var(--paper-deep);
+  }
+
+  .post-card__image :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.88) contrast(0.98);
+    transition: transform 300ms ease;
+  }
+
+  .post-card:hover .post-card__image :global(img) {
+    transform: scale(1.025);
+  }
+
+  .post-card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 1.15rem 1.2rem 1.35rem;
   }
 
   .post-card__meta {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto auto 1fr;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.65rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px dashed var(--line);
     color: var(--muted);
-    font-size: 0.875rem;
+    font-family: var(--font-mono);
+    font-size: 0.67rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .entry-number {
+    color: var(--accent);
+    font-size: 0.84rem;
   }
 
   .category {
-    color: var(--accent);
+    color: var(--ink);
     font-weight: 700;
-  }
-
-  h2 {
-    margin: 0.8rem 0 0.5rem;
-    font-size: clamp(1.2rem, 3vw, 1.5rem);
-  }
-
-  h2 a {
-    color: var(--text);
     text-decoration: none;
   }
 
+  time {
+    justify-self: end;
+    white-space: nowrap;
+  }
+
+  h2 {
+    min-height: 4.15em;
+    margin: 1rem 0 0.7rem;
+    font-family: var(--font-mono);
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    line-height: 1.38;
+    letter-spacing: -0.04em;
+  }
+
+  h2 a {
+    text-decoration: none;
+  }
+
+  h2 a:hover {
+    color: var(--accent);
+  }
+
   p {
+    display: -webkit-box;
+    overflow: hidden;
+    min-height: 4.8em;
     margin: 0;
-    color: var(--muted);
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    line-height: 1.75;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-top: auto;
+    padding-top: 1.15rem;
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .read-more span {
+    transition: transform 160ms ease;
+  }
+
+  .read-more:hover span {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 420px) {
+    .post-card__meta {
+      grid-template-columns: auto auto;
+    }
+
+    time {
+      display: none;
+    }
+
+    h2 {
+      min-height: 0;
+    }
   }
 </style>

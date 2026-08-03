@@ -1,31 +1,166 @@
 ---
-import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
-import Layout from '../layouts/BlogPost.astro';
+import { Image } from 'astro:assets';
+import AboutImage from '../assets/blog-placeholder-about.jpg';
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<Layout
-	title="About Me"
-	description="Lorem ipsum dolor sit amet"
-	pubDate={new Date('August 08 2021')}
-	heroImage={AboutHeroImage}
-	category="Dev"
-	tags={[]}
-	author="taha"
-	draft={false}
+<BaseLayout
+  title="About | taha.log()"
+  description="taha.log()と、管理人たはについて紹介します。"
 >
-<h1>About</h1>
+  <section class="about page-shell">
+    <header class="about__header">
+      <p class="section-kicker">// profile</p>
+      <h1 class="section-title">About this log</h1>
+    </header>
 
-<p>
-  はじめまして、管理人の「たは」です。
-</p>
+    <div class="about__grid">
+      <figure class="profile-image">
+        <Image src={AboutImage} alt="taha.log()のマスコット風イメージ" />
+        <figcaption>owner / taha</figcaption>
+      </figure>
 
-<p>
-  taha.log() は、ゲームを中心に、AI・開発・ガジェットなど、
-  気になったことを自由に記録していく個人ブログです。
-</p>
+      <div class="about__body">
+        <p class="lead">はじめまして、管理人の「たは」です。</p>
 
-<p>
-  Steamのインディーゲームやローグライクを遊ぶことが多く、
-  実際にプレイした感想や、海外コミュニティで話題になっている内容なども紹介していきます。
-</p>
-</Layout>
+        <p>
+          普段はSEとしてWebシステムの開発に関わり、趣味ではSteamのインディーゲームやローグライトをよく遊んでいます。
+        </p>
+
+        <p>
+          taha.log()は、ゲームを中心に、AI・開発・ガジェットなど、実際に遊んだことや試したことを記録していく個人ブログです。
+        </p>
+
+        <p>
+          攻略サイトというより、あとから自分でも振り返れるログ。初めて遊んだときに感じたことや、海外コミュニティで見かけた情報も、自分の体験と分けながら残していきます。
+        </p>
+
+        <div class="focus-list" aria-label="主なテーマ">
+          <span>Games</span>
+          <span>AI</span>
+          <span>Dev</span>
+          <span>Gadgets</span>
+        </div>
+
+        <a class="articles-link" href="/blog/">記事を読む <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about {
+    padding-block: clamp(4rem, 8vw, 7rem) 2rem;
+  }
+
+  .about__header {
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .about__grid {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.25fr);
+    gap: clamp(3rem, 8vw, 7rem);
+    align-items: start;
+    margin-top: 3rem;
+  }
+
+  .profile-image {
+    position: relative;
+    margin: 0;
+    padding: 0.7rem;
+    border: 1px solid var(--line-strong);
+    background: rgba(251, 247, 237, 0.75);
+    box-shadow: var(--shadow);
+  }
+
+  .profile-image::before {
+    position: absolute;
+    z-index: 1;
+    top: -0.6rem;
+    left: 50%;
+    width: 5rem;
+    height: 1.2rem;
+    transform: translateX(-50%) rotate(1.5deg);
+    background: rgba(224, 197, 151, 0.62);
+    content: "";
+  }
+
+  .profile-image :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: saturate(0.82) sepia(0.06);
+  }
+
+  figcaption {
+    padding: 0.7rem 0.2rem 0.1rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+  }
+
+  .about__body {
+    max-width: 42rem;
+  }
+
+  .about__body p {
+    margin: 0 0 1.4rem;
+    color: var(--ink-soft);
+    line-height: 2;
+  }
+
+  .about__body .lead {
+    color: var(--ink);
+    font-size: clamp(1.35rem, 3vw, 2rem);
+    font-weight: 700;
+    line-height: 1.6;
+  }
+
+  .focus-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 2rem;
+  }
+
+  .focus-list span {
+    padding: 0.45rem 0.75rem;
+    border: 1px solid var(--line-strong);
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
+  .articles-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-top: 2.2rem;
+    padding: 0.9rem 1.1rem;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .articles-link:hover {
+    background: var(--accent);
+    color: var(--paper-light);
+  }
+
+  @media (max-width: 760px) {
+    .about__grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+
+    .profile-image {
+      width: min(100%, 30rem);
+    }
+  }
+</style>
