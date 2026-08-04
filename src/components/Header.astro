@@ -15,7 +15,13 @@ const isArticles =
     </a>
 
     <nav aria-label="メインナビゲーション">
-      <a class:list={{ active: isArticles }} href="/blog/">Articles</a>
+      <a
+        class:list={['articles-link', { active: isArticles }]}
+        href="/blog/"
+        aria-current={isArticles ? 'page' : undefined}
+      >
+        記事一覧
+      </a>
       <a href="/#categories">Categories</a>
       <a class:list={{ active: pathname.startsWith('/about') }} href="/about/">
         About
@@ -86,6 +92,26 @@ const isArticles =
     color: var(--accent);
   }
 
+  nav .articles-link {
+    padding: 0.55rem 0.8rem;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-weight: 700;
+    transition:
+      background-color 160ms ease,
+      color 160ms ease;
+  }
+
+  nav .articles-link::after {
+    display: none;
+  }
+
+  nav .articles-link:hover,
+  nav .articles-link.active {
+    background: var(--accent);
+    color: var(--paper-light);
+  }
+
   @media (max-width: 720px) {
     .site-header__inner {
       width: min(100% - 2rem, 1180px);
@@ -103,6 +129,10 @@ const isArticles =
 
     nav a {
       font-size: 0.7rem;
+    }
+
+    nav .articles-link {
+      padding: 0.48rem 0.62rem;
     }
   }
 

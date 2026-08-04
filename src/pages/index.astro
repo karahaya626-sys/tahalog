@@ -39,9 +39,9 @@ const categories = [
         実際に遊んだこと・試したことを、自分の言葉で記録する個人ブログです。
       </p>
 
-      <a class="hero__cta" href="#latest-logs">
-        <span>最新の記事を読む</span>
-        <span aria-hidden="true">→</span>
+      <a class="hero__cta" href="/blog/">
+        <span>記事一覧を見る</span>
+        <span class="hero__cta-meta">全{allPosts.length}件 <span aria-hidden="true">→</span></span>
       </a>
 
       <nav id="categories" class="category-nav" aria-label="カテゴリー">
@@ -84,7 +84,10 @@ const categories = [
         <p class="section-kicker">// latest logs</p>
         <h2 class="section-title">新しい記録</h2>
       </div>
-      <a class="all-logs" href="/blog/">すべての記事 <span aria-hidden="true">→</span></a>
+      <a class="all-logs" href="/blog/">
+        <span>記事一覧を見る</span>
+        <span aria-hidden="true">→</span>
+      </a>
     </div>
 
     {
@@ -119,7 +122,7 @@ const categories = [
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(220px, 270px);
     gap: clamp(3rem, 8vw, 7rem);
-    padding-block: clamp(4.5rem, 10vw, 8.5rem) clamp(5rem, 10vw, 8rem);
+    padding-block: clamp(3rem, 6vw, 5.5rem) clamp(3.25rem, 7vw, 5rem);
   }
 
   .hero::before,
@@ -220,6 +223,12 @@ const categories = [
     color: var(--paper-light);
   }
 
+  .hero__cta-meta {
+    margin-left: 1.5rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+  }
+
   .category-nav {
     display: flex;
     flex-wrap: wrap;
@@ -304,17 +313,32 @@ const categories = [
   }
 
   .all-logs {
+    display: inline-flex;
     flex: none;
-    padding-bottom: 0.4rem;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.72rem 0.9rem;
+    border: 1px solid var(--accent);
     color: var(--accent);
     font-family: var(--font-mono);
     font-size: 0.78rem;
     font-weight: 700;
     text-decoration: none;
+    transition:
+      background-color 160ms ease,
+      color 160ms ease;
   }
 
-  .all-logs:hover span {
-    display: inline-block;
+  .all-logs span:last-child {
+    transition: transform 160ms ease;
+  }
+
+  .all-logs:hover {
+    background: var(--accent);
+    color: var(--paper-light);
+  }
+
+  .all-logs:hover span:last-child {
     transform: translateX(4px);
   }
 
@@ -397,7 +421,7 @@ const categories = [
   @media (max-width: 700px) {
     .hero {
       display: block;
-      padding-block: 4rem 5rem;
+      padding-block: 3rem 3.75rem;
     }
 
     .hero__main {
@@ -418,9 +442,13 @@ const categories = [
     }
 
     .section-heading {
-      align-items: flex-start;
-      flex-direction: column;
-      gap: 1rem;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .all-logs {
+      padding-inline: 0.75rem;
+      font-size: 0.72rem;
     }
 
     .post-grid {
@@ -453,6 +481,17 @@ const categories = [
     }
 
     .hero__cta {
+      width: 100%;
+    }
+
+    .section-heading {
+      align-items: stretch;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .all-logs {
+      justify-content: space-between;
       width: 100%;
     }
   }
