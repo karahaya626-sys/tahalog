@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets';
+import DefaultPostImage from '../assets/about-tahalog-desk.jpg';
 import type { BlogPost } from '../lib/posts';
 import { formatDate } from '../lib/posts';
 import BaseLayout from './BaseLayout.astro';
@@ -21,6 +22,10 @@ const {
   heroImage,
 } = post.data;
 const pageTitle = `${title} | taha.log()`;
+const displayImage = heroImage ?? DefaultPostImage;
+const imageAlt = heroImage
+  ? `${title}のメイン画像`
+  : 'ゲームコントローラーやキーボード、ノートが並ぶtaha.log()のデスクイラスト';
 ---
 
 <BaseLayout
@@ -34,7 +39,7 @@ const pageTitle = `${title} | taha.log()`;
     category,
     tags,
     author,
-    image: ogImage ?? heroImage?.src,
+    image: ogImage ?? displayImage.src,
   }}
 >
   <article class="post">
@@ -66,13 +71,9 @@ const pageTitle = `${title} | taha.log()`;
       </div>
     </header>
 
-    {
-      heroImage && (
-        <figure class="hero-image page-shell">
-          <Image src={heroImage} alt={`${title}のメイン画像`} loading="eager" />
-        </figure>
-      )
-    }
+    <figure class="hero-image page-shell">
+      <Image src={displayImage} alt={imageAlt} loading="eager" />
+    </figure>
 
     <div class="prose">
       <slot />
