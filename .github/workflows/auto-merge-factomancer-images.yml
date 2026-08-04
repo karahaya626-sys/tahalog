@@ -1,0 +1,33 @@
+name: Auto-merge Factomancer image fix
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  merge:
+    if: github.head_ref == 'fix/factomancer-original-webp'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify final assets and article
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -d .asset-staging
+          test ! -f .github/workflows/materialize-factomancer-images.yml
+          echo "f0e3b1871b0c89e5c05466d8b0a1053434bf88ea01a1140364a323db515932c8  src/assets/images/factomancer/factomancer-title.webp" | sha256sum --check
+          echo "af5f3695026382145dd973fff8039084e63aba229dd103272663375abb9e7440  src/assets/images/factomancer/factomancer-grimoire.webp" | sha256sum --check
+          echo "cc1be2d84432f757fc7c5cc65e2abf5660ea9a679347224f0741487df8c889ea  src/assets/images/factomancer/factomancer-factory.webp" | sha256sum --check
+          grep -q 'factomancer-title.webp' src/content/blog/factomancer-demo-play-report.md
+          grep -q 'factomancer-grimoire.webp' src/content/blog/factomancer-demo-play-report.md
+          grep -q 'factomancer-factory.webp' src/content/blog/factomancer-demo-play-report.md
+      - name: Merge verified pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: gh pr merge "$PR_URL" --squash --delete-branch
