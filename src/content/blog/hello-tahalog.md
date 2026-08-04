@@ -2,7 +2,6 @@
 title: 'taha.log()を始めました'
 description: 'ゲームやAI、開発など、気になったことを記録していくブログです。'
 pubDate: 'Jul 28 2026'
-heroImage: '../../assets/blog-placeholder-1.jpg'
 ---
 
 はじめまして、管理人のたはです。
