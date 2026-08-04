@@ -2,7 +2,6 @@
 title: "AstroとCloudflare Pagesで個人ブログを作った流れ"
 description: "SEでありゲーマーでもある筆者が、AstroとCloudflare Pagesを使って趣味の個人ブログを公開するまでの流れをまとめました。"
 pubDate: 2026-07-29
-heroImage: '../../assets/blog-placeholder-1.jpg'
 category: "Dev"
 tags: ["Astro", "Cloudflare Pages", "GitHub", "ブログ運営"]
 author: "taha"
