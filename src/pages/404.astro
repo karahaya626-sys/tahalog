@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="ページが見つかりません | taha.log()"
+  description="お探しのページは見つかりませんでした。"
+  seo={{ noindex: true }}
+>
+  <section class="not-found page-shell">
+    <p class="section-kicker">// not found</p>
+    <h1>404</h1>
+    <p class="message">
+      お探しのページは、移動または削除された可能性があります。
+    </p>
+    <div class="links">
+      <a class="primary" href="/blog/">記事一覧を見る <span aria-hidden="true">→</span></a>
+      <a href="/">トップページへ戻る</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    min-height: 62vh;
+    padding-block: clamp(5rem, 12vw, 9rem);
+  }
+
+  h1 {
+    margin: 0.35rem 0 0;
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: clamp(5rem, 18vw, 11rem);
+    line-height: 0.95;
+    letter-spacing: -0.08em;
+  }
+
+  .message {
+    max-width: 36rem;
+    margin: 2rem 0 0;
+    color: var(--ink-soft);
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    line-height: 1.9;
+  }
+
+  .links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem 1.5rem;
+    margin-top: 2.2rem;
+  }
+
+  .links a {
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .links a:hover {
+    color: var(--accent);
+  }
+
+  .links .primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 13rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .links .primary:hover {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: white;
+  }
+</style>

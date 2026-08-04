@@ -145,7 +145,8 @@ select {
   list-style: none;
 }
 
-.tag-list a {
+.tag-list a,
+.tag-list span {
   color: var(--muted);
   font-family: var(--font-mono);
   font-size: 0.78rem;

@@ -1,13 +1,17 @@
 ---
 import PostCard from '../../components/PostCard.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getPublishedPosts, type BlogPost } from '../../lib/posts';
+import {
+  getIndexableTags,
+  getPublishedPosts,
+  type BlogPost,
+} from '../../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getPublishedPosts();
-  const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
+  const tags = getIndexableTags(posts);
 
-  return tags.map((tag) => ({
+  return [...tags].map((tag) => ({
     params: { tag },
     props: {
       tag,
