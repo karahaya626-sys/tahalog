@@ -1,0 +1,59 @@
+name: Materialize Factomancer images
+
+on:
+  push:
+    branches:
+      - fix/factomancer-original-webp
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Decode image assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p src/assets/images/factomancer
+
+          cat .asset-staging/factomancer/title-*.b64 \
+            | tr -d '\r\n' \
+            | base64 --decode \
+            > src/assets/images/factomancer/factomancer-title.webp
+
+          cat .asset-staging/factomancer/grimoire-*.b64 \
+            | tr -d '\r\n' \
+            | base64 --decode \
+            > src/assets/images/factomancer/factomancer-grimoire.webp
+
+          if [ "$(stat -c%s .asset-staging/factomancer/test-local-path.webp 2>/dev/null || echo 0)" -gt 10000 ]; then
+            cp .asset-staging/factomancer/test-local-path.webp \
+              src/assets/images/factomancer/factomancer-factory.webp
+          else
+            cat .asset-staging/factomancer/factory-*.b64 \
+              | tr -d '\r\n' \
+              | base64 --decode \
+              > src/assets/images/factomancer/factomancer-factory.webp
+          fi
+
+          echo "f0e3b1871b0c89e5c05466d8b0a1053434bf88ea01a1140364a323db515932c8  src/assets/images/factomancer/factomancer-title.webp" | sha256sum --check
+          echo "af5f3695026382145dd973fff8039084e63aba229dd103272663375abb9e7440  src/assets/images/factomancer/factomancer-grimoire.webp" | sha256sum --check
+          echo "cc1be2d84432f757fc7c5cc65e2abf5660ea9a679347224f0741487df8c889ea  src/assets/images/factomancer/factomancer-factory.webp" | sha256sum --check
+
+      - name: Commit materialized assets
+        shell: bash
+        run: |
+          rm -rf .asset-staging
+          rm -f .github/workflows/materialize-factomancer-images.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Materialize Factomancer screenshots"
+          git push
