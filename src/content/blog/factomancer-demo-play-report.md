@@ -13,8 +13,6 @@ draft: false
 
 本作は魔法で動く機械を並べて商品を作り、1日ごとに設定された目標金額の達成を目指すゲームである。
 
-![Factomancerのタイトル画面](../../assets/images/factomancer/play-title.svg)
-
 ゲーム内では、Steamストアで「秩序」と訳されている組織が、場所によっては**「おーだー」**と表記されている。遊び心なのか翻訳の揺れなのかは分からないが、妙に記憶へ残る（笑）。
 
 とはいえ、実際にプレイして印象に残ったのは翻訳よりも、工場建設とローグライトを組み合わせた独特なゲームの流れであった。
@@ -39,11 +37,11 @@ draft: false
 
 既存の工場を土台に、新しく手に入れた機械や販売所を追加し、少しずつ生産規模を広げていく形だ。
 
-![6日目までに拡張したFactomancerの工場](../../assets/images/factomancer/play-factory.svg)
+![魔法の機械と生産ラインが並ぶFactomancerの工場](../../assets/images/factomancer/official-factory.webp)
 
-画像は6日目の工場である。複数の機械をベルトで接続し、原料を加工しながら、より価値の高い商品へ変換している。
+*工場を拡張しながら、複数の製作ルートをつないでいく。画像出典：[Factomancer Steamストア](https://store.steampowered.com/app/3979570/Factomancer/?l=japanese)／© Voltige Games*
 
-毎日ゼロから作り直すのではなく、前日までの工場へ新しいラインを継ぎ足していく感覚に近い。日数が進むほど最初は単純だった工場が複雑になり、工場自動化ゲームらしい成長もしっかり味わえる。
+実際のプレイでも、毎日ゼロから作り直すのではなく、前日までの工場へ新しいラインを継ぎ足していく感覚に近かった。日数が進むほど最初は単純だった工場が複雑になり、工場自動化ゲームらしい成長もしっかり味わえる。
 
 ## 新しく使える機械は状況によって変わる
 
@@ -69,7 +67,9 @@ draft: false
 
 そこで便利なのが、ゲーム内の図鑑にあたる**グリモワール**である。
 
-![原料から製作可能なものを絞り込めるグリモワール](../../assets/images/factomancer/play-grimoire.svg)
+![レシピや関連素材を確認できるFactomancerのグリモワール](../../assets/images/factomancer/official-grimoire.webp)
+
+*必要な原料や機械、関連する製作物を確認できる。画像出典：[Factomancer Steamストア](https://store.steampowered.com/app/3979570/Factomancer/?l=japanese)／© Voltige Games*
 
 グリモワールでは、必要な原料、使用する機械、完成品の価格、生産時間や生産量などをまとめて確認できる。
 
