@@ -5,9 +5,7 @@ import { getPublishedPosts, type BlogPost } from '../../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getPublishedPosts();
-  const knownCategories = ['Games', 'AI', 'Dev', 'Gadgets'];
-  const discoveredCategories = posts.map((post) => post.data.category);
-  const categories = [...new Set([...knownCategories, ...discoveredCategories])];
+  const categories = [...new Set(posts.map((post) => post.data.category))];
 
   return categories.map((category) => ({
     params: { category },
@@ -38,18 +36,9 @@ const { category, posts } = Astro.props;
       <p class="count">{String(posts.length).padStart(2, '0')} entries</p>
     </header>
 
-    {
-      posts.length > 0 ? (
-        <div class="post-grid">
-          {posts.map((post, index) => <PostCard post={post} index={index} />)}
-        </div>
-      ) : (
-        <div class="empty-note">
-          <p>このカテゴリーの記事は準備中です。</p>
-          <a href="/blog/">公開中の記事を見る →</a>
-        </div>
-      )
-    }
+    <div class="post-grid">
+      {posts.map((post, index) => <PostCard post={post} index={index} />)}
+    </div>
   </section>
 </BaseLayout>
 
@@ -95,26 +84,6 @@ const { category, posts } = Astro.props;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1.35rem;
     margin-top: 2rem;
-  }
-
-  .empty-note {
-    margin-top: 2rem;
-    padding: 2rem;
-    border: 1px dashed var(--line-strong);
-    background: rgba(251, 247, 237, 0.5);
-  }
-
-  .empty-note p {
-    margin: 0;
-  }
-
-  .empty-note a {
-    display: inline-block;
-    margin-top: 1rem;
-    color: var(--accent);
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    text-decoration: none;
   }
 
   @media (max-width: 920px) {

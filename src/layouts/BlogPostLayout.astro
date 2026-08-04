@@ -2,7 +2,11 @@
 import { Image } from 'astro:assets';
 import DefaultPostImage from '../assets/about-tahalog-desk.jpg';
 import type { BlogPost } from '../lib/posts';
-import { formatDate } from '../lib/posts';
+import {
+  formatDate,
+  getIndexableTags,
+  getPublishedPosts,
+} from '../lib/posts';
 import BaseLayout from './BaseLayout.astro';
 
 interface Props {
@@ -26,6 +30,7 @@ const displayImage = heroImage ?? DefaultPostImage;
 const imageAlt = heroImage
   ? `${title}のメイン画像`
   : 'ゲームコントローラーやキーボード、ノートが並ぶtaha.log()のデスクイラスト';
+const indexableTags = getIndexableTags(await getPublishedPosts());
 ---
 
 <BaseLayout
@@ -86,7 +91,11 @@ const imageAlt = heroImage
           <ul class="tag-list" aria-label="タグ">
             {tags.map((tag) => (
               <li>
-                <a href={`/tag/${encodeURIComponent(tag)}/`}>#{tag}</a>
+                {indexableTags.has(tag) ? (
+                  <a href={`/tag/${encodeURIComponent(tag)}/`}>#{tag}</a>
+                ) : (
+                  <span>#{tag}</span>
+                )}
               </li>
             ))}
           </ul>

@@ -13,6 +13,7 @@ interface Props {
   tags?: string[];
   author?: string;
   image?: string;
+  noindex?: boolean;
 }
 
 const {
@@ -27,6 +28,7 @@ const {
   tags = [],
   author = 'taha',
   image,
+  noindex = false,
 } = Astro.props;
 
 const siteName = 'taha.log()';
@@ -72,6 +74,7 @@ const structuredData =
 <meta name="description" content={description} />
 <meta name="generator" content={Astro.generator} />
 <meta name="theme-color" content="#f5eedf" />
+{noindex && <meta name="robots" content="noindex, follow" />}
 
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" href="/favicon.ico" />
@@ -86,7 +89,6 @@ const structuredData =
 <Font cssVariable="--font-atkinson" preload />
 
 <link rel="canonical" href={canonicalUrl} />
-<link rel="sitemap" href="/sitemap.xml" />
 
 <meta property="og:type" content={type} />
 <meta property="og:site_name" content={siteName} />

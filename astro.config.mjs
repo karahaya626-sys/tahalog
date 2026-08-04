@@ -6,7 +6,12 @@ import { defineConfig, fontProviders } from 'astro/config';
 export default defineConfig({
   site: 'https://tahalog.com',
 
-  integrations: [mdx(), sitemap()],
+  integrations: [
+    mdx(),
+    sitemap({
+      filter: (page) => page !== 'https://tahalog.com/404/',
+    }),
+  ],
 
   fonts: [
     {
