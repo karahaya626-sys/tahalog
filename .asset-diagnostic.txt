@@ -1,0 +1,30 @@
+CHUNK HASHES
+ee8bab05d12558f94852f8834250fc149e4512e00cef0dbbc2a7303cd65d1ec7  .asset-new/factomancer/factory-00.b64
+5699bc9549a437ded59f9e7d76b14dae71b9ee4b6e44cc4c42719a39a4da3f16  .asset-new/factomancer/factory-01.b64
+ae72911831671688efdf5a58c254a73c8706497c37d2f966a4d0b87fa68fb071  .asset-new/factomancer/factory-02.b64
+95adb727e1cf34f7f8249133352f5486c2423151163587aefdca716428ac8a1d  .asset-new/factomancer/grimoire-00.b64
+17df1158412c08a67fe8541f179a2f055e22e00c71ed47d7072519aa8a16f57a  .asset-new/factomancer/grimoire-01.b64
+9f6e31d0c8cd34b4a6ce9f87d43b0f5e95ca715683cf11b5b0745cc56767c18d  .asset-new/factomancer/title-00.b64
+171b50f1468b4a89247aa0fd48d4af1998d5af16d7fe75887a4e9f15b4816b62  .asset-new/factomancer/title-01.b64
+786f552469cfce34d1fc06805ae112e7a857555ec1864e8a0f34e76eb3e25b6f  .asset-new/factomancer/title-02.b64
+
+EXPECTED CHUNK HASHES
+b79d823fc7226731b12d7d6135d9011063435db4491e957f005deb535c8fa2ec  .asset-new/factomancer/factory-00.b64
+6582f8ea3a399b06aa5f626a6c9794096f1965cdca05e692314a9a7aca431dc5  .asset-new/factomancer/factory-01.b64
+ae72911831671688efdf5a58c254a73c8706497c37d2f966a4d0b87fa68fb071  .asset-new/factomancer/factory-02.b64
+95adb727e1cf34f7f8249133352f5486c2423151163587aefdca716428ac8a1d  .asset-new/factomancer/grimoire-00.b64
+17df1158412c08a67fe8541f179a2f055e22e00c71ed47d7072519aa8a16f57a  .asset-new/factomancer/grimoire-01.b64
+9f6e31d0c8cd34b4a6ce9f87d43b0f5e95ca715683cf11b5b0745cc56767c18d  .asset-new/factomancer/title-00.b64
+417454a397713b46a1a4f1ffdf8613768b36c9c61eb38e66941608050674f17b  .asset-new/factomancer/title-01.b64
+786f552469cfce34d1fc06805ae112e7a857555ec1864e8a0f34e76eb3e25b6f  .asset-new/factomancer/title-02.b64
+
+DECODE RESULTS
+title decode_status=0 bytes=29154
+d234a526ff594ab65cae77f06282440d3a91ef67435427753fa0d3c8ba862b63  /tmp/factomancer/title.webp
+/tmp/factomancer/title.webp: RIFF (little-endian) data, Web/P image, VP8 encoding, 768x432, Scaling: [none]x[none], YUV color, decoders should clamp
+grimoire decode_status=0 bytes=18334
+538c632992b0092c2bb3ff0a36122961420c4530fc967373b20e31a9ee54d5d2  /tmp/factomancer/grimoire.webp
+/tmp/factomancer/grimoire.webp: RIFF (little-endian) data, Web/P image, VP8 encoding, 768x432, Scaling: [none]x[none], YUV color, decoders should clamp
+factory decode_status=1 bytes=34415
+8db1da2f8e0b70a99043405d29a55bb9a9978aab3a038618f2c578e464bb3516  /tmp/factomancer/factory.webp
+/tmp/factomancer/factory.webp: RIFF (little-endian) data, Web/P image, VP8 encoding, 768x432, Scaling: [none]x[none], YUV color, decoders should clamp
