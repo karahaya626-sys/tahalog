@@ -57,3 +57,5 @@ jobs:
           git add -A
           git commit -m "Materialize Factomancer screenshots"
           git push
+
+# Trigger materialization after workflow creation.
