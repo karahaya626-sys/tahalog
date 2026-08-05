@@ -1,0 +1,63 @@
+name: Cache Wanderburg image
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/cache-wanderburg-image.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  cache-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Download official Wanderburg image
+        run: |
+          mkdir -p src/assets/images/wanderburg
+          curl --location --fail --retry 3 \
+            --user-agent 'Mozilla/5.0' \
+            'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3624140/a0a68815aac3899476a7365a04771e731008a406/header.jpg?t=1776354662' \
+            --output src/assets/images/wanderburg/header.jpg
+          test -s src/assets/images/wanderburg/header.jpg
+
+      - name: Switch article to the local image
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          article = Path('src/content/blog/wanderburg-overview.md')
+          text = article.read_text(encoding='utf-8')
+          local_line = "heroImage: '../../assets/images/wanderburg/header.jpg'"
+
+          lines = text.splitlines()
+          output = []
+          image_written = False
+          for line in lines:
+              if line.startswith('ogImage:') or line.startswith('heroImage:'):
+                  if not image_written:
+                      output.append(local_line)
+                      image_written = True
+                  continue
+              output.append(line)
+
+          if not image_written:
+              for index, line in enumerate(output):
+                  if line.startswith('updatedDate:') or line.startswith('pubDate:'):
+                      output.insert(index + 1, local_line)
+                      break
+
+          article.write_text('\n'.join(output) + '\n', encoding='utf-8')
+          PY
+
+      - name: Commit local image
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/assets/images/wanderburg/header.jpg src/content/blog/wanderburg-overview.md
+          git commit -m 'Store Wanderburg image locally'
+          git push
