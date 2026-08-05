@@ -6,21 +6,24 @@ on:
       - fix/factomancer-images-publish
 
 jobs:
-  verify:
+  title:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Decode and verify images
-        shell: bash
-        run: |
-          set -uo pipefail
-          mkdir -p /tmp/factomancer
-          for name in title grimoire factory; do
-            cat .asset-old/factomancer/${name}-*.b64 | tr -d '\r\n' | base64 --decode > /tmp/factomancer/${name}.webp || true
-            echo "${name}: $(wc -c < /tmp/factomancer/${name}.webp) bytes"
-            sha256sum /tmp/factomancer/${name}.webp
-            file /tmp/factomancer/${name}.webp
-          done
-          echo "expected title:    f0e3b1871b0c89e5c05466d8b0a1053434bf88ea01a1140364a323db515932c8"
-          echo "expected grimoire: af5f3695026382145dd973fff8039084e63aba229dd103272663375abb9e7440"
-          echo "expected factory:  cc1be2d84432f757fc7c5cc65e2abf5660ea9a679347224f0741487df8c889ea"
+      - run: |
+          cat .asset-old/factomancer/title-*.b64 | tr -d '\r\n' | base64 --decode > /tmp/title.webp
+          echo "f0e3b1871b0c89e5c05466d8b0a1053434bf88ea01a1140364a323db515932c8  /tmp/title.webp" | sha256sum -c -
+  grimoire:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          cat .asset-old/factomancer/grimoire-*.b64 | tr -d '\r\n' | base64 --decode > /tmp/grimoire.webp
+          echo "af5f3695026382145dd973fff8039084e63aba229dd103272663375abb9e7440  /tmp/grimoire.webp" | sha256sum -c -
+  factory:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          cat .asset-old/factomancer/factory-*.b64 | tr -d '\r\n' | base64 --decode > /tmp/factory.webp
+          echo "cc1be2d84432f757fc7c5cc65e2abf5660ea9a679347224f0741487df8c889ea  /tmp/factory.webp" | sha256sum -c -
