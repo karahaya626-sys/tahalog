@@ -1,0 +1,64 @@
+name: Update Factomancer article screenshots
+
+on:
+  push:
+    branches:
+      - fix/factomancer-screenshots-clean
+    paths:
+      - .github/workflows/update-factomancer-article.yml
+
+permissions:
+  contents: write
+
+jobs:
+  update-and-build:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/factomancer-screenshots-clean
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Replace article screenshots
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path('src/content/blog/factomancer-demo-play-report.md')
+          text = path.read_text(encoding='utf-8')
+
+          replacements = {
+              "heroImage: '../../assets/images/factomancer/official-factory.webp'": "heroImage: '../../assets/images/factomancer/factomancer-title.avif'",
+              "![魔法の機械と生産ラインが並ぶFactomancerの工場](../../assets/images/factomancer/official-factory.webp)": "![6日目までに作成したFactomancerの魔法工場](../../assets/images/factomancer/factomancer-factory.avif)",
+              "*工場を拡張しながら、複数の製作ルートをつないでいく。画像出典：[Factomancer Steamストア](https://store.steampowered.com/app/3979570/Factomancer/?l=japanese)／© Voltige Games*": "*6日目までに作成した工場。前日までの設備へ新しい機械や生産ラインを追加していく。筆者が体験版プレイ中に撮影。*",
+              "![レシピや関連素材を確認できるFactomancerのグリモワール](../../assets/images/factomancer/official-grimoire.webp)": "![原料から製作可能なものを絞り込めるFactomancerのグリモワール](../../assets/images/factomancer/factomancer-grimoire.avif)",
+              "*必要な原料や機械、関連する製作物を確認できる。画像出典：[Factomancer Steamストア](https://store.steampowered.com/app/3979570/Factomancer/?l=japanese)／© Voltige Games*": "*原料から製作可能なものを絞り込めるグリモワール。筆者が体験版プレイ中に撮影。*",
+          }
+
+          for old, new in replacements.items():
+              if old not in text:
+                  raise SystemExit(f'置換対象が見つからない: {old}')
+              text = text.replace(old, new, 1)
+
+          path.write_text(text, encoding='utf-8')
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Astro site
+        run: npm run build
+
+      - name: Commit verified article update
+        shell: bash
+        run: |
+          rm -f .github/workflows/update-factomancer-article.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Use original screenshots in Factomancer play report'
+          git push origin HEAD:fix/factomancer-screenshots-clean
