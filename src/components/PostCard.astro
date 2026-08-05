@@ -10,13 +10,21 @@ interface Props {
 }
 
 const { post, index = 0 } = Astro.props;
-const image = post.data.heroImage ?? DefaultPostImage;
+const localImage = post.data.heroImage;
+const remoteImage = localImage ? undefined : post.data.ogImage;
+const fallbackImage = localImage ?? DefaultPostImage;
 const entryNumber = String(index + 1).padStart(2, '0');
 ---
 
 <article class="post-card">
   <a class="post-card__image" href={getPostUrl(post)} tabindex="-1" aria-hidden="true">
-    <Image src={image} alt="" loading="lazy" />
+    {
+      remoteImage ? (
+        <img src={remoteImage} alt="" loading="lazy" referrerpolicy="no-referrer" />
+      ) : (
+        <Image src={fallbackImage} alt="" loading="lazy" />
+      )
+    }
   </a>
 
   <div class="post-card__body">
