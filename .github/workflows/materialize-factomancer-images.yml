@@ -1,4 +1,4 @@
-name: Materialize Factomancer images
+name: Diagnose Factomancer image chunks
 
 on:
   push:
@@ -9,92 +9,46 @@ permissions:
   contents: write
 
 jobs:
-  materialize:
+  diagnose:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Decode and verify screenshots
+      - name: Build diagnostic report
         shell: bash
         run: |
-          set -euo pipefail
-          mkdir -p src/assets/images/factomancer
-
-          cat .asset-new/factomancer/title-*.b64 | tr -d '\r\n' | base64 --decode > src/assets/images/factomancer/factomancer-title.webp
-          cat .asset-new/factomancer/grimoire-*.b64 | tr -d '\r\n' | base64 --decode > src/assets/images/factomancer/factomancer-grimoire.webp
-          cat .asset-new/factomancer/factory-*.b64 | tr -d '\r\n' | base64 --decode > src/assets/images/factomancer/factomancer-factory.webp
-
-          echo 'a0eaa5affdf768653fb162c692def59231554a40aa3923324139bc0af49d01af  src/assets/images/factomancer/factomancer-title.webp' | sha256sum -c -
-          echo '538c632992b0092c2bb3ff0a36122961420c4530fc967373b20e31a9ee54d5d2  src/assets/images/factomancer/factomancer-grimoire.webp' | sha256sum -c -
-          echo 'b74172ad1c400655e67b7dda8bc4bb8f69c9628da781ff686faac9fe2b7e06da  src/assets/images/factomancer/factomancer-factory.webp' | sha256sum -c -
-
-          file src/assets/images/factomancer/factomancer-*.webp
-
-      - name: Update article image references
-        shell: python
-        run: |
-          from pathlib import Path
-
-          path = Path('src/content/blog/factomancer-demo-play-report.md')
-          text = path.read_text(encoding='utf-8')
-
-          text = text.replace(
-              "heroImage: '../../assets/images/factomancer/official-factory.webp'",
-              "heroImage: '../../assets/images/factomancer/factomancer-title.webp'",
-              1,
-          )
-          text = text.replace(
-              '../../assets/images/factomancer/official-factory.webp',
-              '../../assets/images/factomancer/factomancer-factory.webp',
-              1,
-          )
-          text = text.replace(
-              '*工場を拡張しながら、複数の製作ルートをつないでいく。画像出典：[Factomancer Steamストア](https://store.steampowered.com/app/3979570/Factomancer/?l=japanese)／© Voltige Games*',
-              '*6日目まで育てた工場。体験版プレイ時に撮影。*',
-              1,
-          )
-          text = text.replace(
-              '../../assets/images/factomancer/official-grimoire.webp',
-              '../../assets/images/factomancer/factomancer-grimoire.webp',
-              1,
-          )
-          text = text.replace(
-              '*必要な原料や機械、関連する製作物を確認できる。画像出典：[Factomancer Steamストア](https://store.steampowered.com/app/3979570/Factomancer/?l=japanese)／© Voltige Games*',
-              '*原料から製作可能なアイテムを絞り込んだグリモワール。体験版プレイ時に撮影。*',
-              1,
-          )
-
-          required = [
-              'factomancer-title.webp',
-              'factomancer-factory.webp',
-              'factomancer-grimoire.webp',
-          ]
-          if not all(item in text for item in required):
-              raise SystemExit('Article image references were not updated correctly')
-          if 'official-factory.webp' in text or 'official-grimoire.webp' in text:
-              raise SystemExit('Old official image references remain')
-
-          path.write_text(text, encoding='utf-8')
-
-      - name: Build Astro site
+          set +e
+          report=.asset-diagnostic.txt
+          : > "$report"
+          echo 'CHUNK HASHES' >> "$report"
+          sha256sum .asset-new/factomancer/*.b64 >> "$report"
+          echo >> "$report"
+          echo 'EXPECTED CHUNK HASHES' >> "$report"
+          cat >> "$report" <<'EOF'
+          b79d823fc7226731b12d7d6135d9011063435db4491e957f005deb535c8fa2ec  .asset-new/factomancer/factory-00.b64
+          6582f8ea3a399b06aa5f626a6c9794096f1965cdca05e692314a9a7aca431dc5  .asset-new/factomancer/factory-01.b64
+          ae72911831671688efdf5a58c254a73c8706497c37d2f966a4d0b87fa68fb071  .asset-new/factomancer/factory-02.b64
+          95adb727e1cf34f7f8249133352f5486c2423151163587aefdca716428ac8a1d  .asset-new/factomancer/grimoire-00.b64
+          17df1158412c08a67fe8541f179a2f055e22e00c71ed47d7072519aa8a16f57a  .asset-new/factomancer/grimoire-01.b64
+          9f6e31d0c8cd34b4a6ce9f87d43b0f5e95ca715683cf11b5b0745cc56767c18d  .asset-new/factomancer/title-00.b64
+          417454a397713b46a1a4f1ffdf8613768b36c9c61eb38e66941608050674f17b  .asset-new/factomancer/title-01.b64
+          786f552469cfce34d1fc06805ae112e7a857555ec1864e8a0f34e76eb3e25b6f  .asset-new/factomancer/title-02.b64
+          EOF
+          mkdir -p /tmp/factomancer
+          echo >> "$report"
+          echo 'DECODE RESULTS' >> "$report"
+          for name in title grimoire factory; do
+            cat .asset-new/factomancer/${name}-*.b64 | tr -d '\r\n' | base64 --decode > /tmp/factomancer/${name}.webp
+            status=$?
+            echo "$name decode_status=$status bytes=$(wc -c < /tmp/factomancer/${name}.webp)" >> "$report"
+            sha256sum /tmp/factomancer/${name}.webp >> "$report"
+            file /tmp/factomancer/${name}.webp >> "$report"
+          done
+      - name: Commit diagnostic report
         shell: bash
         run: |
-          set -euo pipefail
-          npm ci
-          npm run build
-
-      - name: Remove staging files
-        shell: bash
-        run: |
-          rm -rf .asset-new .asset-old .asset-upload
-
-      - name: Commit generated assets
-        shell: bash
-        run: |
-          set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -A
-          git commit -m 'Use original Factomancer screenshots'
+          git add .asset-diagnostic.txt
+          git commit -m 'Record Factomancer chunk diagnostics'
           git push
