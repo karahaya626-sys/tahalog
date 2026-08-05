@@ -3,7 +3,7 @@ title: "『Wanderburg』はどんなゲーム？動く城を巨大化させる�
 description: "車輪付きの城で村や要塞を飲み込み、兵装を追加しながら巨大化する『Wanderburg』。ゲーム内容、日本語対応、体験版の評価、海外コミュニティの反応をまとめる。"
 pubDate: 2026-08-05
 updatedDate: 2026-08-05
-ogImage: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3624140/a0a68815aac3899476a7365a04771e731008a406/header.jpg?t=1776354662"
+heroImage: '../../assets/images/wanderburg/header.jpg'
 category: "Games"
 tags: ["Wanderburg", "ローグライト", "サバイバー系", "Steam"]
 author: "taha"
