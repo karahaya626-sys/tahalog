@@ -2,7 +2,7 @@
 title: "【Factomancer 体験版プレイレポ】毎日育つ魔法工場。「おーだー」の期待に応えろ"
 description: "工場自動化ローグライト『Factomancer』の体験版をプレイ。毎日増える目標金額、日をまたいで育つ工場、グリモワールの便利さ、コミュニティの評価をまとめる。"
 pubDate: 2026-08-04
-heroImage: '../../assets/images/factomancer/official-factory.webp'
+heroImage: '../../assets/images/factomancer/factomancer-title.avif'
 category: "Games"
 tags: ["Factomancer", "体験版", "工場自動化", "ローグライト", "Steam"]
 author: "taha"
@@ -37,9 +37,9 @@ draft: false
 
 既存の工場を土台に、新しく手に入れた機械や販売所を追加し、少しずつ生産規模を広げていく形だ。
 
-![魔法の機械と生産ラインが並ぶFactomancerの工場](../../assets/images/factomancer/official-factory.webp)
+![6日目までに作成したFactomancerの魔法工場](../../assets/images/factomancer/factomancer-factory.avif)
 
-*工場を拡張しながら、複数の製作ルートをつないでいく。画像出典：[Factomancer Steamストア](https://store.steampowered.com/app/3979570/Factomancer/?l=japanese)／© Voltige Games*
+*6日目までに作成した工場。前日までの設備へ新しい機械や生産ラインを追加していく。筆者が体験版プレイ中に撮影。*
 
 実際のプレイでも、毎日ゼロから作り直すのではなく、前日までの工場へ新しいラインを継ぎ足していく感覚に近かった。日数が進むほど最初は単純だった工場が複雑になり、工場自動化ゲームらしい成長もしっかり味わえる。
 
@@ -67,9 +67,9 @@ draft: false
 
 そこで便利なのが、ゲーム内の図鑑にあたる**グリモワール**である。
 
-![レシピや関連素材を確認できるFactomancerのグリモワール](../../assets/images/factomancer/official-grimoire.webp)
+![原料から製作可能なものを絞り込めるFactomancerのグリモワール](../../assets/images/factomancer/factomancer-grimoire.avif)
 
-*必要な原料や機械、関連する製作物を確認できる。画像出典：[Factomancer Steamストア](https://store.steampowered.com/app/3979570/Factomancer/?l=japanese)／© Voltige Games*
+*原料から製作可能なものを絞り込めるグリモワール。筆者が体験版プレイ中に撮影。*
 
 グリモワールでは、必要な原料、使用する機械、完成品の価格、生産時間や生産量などをまとめて確認できる。
 
