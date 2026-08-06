@@ -4,9 +4,11 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && astro build",
+    "prebuild": "node scripts/download-article-images.mjs",
+    "build": "node scripts/check-article-images.mjs && astro check && astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "check:article-images": "node scripts/check-article-images.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.4",
