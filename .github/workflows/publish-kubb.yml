@@ -1,0 +1,223 @@
+name: Publish KUBB article
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-kubb.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Download official Steam images
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p src/assets/images/kubb
+          curl -fsSL 'https://store.steampowered.com/api/appdetails?appids=4609980&l=english&cc=jp' -o /tmp/kubb.json
+          jq -e '.["4609980"].success == true' /tmp/kubb.json >/dev/null
+
+          header_url=$(jq -r '.["4609980"].data.header_image' /tmp/kubb.json)
+          curl -fL --retry 3 --retry-delay 2 "$header_url" -o src/assets/images/kubb/header.jpg
+
+          index=1
+          while IFS= read -r screenshot_url; do
+            curl -fL --retry 3 --retry-delay 2 "$screenshot_url" -o "src/assets/images/kubb/screenshot-${index}.jpg"
+            index=$((index + 1))
+          done < <(jq -r '.["4609980"].data.screenshots[:3][] | .path_full' /tmp/kubb.json)
+
+          test -s src/assets/images/kubb/header.jpg
+          test -s src/assets/images/kubb/screenshot-1.jpg
+          test -s src/assets/images/kubb/screenshot-2.jpg
+          test -s src/assets/images/kubb/screenshot-3.jpg
+
+      - name: Create article
+        shell: bash
+        run: |
+          cat > src/content/blog/kubb-overview.md <<'EOF'
+          ---
+          title: "『KUBB』はどんなゲーム？落ち物パズル×デッキ構築ローグライトの特徴"
+          description: "落ち物パズルへデッキ構築、災害、異次元ステージを組み合わせた『KUBB』。65種類のブロック、日本語対応、体験版、Emberwardとの違いを公式情報から整理する。"
+          pubDate: 2026-08-07
+          heroImage: '../../assets/images/kubb/header.jpg'
+          category: "Games"
+          tags: ["KUBB", "デッキ構築", "ローグライト", "落ち物パズル", "Steam"]
+          author: "taha"
+          draft: false
+          ---
+
+          『KUBB』は、落ちてくるブロックを積み上げて列を消すパズルへ、デッキ構築とローグライトを組み合わせた作品である。
+
+          基本ルールだけを見ると昔ながらの落ち物パズルに近い。しかし、ラン中に選んだカードによって特殊なブロックがデッキへ加わり、さらに吹雪や寄生虫といった災害、重力まで変化する異次元ステージが盤面をかき回してくる。
+
+          きれいに積む技術だけでなく、どのブロックを採用し、崩れかけた盤面をどう立て直すかという判断が重要になりそうだ。
+
+          今回はまだ実際にはプレイしていないため、Steamで公開されている公式情報をもとに、ゲームの特徴や日本語対応、体験版の内容を整理する。
+
+          > ※本記事は2026年8月7日時点の情報をもとにしている。アップデートにより、収録内容や配信状況が変更される可能性がある。
+
+          ## 『KUBB』とは
+
+          『KUBB』は、Sleepless Wizardsが開発・販売するローグライト落ち物パズルである。
+
+          Steamストアでは2026年8月6日リリースと案内されており、製品版にはそれぞれ異なるルールを持つ65種類のブロックが収録される。
+
+          | 項目 | 内容 |
+          |---|---|
+          | 開発・販売 | Sleepless Wizards |
+          | ジャンル | 落ち物パズル・デッキ構築・ローグライト |
+          | プレイ人数 | シングルプレイ |
+          | 対応OS | Windows / macOS / Linux |
+          | 日本語 | インターフェースに対応 |
+          | 操作 | キーボード・ゲームパッド |
+          | 製品版のブロック数 | 65種類 |
+          | 体験版 | Steamで無料配信 |
+
+          ![特殊なブロックを積み上げるKUBBのプレイ画面](../../assets/images/kubb/screenshot-1.jpg)
+
+          *通常の落ち物パズルへ、ブロックごとの特殊能力が加わる。画像出典：[KUBB Steamストア](https://store.steampowered.com/app/4609980/KUBB/?l=japanese)／© Sleepless Wizards*
+
+          ## ブロックそのものがデッキになる
+
+          一般的なデッキ構築ゲームでは、カードを選んで手札から使用する。一方の『KUBB』では、ラン中に選んだカードが新しいブロックとして出現候補へ加わる。
+
+          数レベルごとに新しいカードを選択し、ランを進めながら自分のブロック構成を作っていく仕組みだ。
+
+          ブロックには、盤面を破壊する攻撃的なタイプ、ほかのブロックを守るタイプ、盤面上へ残っている間にスコアを増やすレリック系などが存在する。
+
+          強力な破壊ブロックを増やして多少乱雑に積み上げるのか、盤面へ長く残すブロックを中心に安定したスコアを狙うのか。選んだカードによって、同じ落ち物パズルでも組み立て方が変わる。
+
+          ただし、次に落ちてくるブロックは完全には制御できない。強いカードを集めるだけでなく、現在の盤面と引いたブロックをつなげるアドリブも必要になりそうだ。
+
+          ## 災害が盤面へ居座る
+
+          ラン中には、通常のブロックだけでなく**災害**も発生する。
+
+          公式情報では、列を雪で埋めていく吹雪、デッキ内のカードを内側から侵食する寄生虫、ゲーム全体を加速させる効果などが紹介されている。
+
+          ![吹雪などの災害が発生するKUBBの盤面](../../assets/images/kubb/screenshot-2.jpg)
+
+          *災害は発生して終わりではなく、対処するまで盤面やデッキへ影響を与える。画像出典：[KUBB Steamストア](https://store.steampowered.com/app/4609980/KUBB/?l=japanese)／© Sleepless Wizards*
+
+          災害の中には対策によって治せるものもあれば、効果が消えるまで耐えるしかないものもあるという。
+
+          普段どおりに列を消しているだけでは足りず、災害によって崩れた盤面を立て直す必要がある。順調なランでも突然ルールが変わるため、毎回同じ積み方を繰り返すゲームにはならなさそうだ。
+
+          ## 18種類の異次元がルールを変える
+
+          ポータルへ入ると、通常とは異なるルールで遊ぶ**異次元ステージ**が始まる。
+
+          公式が挙げている変化には、次のようなものがある。
+
+          - 重力が反転する
+          - 盤面の幅が狭くなる
+          - ブロックが見えなくなる
+          - 砂のように盤面が動く
+
+          ![通常とは異なるルールでブロックを積む異次元ステージ](../../assets/images/kubb/screenshot-3.jpg)
+
+          *異次元は高リスクの寄り道であり、生き残れば強化されるが、失敗すればランを失う。画像出典：[KUBB Steamストア](https://store.steampowered.com/app/4609980/KUBB/?l=japanese)／© Sleepless Wizards*
+
+          異次元は全部で18種類用意されている。通常の盤面で安定しているときに危険を冒して入るか、そのままランを続けるかという選択も発生する。
+
+          ブロックの特殊能力だけでなく、ステージ側のルールまで変化するため、「今回はこのデッキが完成したから勝ち」という単純な展開にはなりにくそうだ。
+
+          ## ゲームオーバー後もブロックが増える
+
+          1回のランが終了すると盤面とデッキは失われるが、実績の達成によって新しいブロックが解放される。
+
+          新しいブロックが増えるほど、次回以降に作れるデッキや戦略も広がる。プレイヤー自身が積み方に慣れるだけでなく、ゲーム側の選択肢も少しずつ増えていく形だ。
+
+          Steamランキングにも対応しているため、単にクリアを目指すだけでなく、解放したブロックを組み合わせて高得点を狙う遊び方も中心になりそうである。
+
+          ## 無料体験版と日本語対応
+
+          Steamでは無料体験版が配信されている。
+
+          体験版のストア説明では30種類以上のブロックを利用でき、製品版ではさらに30種類以上が追加されると案内されている。製品版の全65種類を試せるわけではないが、デッキ構築、災害、異次元という基本部分は確認できる。
+
+          日本語はインターフェースに対応。音声や字幕を読むタイプのゲームではないため、効果説明やメニューが日本語で確認できれば遊びやすそうだ。
+
+          なお、開発元はSteam上で、非英語13言語のローカライズとフレーバーテキストの草案にAIツールを使用したと開示している。AI支援による文章は開発者が確認・編集しており、アートやゲーム中に生成されるコンテンツには生成AIを使っていないとしている。
+
+          ## 『Emberward』との違い
+
+          taha.log()で以前紹介した[『Emberward』](/blog/emberward-first-impressions/)も、ブロックとローグライトを組み合わせたゲームである。
+
+          ただし、ブロックの役割はかなり違う。
+
+          | ゲーム | ブロックの使い方 |
+          |---|---|
+          | KUBB | 落ちてくるブロックを積み、列を消して盤面を維持する |
+          | Emberward | ブロックを置いて迷路を作り、敵の進行ルートを設計する |
+
+          『Emberward』はタワーディフェンスの配置や敵の誘導が中心であり、『KUBB』は落ち物パズルの操作と盤面管理が中心である。
+
+          テトリス系のブロックが好きでも、求められる判断は別物だ。素早い操作と盤面の立て直しを楽しみたい場合は『KUBB』、時間をかけて迷路や防衛配置を考えたい場合は『Emberward』が近そうである。
+
+          ## 海外コミュニティの評価
+
+          確認時点では、製品版のSteamユーザーレビューはまだ投稿されていない。体験版についても、評価傾向を判断できるだけのレビューは表示されていない。
+
+          そのため、現段階で「非常に好評」などと評価を決めつけることはできない。
+
+          一方で、公式が公開している内容からは、落ち物パズルへデッキ構築を足すだけでなく、災害や異次元によって盤面のルールそのものを変えようとしている点が特徴として見える。
+
+          実際の評価では、特殊ブロックの引きが理不尽に感じないか、災害へ対処する手段が十分にあるか、日本語の効果説明が自然かといった部分が注目点になりそうだ。
+
+          ## どんな人に合いそうか
+
+          『KUBB』は、次のような人と相性がよさそうである。
+
+          - 落ち物パズルが好きだが、毎回同じルールでは物足りない
+          - デッキ構築ローグライトの選択と組み合わせが好き
+          - 短いランを何度も繰り返したい
+          - 崩れかけた盤面を立て直す展開が好き
+          - スコアアタックやランキングを楽しみたい
+
+          反対に、落ち着いて長時間考えながら配置したい場合や、ランダムに選ばれるブロックへ対応することが苦手な場合は忙しく感じる可能性がある。
+
+          ## まとめ
+
+          『KUBB』は、落ち物パズルへカードを追加しただけの作品ではない。
+
+          65種類のブロックからデッキを作り、吹雪や寄生虫といった災害へ対処し、重力や盤面まで変化する18種類の異次元を突破するローグライトである。
+
+          シンプルなルールから始まり、ランが進むほどブロックとステージの両方が暴れ始める。その混乱をどこまで自分のデッキで制御できるかが、本作の面白さになりそうだ。
+
+          現時点ではレビュー数がなく評価はこれからだが、無料体験版があるため、落ち物パズルとデッキ構築の組み合わせが気になるなら実際に確かめやすい作品である。
+
+          ## 参照した公式情報
+
+          - [KUBB Steamストア](https://store.steampowered.com/app/4609980/KUBB/?l=japanese)
+          - [KUBB Demo Steamストア](https://store.steampowered.com/app/4665930/KUBB_Demo/?l=japanese)
+          EOF
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate production build
+        run: npm run build
+
+      - name: Commit article and images
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/publish-kubb.yml
+          git add src/content/blog/kubb-overview.md src/assets/images/kubb
+          git commit -m "Add KUBB overview"
+          git push
