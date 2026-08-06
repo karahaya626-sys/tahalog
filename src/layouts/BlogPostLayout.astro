@@ -1,11 +1,13 @@
 ---
 import { Image } from 'astro:assets';
 import DefaultPostImage from '../assets/about-tahalog-desk.jpg';
+import PostCard from '../components/PostCard.astro';
 import type { BlogPost } from '../lib/posts';
 import {
   formatDate,
   getIndexableTags,
   getPublishedPosts,
+  getRelatedPosts,
 } from '../lib/posts';
 import BaseLayout from './BaseLayout.astro';
 
@@ -31,7 +33,9 @@ const remoteDisplayImage = heroImage ? undefined : ogImage;
 const imageAlt = heroImage || remoteDisplayImage
   ? `${title}のメイン画像`
   : 'ゲームコントローラーやキーボード、ノートが並ぶtaha.log()のデスクイラスト';
-const indexableTags = getIndexableTags(await getPublishedPosts());
+const publishedPosts = await getPublishedPosts();
+const indexableTags = getIndexableTags(publishedPosts);
+const relatedPosts = getRelatedPosts(post, publishedPosts);
 ---
 
 <BaseLayout
@@ -95,6 +99,23 @@ const indexableTags = getIndexableTags(await getPublishedPosts());
     <div class="prose">
       <slot />
     </div>
+
+
+{
+  relatedPosts.length > 0 && (
+    <section class="related-posts page-shell" aria-labelledby="related-posts-title">
+      <div class="related-posts__heading">
+        <p>// continue reading</p>
+        <h2 id="related-posts-title">関連記事</h2>
+      </div>
+      <div class="related-posts__grid">
+        {relatedPosts.map((relatedPost, index) => (
+          <PostCard post={relatedPost} index={index} />
+        ))}
+      </div>
+    </section>
+  )
+}
 
     {
       tags.length > 0 && (
@@ -356,6 +377,43 @@ const indexableTags = getIndexableTags(await getPublishedPosts());
     background: rgba(221, 92, 62, 0.09);
     color: var(--ink);
   }
+
+
+.related-posts {
+  margin-top: 5rem;
+}
+
+.related-posts__heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.related-posts__heading p {
+  margin: 0;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.related-posts__heading h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(1.55rem, 3vw, 2rem);
+  line-height: 1.3;
+  letter-spacing: -0.035em;
+}
+
+.related-posts__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 1.25rem;
+}
 
   .post__footer {
     margin-top: 4.5rem;
