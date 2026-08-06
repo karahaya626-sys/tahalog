@@ -2,6 +2,7 @@
 title: "AstroとCloudflare Pagesで個人ブログを作った流れ"
 description: "SEでありゲーマーでもある筆者が、AstroとCloudflare Pagesを使って趣味の個人ブログを公開するまでの流れをまとめました。"
 pubDate: 2026-07-29
+heroImage: '../../assets/blog-placeholder-1.jpg'
 category: "Dev"
 tags: ["Astro", "Cloudflare Pages", "GitHub", "ブログ運営"]
 author: "taha"
@@ -25,6 +26,10 @@ draft: false
 SEとして働いていますが、AstroやCloudflare Pagesに最初から詳しかったわけではありません。そこで、分からない部分はAIに相談し、必要な設定や次に進める作業を一つずつ確認しながら形にしていきました。
 
 この記事では、独自ドメインを準備してからブログを公開するまでに進めたことを、順番にまとめます。
+
+![Astroで個人ブログを構築するイメージ](../../assets/blog-placeholder-2.jpg)
+
+*テンプレートから始め、必要な機能を少しずつ追加して現在の形へ整えていった。*
 
 ## まずは全体の流れ
 
@@ -105,6 +110,10 @@ git push
 ```
 
 先に`npm run build`を実行しておくと、公開前に本番用のページが正常に生成できるか確認できます。
+
+![GitHubから公開環境へ反映するイメージ](../../assets/blog-placeholder-3.jpg)
+
+*記事やサイトの変更をGitHubへ送り、Cloudflare Pagesが自動で公開用ページを生成する。*
 
 ## 4. Cloudflare PagesとGitHubをつなぐ
 
@@ -224,6 +233,10 @@ git add .
 git commit -m "Add new article"
 git push
 ```
+
+![taha.logを更新していくイメージ](../../assets/blog-placeholder-4.jpg)
+
+*完成形を一度で目指さず、記事やデザインを少しずつ改善していく。*
 
 ## まとめ
 
