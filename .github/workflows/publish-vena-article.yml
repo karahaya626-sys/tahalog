@@ -1,0 +1,211 @@
+name: Publish Vena article
+
+on:
+  push:
+    paths:
+      - '.github/workflows/publish-vena-article.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Download official Steam images
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p src/assets/images/vena
+          curl -fsSL 'https://store.steampowered.com/api/appdetails?appids=4165740&l=english' -o /tmp/vena.json
+          header_url="$(jq -r '."4165740".data.header_image' /tmp/vena.json)"
+          mapfile -t screenshots < <(jq -r '."4165740".data.screenshots[:3][].path_full' /tmp/vena.json)
+          test -n "$header_url"
+          test "${#screenshots[@]}" -eq 3
+          curl -fsSL "$header_url" -o src/assets/images/vena/header.jpg
+          for i in 0 1 2; do
+            curl -fsSL "${screenshots[$i]}" -o "src/assets/images/vena/screenshot-$((i + 1)).jpg"
+          done
+
+      - name: Create article
+        shell: bash
+        run: |
+          cat > src/content/blog/vena-overview.md <<'ARTICLE'
+          ---
+          title: "『Vena』はどんなゲーム？六角形タイルで資源網を作る自動化ローグライク"
+          description: "六角形タイルをつないで6種類の資源を中央のNexusへ届ける自動化ローグライク『Vena』。ダイスを使うショップ、100種類以上のタイル、日本語対応、体験版の評価をまとめる。"
+          pubDate: 2026-08-07
+          heroImage: '../../assets/images/vena/header.jpg'
+          category: "Games"
+          tags: ["Vena", "工場自動化", "ローグライト", "資源管理", "Steam"]
+          author: "taha"
+          draft: false
+          ---
+
+          『Vena』は、六角形のタイルを配置して資源ネットワークを作り、中央にあるNexusの需要を満たしていく自動化ローグライクである。
+
+          ベルトコンベアを細かく引く一般的な工場ゲームとは異なり、盤面へ生産タイルや変換タイルを置き、その向きと接続によって資源の流れを組み立てる。見た目はボードゲームに近いが、限られた選択肢から効率のよい生産網を作る感覚は、しっかり自動化ゲームだ。
+
+          各フェーズの合間にはダイスを振ってショップを利用し、ランダムに並ぶタイルやパークから次の一手を選ぶ。工場を美しく完成させるというより、手元に来た部品を組み合わせて、その場で成立する仕組みを作る作品になっている。
+
+          今回はまだ実際にはプレイしていないため、Steamの公式情報と開発者の発表、体験版へ寄せられた評価をもとに、どんなゲームなのかを整理する。
+
+          > ※本記事は2026年8月7日時点の情報をもとにしている。開発中の作品であるため、発売時期や収録内容、評価件数は今後変わる可能性がある。
+
+          ## 『Vena』とは
+
+          『Vena』は、個人開発者loertingが開発・販売する自動化ローグライクである。
+
+          都市建設、ローグライクのデッキ構築、自動化を組み合わせた作品として紹介されており、製品版は2026年第4四半期にSteamで発売予定。無料体験版はすでに配信されている。
+
+          | 項目 | 内容 |
+          |---|---|
+          | 開発・販売 | loerting |
+          | ジャンル | 自動化・資源管理・ローグライト |
+          | プレイ人数 | シングルプレイ |
+          | プラットフォーム | PC（Steam） |
+          | 日本語 | インターフェースに対応 |
+          | 体験版公開日 | 2026年2月6日 |
+          | 製品版発売予定 | 2026年第4四半期 |
+
+          ![中央のNexusへ六方向から資源を送るVenaの盤面](../../assets/images/vena/screenshot-1.jpg)
+
+          *盤面中央にあるNexusの需要を満たすため、六方向へ資源ネットワークを伸ばしていく。画像出典：[Steamストア](https://store.steampowered.com/app/4165740/Vena/)／© loerting*
+
+          ## 6種類の資源をNexusへ届ける
+
+          ゲームは中央に置かれたNexusから始まる。
+
+          Nexusには6本の経路が伸びており、それぞれを通じて6種類の資源を供給する。フェーズが進むごとに要求量は増えていくため、序盤に成立した小さな生産網をそのまま使い続けるだけでは追いつかない。
+
+          生産タイルを置くだけでなく、資源を別の種類へ変換するタイル、出力を複製するタイル、条件次第で大きな利益を生むタイルなどを組み合わせ、全9フェーズの突破を目指す。
+
+          タイルは回転させて配置できる。欲しい資源が作れても、出口の向きが合わなければネットワークへ接続できないため、何を引くかだけでなく、盤面へどう収めるかも重要になる。
+
+          ## 100種類以上の六角形タイル
+
+          製品版には100種類以上の回転可能な六角形タイルが収録予定である。
+
+          タイルにはコモンからレジェンダリーまで4段階のレアリティがあり、それぞれ異なる効果を持つ。単体で強いタイルを置くだけではなく、生産・変換・複製を連鎖させたときに大きく伸びる設計になっているようだ。
+
+          ローグライトなので、毎回同じ部品が手に入るわけではない。理想の工場を決め打ちするのではなく、今回引いたタイルから使える組み合わせを探す必要がある。
+
+          ![六角形タイルを連結して複雑な資源網を構築するVena](../../assets/images/vena/screenshot-2.jpg)
+
+          *タイルの効果だけでなく、向きと配置スペースを考えて資源の流れをつなぐ。画像出典：[Steamストア](https://store.steampowered.com/app/4165740/Vena/)／© loerting*
+
+          ## ショップではダイスを振る
+
+          各フェーズの間にはショップが開き、ダイスを振って次に使うタイルを確保する。
+
+          ダイスは一部を保持したまま振り直すことができ、同じ目を3つ揃えると4個目のダイスが解放される。提示されたタイルが合わなければ、ショップの商品を入れ替えて必要な部品を探すことも可能だ。
+
+          ショップ終了時には3つの候補からパークを1つ選び、そのランの方向性を決める。製品版には50種類以上のパークが用意される予定で、資源効率を伸ばすだけでなく、通常のルールを崩すような効果も含まれる。
+
+          自動化ゲームでありながら、安定した生産計画だけでは完結しない。どこまでダイスを振り直すか、目当てのタイルを追うか、手元の構成で妥協するかというリスク管理もゲームの一部になっている。
+
+          ## 7種類のモードと5段階の難易度
+
+          製品版では7種類のゲームモードと、NormalからGodまでの5段階の難易度が用意される予定である。
+
+          さらに、実績や高難度のクリアによって20種類以上のスキンを解放できる。数値を恒久的に上げ続けるタイプというより、プレイヤー自身が仕組みを理解し、より効率のよい配置を作れるようになることが長期的な成長につながりそうだ。
+
+          もともとはGodot Wild Jam #85で受賞した作品を発展させたプロジェクトであり、現在は個人開発でコード、ゲームデザイン、ピクセルアート、音楽まで制作されている。
+
+          ## Factomancerとの違い
+
+          同じ自動化ローグライトとして、[『Factomancer』](https://tahalog.com/blog/factomancer-official-overview/)が気になっている人も多そうだ。
+
+          共通するのは、ランダムに提示される要素から生産ラインを組み、その回ならではの相乗効果を作る部分である。ただし、実際の遊び方はかなり異なる。
+
+          |  | Vena | Factomancer |
+          |---|---|---|
+          | 工場の形 | 六角形タイルによる盤面型 | 建物と搬送ラインを配置 |
+          | 進行 | 9つのフェーズを突破 | 日ごとの目標を達成 |
+          | ランダム要素 | ダイス、タイル、パーク | カード、レシピ、イベント |
+          | 操作感 | ボードゲーム寄り | 工場シミュレーション寄り |
+          | 主な悩み | 接続方向と限られた盤面 | 生産量、搬送、資金繰り |
+
+          『Factomancer』が小さな工場を日ごとに拡張していく作品なら、『Vena』は一枚の盤面上で資源パズルを完成させる作品に近い。
+
+          コンベアや建物を細かく管理するより、タイル同士のシナジーを考えたい人には『Vena』のほうが入りやすそうだ。
+
+          ## 日本語対応と体験版
+
+          体験版はSteamで無料配信されており、日本語インターフェースに対応している。
+
+          公式ページでは英語のほか、日本語、中国語、韓国語、フランス語、ドイツ語など複数言語への対応が案内されている。テキストを読みながらタイル効果を組み合わせる作品なので、最初から日本語で試せるのはありがたい。
+
+          体験版はWindowsだけでなく、macOSとLinux向けの配信情報も登録されている。
+
+          ![タイル候補やパークを選ぶVenaのショップ画面](../../assets/images/vena/screenshot-3.jpg)
+
+          *ダイスを保持・振り直しながら、次のフェーズで使うタイルを集める。画像出典：[Steamストア](https://store.steampowered.com/app/4165740/Vena/)／© loerting*
+
+          ## 海外コミュニティの評価
+
+          2026年8月7日時点で、Steamの体験版は**30件中93％が好評**となっている。
+
+          件数はまだ30件と少なく、広く評価が固まった段階ではない。ただ、初期プレイヤーからは次のような部分が評価されているようだ。
+
+          - タイルをつないで生産網が動き始める気持ちよさ
+          - ボードゲームのようにまとまった画面で遊べる
+          - 短いランの中でもシナジーを考える余地がある
+          - ピクセルアートと配置音、民族調の音楽に統一感がある
+          - 日本語を含む多言語へ早い段階から対応している
+
+          一方で、ダイスとショップの結果が構成へ大きく影響するため、毎回理想どおりに工場を作りたい人にはランダム性が強く感じられる可能性がある。
+
+          また、現時点では体験版である。100種類以上のタイルや7種類のモードなど、公式が紹介している多くの要素は製品版へ向けた内容なので、今後の調整も含めて見ておきたい。
+
+          ## どんな人に合いそうか
+
+          『Vena』は、以下のような人と相性がよさそうだ。
+
+          - 工場自動化は好きだが、巨大な生産ラインの管理は少し疲れる
+          - 六角形タイルやボードゲーム風の盤面が好き
+          - ローグライトで毎回違う部品から最適解を探したい
+          - 資源変換や複製を連鎖させるシナジーが好き
+          - 一回のランで完結する自動化ゲームを探している
+
+          反対に、広大なマップへ自由に工場を建てたい人や、ランダム要素を避けて緻密な計画を作りたい人には、少し方向性が異なるかもしれない。
+
+          ## まとめ
+
+          『Vena』は、六角形タイルによる資源パズルへ、ローグライトのランダム性と自動化の連鎖を組み合わせた作品である。
+
+          中央のNexusが求める6種類の資源を届けるという目的は分かりやすい。一方で、タイルの向き、ダイス、ショップ、パークが重なることで、毎回異なる生産網を考える必要がある。
+
+          体験版は日本語に対応しており、30件と母数は小さいながら93％が好評。『Factomancer』のような自動化ローグライトが気になる人はもちろん、ボードゲームやタイル配置型のパズルが好きな人にも試しやすい作品だ。
+
+          - [『Vena』製品版のSteamページ](https://store.steampowered.com/app/4165740/Vena/)
+          - [『Vena Demo』をSteamで無料プレイ](https://store.steampowered.com/app/4202120/Vena_Demo/)
+          ARTICLE
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate production build
+        run: npm run build
+
+      - name: Commit article and images
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/publish-vena-article.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/content/blog/vena-overview.md src/assets/images/vena .github/workflows/publish-vena-article.yml
+          git commit -m 'Add Vena overview'
+          git push origin HEAD:main
