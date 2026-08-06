@@ -1,0 +1,269 @@
+---
+import { Image } from 'astro:assets';
+import DefaultPostImage from '../assets/about-tahalog-desk.jpg';
+import type { BlogPost } from '../lib/posts';
+import { formatDate, getPostUrl } from '../lib/posts';
+
+interface Props {
+  currentPost: BlogPost;
+  posts: BlogPost[];
+}
+
+const { currentPost, posts } = Astro.props;
+const normalizeTag = (tag: string) => tag.trim().toLocaleLowerCase('ja-JP');
+const primaryTag = currentPost.data.tags[0]
+  ? normalizeTag(currentPost.data.tags[0])
+  : undefined;
+
+const sameTopicPosts = primaryTag
+  ? posts
+      .filter((post) => {
+        if (post.id === currentPost.id || !post.data.tags[0]) {
+          return false;
+        }
+
+        return normalizeTag(post.data.tags[0]) === primaryTag;
+      })
+      .slice(0, 4)
+  : [];
+
+const sameTopicIds = new Set(sameTopicPosts.map((post) => post.id));
+const recentPosts = posts
+  .filter(
+    (post) => post.id !== currentPost.id && !sameTopicIds.has(post.id),
+  )
+  .slice(0, 5);
+
+const sameTopicLabel =
+  currentPost.data.category === 'Games'
+    ? 'このゲームの記事'
+    : '同じテーマの記事';
+---
+
+<aside class="article-sidebar" aria-label="記事ナビゲーション">
+  <div class="article-sidebar__inner">
+    {
+      sameTopicPosts.length > 0 && (
+        <section class="sidebar-section">
+          <p class="sidebar-section__eyebrow">// same topic</p>
+          <h2>{sameTopicLabel}</h2>
+          <ul class="sidebar-list">
+            {sameTopicPosts.map((sidebarPost) => (
+              <li>
+                <a href={getPostUrl(sidebarPost)}>
+                  <span class="sidebar-list__image">
+                    {sidebarPost.data.heroImage ? (
+                      <Image
+                        src={sidebarPost.data.heroImage}
+                        alt=""
+                        widths={[144]}
+                        sizes="72px"
+                        loading="lazy"
+                      />
+                    ) : sidebarPost.data.ogImage ? (
+                      <img
+                        src={sidebarPost.data.ogImage}
+                        alt=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer"
+                      />
+                    ) : (
+                      <Image
+                        src={DefaultPostImage}
+                        alt=""
+                        widths={[144]}
+                        sizes="72px"
+                        loading="lazy"
+                      />
+                    )}
+                  </span>
+                  <span class="sidebar-list__body">
+                    <strong>{sidebarPost.data.title}</strong>
+                    <time datetime={sidebarPost.data.pubDate.toISOString()}>
+                      {formatDate(sidebarPost.data.pubDate)}
+                    </time>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      recentPosts.length > 0 && (
+        <section class="sidebar-section">
+          <p class="sidebar-section__eyebrow">// latest logs</p>
+          <h2>最近の記事</h2>
+          <ul class="sidebar-list">
+            {recentPosts.map((sidebarPost) => (
+              <li>
+                <a href={getPostUrl(sidebarPost)}>
+                  <span class="sidebar-list__image">
+                    {sidebarPost.data.heroImage ? (
+                      <Image
+                        src={sidebarPost.data.heroImage}
+                        alt=""
+                        widths={[144]}
+                        sizes="72px"
+                        loading="lazy"
+                      />
+                    ) : sidebarPost.data.ogImage ? (
+                      <img
+                        src={sidebarPost.data.ogImage}
+                        alt=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer"
+                      />
+                    ) : (
+                      <Image
+                        src={DefaultPostImage}
+                        alt=""
+                        widths={[144]}
+                        sizes="72px"
+                        loading="lazy"
+                      />
+                    )}
+                  </span>
+                  <span class="sidebar-list__body">
+                    <strong>{sidebarPost.data.title}</strong>
+                    <time datetime={sidebarPost.data.pubDate.toISOString()}>
+                      {formatDate(sidebarPost.data.pubDate)}
+                    </time>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <a class="sidebar-section__more" href="/blog/">すべての記事を見る →</a>
+        </section>
+      )
+    }
+  </div>
+</aside>
+
+<style>
+  .article-sidebar {
+    min-width: 0;
+  }
+
+  .article-sidebar__inner {
+    position: sticky;
+    top: 6rem;
+    display: grid;
+    gap: 2.2rem;
+  }
+
+  .sidebar-section {
+    padding: 1rem;
+    border: 1px solid var(--line-strong);
+    background: rgba(251, 247, 237, 0.72);
+    box-shadow: 0 12px 32px rgba(48, 39, 24, 0.07);
+  }
+
+  .sidebar-section__eyebrow {
+    margin: 0 0 0.25rem;
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  h2 {
+    margin: 0 0 0.9rem;
+    color: var(--ink);
+    font-size: 1.08rem;
+    line-height: 1.45;
+  }
+
+  .sidebar-list {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sidebar-list li + li {
+    border-top: 1px solid var(--line);
+  }
+
+  .sidebar-list a {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: center;
+    padding-block: 0.85rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .sidebar-list__image {
+    overflow: hidden;
+    aspect-ratio: 3 / 2;
+    border: 1px solid var(--line);
+    background: var(--paper-light);
+  }
+
+  .sidebar-list__image :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 180ms ease;
+  }
+
+  .sidebar-list__body {
+    display: grid;
+    gap: 0.35rem;
+    min-width: 0;
+  }
+
+  .sidebar-list strong {
+    display: -webkit-box;
+    overflow: hidden;
+    color: var(--ink);
+    font-size: 0.78rem;
+    line-height: 1.55;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .sidebar-list time {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.61rem;
+  }
+
+  .sidebar-list a:hover strong {
+    color: var(--accent);
+  }
+
+  .sidebar-list a:hover .sidebar-list__image :global(img) {
+    transform: scale(1.04);
+  }
+
+  .sidebar-section__more {
+    display: inline-block;
+    margin-top: 0.8rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .sidebar-section__more:hover {
+    color: var(--accent);
+  }
+
+  @media (max-width: 1040px) {
+    .article-sidebar__inner {
+      position: static;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+      margin-top: 1.5rem;
+    }
+  }
+</style>
