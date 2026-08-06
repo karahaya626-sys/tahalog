@@ -27,105 +27,99 @@ jobs:
         run: |
           python <<'PY'
           from pathlib import Path
+          from textwrap import dedent
 
           path = Path('src/layouts/BlogPostLayout.astro')
           text = path.read_text(encoding='utf-8')
 
-          text = text.replace(
-              "import DefaultPostImage from '../assets/about-tahalog-desk.jpg';\n",
-              "import DefaultPostImage from '../assets/about-tahalog-desk.jpg';\nimport PostCard from '../components/PostCard.astro';\n",
-              1,
-          )
-
-          text = text.replace(
-              "  getPublishedPosts,\n} from '../lib/posts';",
-              "  getPublishedPosts,\n  getRelatedPosts,\n} from '../lib/posts';",
-              1,
-          )
-
-          text = text.replace(
-              "const indexableTags = getIndexableTags(await getPublishedPosts());",
-              "const publishedPosts = await getPublishedPosts();\nconst indexableTags = getIndexableTags(publishedPosts);\nconst relatedPosts = getRelatedPosts(post, publishedPosts);",
-              1,
-          )
-
-          body_marker = '''    <div class="prose">
-              <slot />
-            </div>
-
-            {
-              tags.length > 0 && ('''
-          related_markup = '''    <div class="prose">
-              <slot />
-            </div>
-
-            {
-              relatedPosts.length > 0 && (
-                <section class="related-posts page-shell" aria-labelledby="related-posts-title">
-                  <div class="related-posts__heading">
-                    <p>// continue reading</p>
-                    <h2 id="related-posts-title">関連記事</h2>
-                  </div>
-                  <div class="related-posts__grid">
-                    {relatedPosts.map((relatedPost, index) => (
-                      <PostCard post={relatedPost} index={index} />
-                    ))}
-                  </div>
-                </section>
+          if "import PostCard from '../components/PostCard.astro';" not in text:
+              text = text.replace(
+                  "import DefaultPostImage from '../assets/about-tahalog-desk.jpg';\n",
+                  "import DefaultPostImage from '../assets/about-tahalog-desk.jpg';\nimport PostCard from '../components/PostCard.astro';\n",
+                  1,
               )
-            }
 
-            {
-              tags.length > 0 && ('''
+          if '  getRelatedPosts,\n' not in text:
+              text = text.replace(
+                  "  getPublishedPosts,\n} from '../lib/posts';",
+                  "  getPublishedPosts,\n  getRelatedPosts,\n} from '../lib/posts';",
+                  1,
+              )
 
-          if body_marker not in text:
-              raise SystemExit('Could not find article body insertion point')
-          text = text.replace(body_marker, related_markup, 1)
+          if 'const relatedPosts = getRelatedPosts(post, publishedPosts);' not in text:
+              text = text.replace(
+                  "const indexableTags = getIndexableTags(await getPublishedPosts());",
+                  "const publishedPosts = await getPublishedPosts();\nconst indexableTags = getIndexableTags(publishedPosts);\nconst relatedPosts = getRelatedPosts(post, publishedPosts);",
+                  1,
+              )
 
-          style_marker = '''  .post__footer {
-              margin-top: 4.5rem;'''
-          related_styles = '''  .related-posts {
-              margin-top: 5rem;
-            }
+          if 'class="related-posts page-shell"' not in text:
+              body_marker = '    <div class="prose">\n      <slot />\n    </div>\n'
+              related_markup = dedent('''
 
-            .related-posts__heading {
-              display: flex;
-              align-items: end;
-              justify-content: space-between;
-              gap: 1rem;
-              margin-bottom: 1.5rem;
-              padding-bottom: 0.85rem;
-              border-bottom: 1px solid var(--line-strong);
-            }
+                {
+                  relatedPosts.length > 0 && (
+                    <section class="related-posts page-shell" aria-labelledby="related-posts-title">
+                      <div class="related-posts__heading">
+                        <p>// continue reading</p>
+                        <h2 id="related-posts-title">関連記事</h2>
+                      </div>
+                      <div class="related-posts__grid">
+                        {relatedPosts.map((relatedPost, index) => (
+                          <PostCard post={relatedPost} index={index} />
+                        ))}
+                      </div>
+                    </section>
+                  )
+                }
+              ''')
+              if body_marker not in text:
+                  raise SystemExit('Could not find article body insertion point')
+              text = text.replace(body_marker, body_marker + related_markup, 1)
 
-            .related-posts__heading p {
-              margin: 0;
-              color: var(--accent);
-              font-family: var(--font-mono);
-              font-size: 0.72rem;
-              font-weight: 700;
-            }
+          if '  .related-posts {' not in text:
+              style_marker = '  .post__footer {\n'
+              related_styles = dedent('''
+                .related-posts {
+                  margin-top: 5rem;
+                }
 
-            .related-posts__heading h2 {
-              margin: 0;
-              color: var(--ink);
-              font-size: clamp(1.55rem, 3vw, 2rem);
-              line-height: 1.3;
-              letter-spacing: -0.035em;
-            }
+                .related-posts__heading {
+                  display: flex;
+                  align-items: end;
+                  justify-content: space-between;
+                  gap: 1rem;
+                  margin-bottom: 1.5rem;
+                  padding-bottom: 0.85rem;
+                  border-bottom: 1px solid var(--line-strong);
+                }
 
-            .related-posts__grid {
-              display: grid;
-              grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
-              gap: 1.25rem;
-            }
+                .related-posts__heading p {
+                  margin: 0;
+                  color: var(--accent);
+                  font-family: var(--font-mono);
+                  font-size: 0.72rem;
+                  font-weight: 700;
+                }
 
-            .post__footer {
-              margin-top: 4.5rem;'''
+                .related-posts__heading h2 {
+                  margin: 0;
+                  color: var(--ink);
+                  font-size: clamp(1.55rem, 3vw, 2rem);
+                  line-height: 1.3;
+                  letter-spacing: -0.035em;
+                }
 
-          if style_marker not in text:
-              raise SystemExit('Could not find style insertion point')
-          text = text.replace(style_marker, related_styles, 1)
+                .related-posts__grid {
+                  display: grid;
+                  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+                  gap: 1.25rem;
+                }
+
+              ''')
+              if style_marker not in text:
+                  raise SystemExit('Could not find style insertion point')
+              text = text.replace(style_marker, related_styles + style_marker, 1)
 
           path.write_text(text, encoding='utf-8')
           PY
