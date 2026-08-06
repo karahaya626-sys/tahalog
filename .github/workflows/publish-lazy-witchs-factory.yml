@@ -1,0 +1,246 @@
+name: Publish Lazy Witch's Factory article
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-lazy-witchs-factory.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Download official images
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p src/assets/images/lazy-witchs-factory
+
+          curl -fL --retry 3 \
+            'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3971650/e8744ec3dbec0f38529af71c672e36b919a99443/header_japanese.jpg?t=1783328447' \
+            -o src/assets/images/lazy-witchs-factory/header.jpg
+
+          curl -fL --retry 3 \
+            'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3971650/extras/94b158b5abdd3c229135ead8dcadc154.avif?t=1783328447' \
+            -o src/assets/images/lazy-witchs-factory/momoko-and-familiars.avif
+
+          curl -fL --retry 3 \
+            'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3971650/extras/699f457f6b00bd0eaf00e75abdea6157.avif?t=1783328447' \
+            -o src/assets/images/lazy-witchs-factory/familiars.avif
+
+          curl -fL --retry 3 \
+            'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3971650/extras/225aa7f768640c463c016ab573f743e4.avif?t=1783328447' \
+            -o src/assets/images/lazy-witchs-factory/sponsors.avif
+
+          test -s src/assets/images/lazy-witchs-factory/header.jpg
+          test -s src/assets/images/lazy-witchs-factory/momoko-and-familiars.avif
+          test -s src/assets/images/lazy-witchs-factory/familiars.avif
+          test -s src/assets/images/lazy-witchs-factory/sponsors.avif
+
+      - name: Create article
+        shell: bash
+        run: |
+          cat > src/content/blog/lazy-witchs-factory-overview.md <<'ARTICLE'
+          ---
+          title: "『Lazy Witch’s Factory』はどんなゲーム？30分で借金を返すローグライト工場ビルダー"
+          description: "30分以内に工場を作り、悪魔との契約で生産ルールを変えながら借金返済を目指す『Lazy Witch’s Factory』。ゲーム内容、日本語対応、発売時期、体験版の評価をまとめる。"
+          pubDate: 2026-08-06
+          heroImage: '../../assets/images/lazy-witchs-factory/header.jpg'
+          category: "Games"
+          tags: ["Lazy Witch's Factory", "工場自動化", "ローグライト", "Steam"]
+          author: "taha"
+          draft: false
+          ---
+
+          『Lazy Witch’s Factory（レイジーウィッチーズファクトリー）』は、30分という制限時間の中で工場を作り、巨額の借金返済を目指すローグライト工場ビルダーである。
+
+          工場自動化ゲームといえば、時間をかけて整った生産ラインを完成させる作品が多い。しかし本作で求められるのは、美しさよりもスピードだ。間に合わせの配線やごちゃごちゃしたラインでも構わない。期限までに金を作れれば、それが正義である。
+
+          さらに、普通に資源を加工しているだけでは借金返済に足りない。悪魔と契約し、製造レシピや資源の価値そのものを捻じ曲げながら、生産力を一気に膨らませていく。
+
+          今回はまだ実際にはプレイしていないため、公式Steamページと開発元の発表、体験版へ寄せられたコミュニティの反応をもとに、どんなゲームなのかを整理する。
+
+          > ※本記事は2026年8月6日時点の情報をもとにしている。早期アクセス作品のため、発売時期やゲーム内容、体験版の配信状況は今後変更される可能性がある。
+
+          ## 『Lazy Witch’s Factory』とは
+
+          『Lazy Witch’s Factory』は、日本のインディーゲーム開発会社MELTCLOCK.Incが開発し、Phoenixx Inc.が販売する工場建設ローグライトである。
+
+          主人公は、不労所得という甘い言葉に釣られ、とんでもない借金を背負った魔女モモコ。地獄へ送り込まれたモモコは、やる気に欠ける使い魔たちを働かせ、製品を売って借金を返さなければならない。
+
+          | 項目 | 内容 |
+          |---|---|
+          | 開発 | MELTCLOCK.Inc |
+          | 販売 | Phoenixx Inc. |
+          | ジャンル | 工場建設・自動化・ローグライト |
+          | 対応プラットフォーム | PC（Steam） |
+          | プレイ人数 | シングルプレイ |
+          | 日本語 | インターフェース・フル音声・字幕に対応 |
+          | 早期アクセス開始予定 | 2026年第3四半期 |
+
+          ![主人公モモコと地獄の工場で働く使い魔たち](../../assets/images/lazy-witchs-factory/momoko-and-familiars.avif)
+
+          *かわいい見た目とは裏腹に、待っているのは借金と残業に追われる地獄の工場である。画像出典：[Steamストア](https://store.steampowered.com/app/3971650/Lazy_Witchs_Factory/?l=japanese)／© MELTCLOCK Inc. Published by Phoenixx Inc.*
+
+          ## 30分以内に工場を作って借金を返す
+
+          1回のランは、1シフトにあたる約30分で進行する。
+
+          空き地から工場を作り始め、資源を採掘し、加工設備へ運び、完成した製品を売却する。基本の流れは一般的な工場自動化ゲームと同じだが、返済期限が迫り続けるため、のんびり工場を整えている余裕はない。
+
+          公式も、スパゲティ状の生産ラインや一時しのぎの修正を許容するゲームとして紹介している。完璧に整理された巨大工場を目指すというより、限られた時間と資源で「いま稼げるライン」を急いで成立させる作品である。
+
+          制限時間が明確なため、長時間かけて一つの工場を育てる自動化ゲームが重く感じる人でも、区切りよく遊びやすそうだ。
+
+          ## 悪魔との「契約」で生産ルールを捻じ曲げる
+
+          本作のローグライト要素を担うのが、悪魔との**契約**である。
+
+          契約を選ぶことで、製造レシピを変更したり、余った資源を別の素材へ変換したり、資金を直接生み出したりできる。通常の生産効率を少し改善するだけでなく、工場の前提そのものを書き換える強化が用意されている。
+
+          ランごとに提示される契約は変化するため、毎回同じ設計図を再現するのではなく、その場で手に入った契約から強力な組み合わせを探す必要がある。
+
+          工場設計の知識と、ローグライトらしい強化選択の判断を組み合わせ、生産力をインフレさせて借金を押し切るゲームになっている。
+
+          ## シフトが終わると工場はリセットされる
+
+          30分のシフトが終わると、そのランで作った工場はリセットされる。
+
+          設備を恒久的に積み上げるのではなく、何度も最初から工場を作り、そのたびに契約の選び方や生産ラインの組み方を改善していく形式である。
+
+          公式は「リセット後も学びは残る」と説明している。キャラクターの数値を延々と上げるというより、プレイヤー自身が契約の相性や効率的な配置を覚え、次のランでより賢く工場を組めるようになる設計だ。
+
+          一つの工場へ愛着を持って育てたい人には忙しく感じる可能性があるが、毎回違う状況から短時間で答えを組み立てるのが好きな人には相性がよさそうだ。
+
+          ## 個性的な使い魔を管理する
+
+          工場で働くのは、サラマンダーやスライムなどのかわいい使い魔たちである。
+
+          ただし、彼らは素直な労働者ではない。サラマンダーは鍛冶を筋力トレーニングだと思い込み、スライムは蒸留作業の苦痛を長引かせたがるなど、それぞれ妙な性質を持っている。
+
+          ![サラマンダーやスライムなど個性的な使い魔](../../assets/images/lazy-witchs-factory/familiars.avif)
+
+          *使い魔の能力だけでなく、癖の強い性格まで含めて管理する必要がある。画像出典：[Steamストア](https://store.steampowered.com/app/3971650/Lazy_Witchs_Factory/?l=japanese)／© MELTCLOCK Inc. Published by Phoenixx Inc.*
+
+          自動化ゲームでありながら、設備だけでなくキャラクターの扱い方も工場運営へ影響する。かわいいキャラクターと、ブラック企業を思わせる皮肉なユーモアの組み合わせも本作の特徴である。
+
+          ## スポンサーの組み合わせで戦略が変わる
+
+          工場運営を助ける高位悪魔たちは、スポンサー企業のような立場で登場する。
+
+          研究者レヴィアタンは実験によって生産性を高め、銀行頭取マモンは怪しい方法で資金繰りを助ける。それぞれ得意とする戦略が異なり、どのスポンサーを選ぶかによって工場の方向性が変わる。
+
+          ![工場計画を支援するレヴィアタンやマモンなどの高位悪魔](../../assets/images/lazy-witchs-factory/sponsors.avif)
+
+          *倫理観はさておき、高位悪魔の支援は借金返済の大きな助けになる。画像出典：[Steamストア](https://store.steampowered.com/app/3971650/Lazy_Witchs_Factory/?l=japanese)／© MELTCLOCK Inc. Published by Phoenixx Inc.*
+
+          早期アクセス開始時点では、5種類のスポンサーから3つを選択可能になる予定だ。各スポンサーには20種類以上の強化選択肢「契約」と、3種類以上の固有オブジェクトが用意され、ランごとにランダムで登場すると案内されている。
+
+          単純計算でもスポンサーの選び方に幅があり、同じ30分でも異なる生産方針を試せる。早期アクセス後は新たなスポンサーや使い魔も追加予定である。
+
+          ## 『Factomancer』との違い
+
+          工場建設とローグライトを組み合わせた作品としては、taha.log()でも紹介した[『Factomancer』](/blog/factomancer-official-overview/)と近い。
+
+          ただし、工場の育て方は大きく異なる。
+
+          | 比較 | Lazy Witch’s Factory | Factomancer |
+          |---|---|---|
+          | ランの区切り | 約30分の1シフト | 30日間のラン |
+          | 工場の扱い | シフト終了でリセット | 日をまたいで継続・拡張 |
+          | ローグライト要素 | 悪魔との契約、スポンサー | 機械、呪文、レリック、イベント |
+          | プレイ感 | 短時間で急いで稼ぐ | 日ごとの課題へ対応しながら育てる |
+
+          『Factomancer』は、前日までの工場へ設備を継ぎ足しながら成長させる作品である。一方、『Lazy Witch’s Factory』は30分ごとに工場を作り直し、短時間で生産力を爆発させることへ重点を置いている。
+
+          同じ工場ローグライトでも、じっくり育てたいなら『Factomancer』、忙しいランを繰り返したいなら『Lazy Witch’s Factory』という違いになりそうだ。
+
+          ## 日本語フル音声に対応
+
+          Steamの表記では、日本語のインターフェース、字幕、フル音声に対応している。
+
+          主人公モモコをはじめ、キャラクター同士の掛け合いや皮肉を含む世界観も日本語で楽しめる。工場自動化ゲームは効果説明やレシピの理解が重要になるため、日本語へ全面対応している点はかなり遊びやすい材料である。
+
+          対応OSは現時点でWindows。最低動作環境として、メモリ8GB、GeForce GTX 1650、空き容量3GBが案内されている。
+
+          ## 体験版は高評価で終了、再公開も予定
+
+          体験版は2026年6月11日に公開され、6月30日に早期アクセス準備のため一時公開を終了した。
+
+          開発元の終了報告によると、公開終了時点で**108件のレビューが集まり、好評率は100％**だった。公式は体験版を将来的に再公開する予定としており、現在のSteamストアにも体験版のダウンロード欄が表示されている。実際の配信状況は切り替わる可能性があるため、Steamページで確認してほしい。
+
+          - [『Lazy Witch’s Factory』公式Steamページ](https://store.steampowered.com/app/3971650/Lazy_Witchs_Factory/?l=japanese)
+          - [体験版の公式Steamページ](https://store.steampowered.com/app/4638750/Lazy_Witchs_Factory_Demo/?l=japanese)
+
+          ## 海外コミュニティの評価
+
+          108件すべてが好評だったことからも、体験版の第一印象はかなり強かったことが分かる。
+
+          コミュニティでは、主に次の点が好意的に受け止められていた。
+
+          - 30分で完結する工場建設という分かりやすい仕組み
+          - かわいいアートとアニメーション
+          - 契約によって生産ルールを変える発想
+          - 完璧な工場ではなく、その場しのぎの混沌を楽しめること
+          - キャラクターとブラックユーモアの組み合わせ
+
+          一方で、体験版の掲示板では、コンベアの向きや分岐が分かりにくく、意図せず物流を止めてしまうという意見もあった。工場が複雑になるほど操作ミスの影響が大きくなるほか、使い魔の役割やレシピについてチュートリアルの説明が足りないという指摘も見られた。
+
+          開発元は体験版期間中にも、接続関係を見やすくする表示、分岐装置の仕様変更、バグ修正などを継続している。好評率の高さだけでなく、操作面のフィードバックを早い段階で反映している点も好印象である。
+
+          ## どんな人に合いそうか
+
+          『Lazy Witch’s Factory』は、次のような人に合いそうだ。
+
+          - 工場自動化ゲームは好きだが、一つの工場へ何十時間もかけるのは重い
+          - ローグライトのランダム強化やシナジー探しが好き
+          - 制限時間の中で優先順位を決めるゲームが好き
+          - 整った生産ラインより、無理やり成立させる混沌を楽しみたい
+          - かわいいキャラクターと毒のあるユーモアに惹かれる
+
+          反対に、時間制限を気にせず、理想どおりの工場をじっくり完成させたい人には忙しすぎる可能性がある。
+
+          ## まとめ
+
+          『Lazy Witch’s Factory』は、30分以内に工場を作り、悪魔との契約で生産ルールを捻じ曲げながら借金返済を目指すローグライト工場ビルダーである。
+
+          長時間かけて美しい工場を完成させるのではなく、限られた条件から強引に生産力を膨らませ、期限へ間に合わせることを楽しむ作品になっている。
+
+          体験版は108件・好評率100％で公開を終えており、早期アクセス開始前の反応としてはかなり良好だ。工場自動化とローグライトの組み合わせが好きなら、今後の動きを追っておきたい一本である。
+
+          ## 参照した情報
+
+          - [Lazy Witch’s Factory Steamストア](https://store.steampowered.com/app/3971650/Lazy_Witchs_Factory/?l=japanese)
+          - [Lazy Witch’s Factory Steamコミュニティ](https://steamcommunity.com/app/3971650)
+          - [体験版配信開始の公式発表（PR TIMES）](https://prtimes.jp/main/html/rd/p/000000324.000053399.html)
+          - [MELTCLOCKによるSteamストア公開時の発表](https://prtimes.jp/main/html/rd/p/000000001.000168610.html)
+          ARTICLE
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate production build
+        run: npm run build
+
+      - name: Commit article and images
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/publish-lazy-witchs-factory.yml
+          git add src/content/blog/lazy-witchs-factory-overview.md src/assets/images/lazy-witchs-factory
+          git commit -m "Add Lazy Witch's Factory overview"
+          git push
