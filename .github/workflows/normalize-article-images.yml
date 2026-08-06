@@ -1,0 +1,318 @@
+name: Normalize article images
+
+on:
+  push:
+    paths:
+      - '.github/workflows/normalize-article-images.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  normalize:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Normalize article images
+        shell: bash
+        run: |
+          python3 <<'PY'
+          from __future__ import annotations
+
+          import json
+          import re
+          import urllib.request
+          from pathlib import Path
+
+          ROOT = Path.cwd()
+          BLOG = ROOT / 'src/content/blog'
+          ASSETS = ROOT / 'src/assets'
+
+          def download_steam_assets(app_id: int, folder: str) -> None:
+              target = ASSETS / 'images' / folder
+              target.mkdir(parents=True, exist_ok=True)
+              url = f'https://store.steampowered.com/api/appdetails?appids={app_id}&l=english&cc=us'
+              request = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  payload = json.load(response)
+              entry = payload[str(app_id)]
+              if not entry.get('success'):
+                  raise RuntimeError(f'Steam API returned no data for app {app_id}')
+              data = entry['data']
+              image_urls = [data['header_image']] + [item['path_full'] for item in data.get('screenshots', [])[:3]]
+              if len(image_urls) < 4:
+                  raise RuntimeError(f'Expected header + 3 screenshots for app {app_id}')
+              filenames = ['header.jpg', 'screenshot-1.jpg', 'screenshot-2.jpg', 'screenshot-3.jpg']
+              for image_url, filename in zip(image_urls, filenames):
+                  image_request = urllib.request.Request(image_url, headers={'User-Agent': 'Mozilla/5.0'})
+                  with urllib.request.urlopen(image_request, timeout=60) as response:
+                      (target / filename).write_bytes(response.read())
+
+          # Missing official assets are fetched from Steam and saved locally.
+          download_steam_assets(4165740, 'vena')
+          download_steam_assets(3624140, 'wanderburg')
+
+          articles = {
+              'astro-cloudflare-pages-blog-build-log.md': {
+                  'hero': '../../assets/blog-placeholder-1.jpg',
+                  'section': 'サイト構築イメージ',
+                  'images': [
+                      ('../../assets/blog-placeholder-2.jpg', 'Astroブログを構築するイメージ', 'AstroとCloudflare Pagesでブログを組み立てていくイメージ。'),
+                      ('../../assets/blog-placeholder-3.jpg', 'コードと公開環境をつなぐイメージ', 'GitHubから公開環境へ反映する流れをイメージした画像。'),
+                      ('../../assets/blog-placeholder-4.jpg', 'taha.logの運用イメージ', '記事を少しずつ増やしていく個人ブログ運用のイメージ。'),
+                  ],
+              },
+              'hello-tahalog.md': {
+                  'hero': '../../assets/about-tahalog-desk.jpg',
+                  'section': 'このブログについて',
+                  'images': [
+                      ('../../assets/blog-placeholder-about.jpg', 'taha.logのブログイメージ', 'ゲームや開発の記録を残すtaha.logのイメージ。'),
+                      ('../../assets/blog-placeholder-5.jpg', '記事を書きためるデスクのイメージ', '気になったことを自分のペースで記録していく。'),
+                  ],
+              },
+              'emberward-first-impressions.md': {
+                  'hero': '../../assets/images/emberward/battle.png',
+                  'section': 'プレイ画面',
+                  'images': [
+                      ('../../assets/images/emberward/maze-building.png', 'Emberwardで迷路を組み立てる画面', 'ブロックを配置し、敵の進行ルートを作っていく。'),
+                      ('../../assets/images/emberward/map-selection.png', 'Emberwardのマップ選択画面', '次に進むルートや報酬を選ぶローグライトらしいマップ画面。'),
+                  ],
+              },
+              'factomancer-demo-play-report.md': {
+                  'hero': '../../assets/images/factomancer/factomancer-title.avif',
+                  'section': '体験版のプレイ画面',
+                  'images': [
+                      ('../../assets/images/factomancer/factomancer-grimoire.avif', 'Factomancerのグリモワール画面', '原料やレシピを確認できるグリモワール。'),
+                      ('../../assets/images/factomancer/factomancer-factory.avif', 'Factomancerの工場画面', '機械を配置して生産ラインを組み立てていく。'),
+                  ],
+              },
+              'factomancer-official-overview.md': {
+                  'hero': '../../assets/images/factomancer/official-factory.webp',
+                  'section': '公式スクリーンショット',
+                  'images': [
+                      ('../../assets/images/factomancer/official-grimoire.webp', 'Factomancerの公式グリモワール画面', 'レシピや素材を確認しながら生産計画を立てる。'),
+                      ('../../assets/images/factomancer/official-event.webp', 'Factomancerのイベント画面', '日ごとに発生する選択やイベントも進行へ影響する。'),
+                      ('../../assets/images/factomancer/official-day-result.webp', 'Factomancerの日次結果画面', '目標達成後に一日の結果を確認する。'),
+                  ],
+              },
+              'guildrun-overview.md': {
+                  'hero': '../../assets/images/guildrun/header.jpg',
+                  'section': '公式スクリーンショット',
+                  'images': [
+                      ('../../assets/images/guildrun/screenshot-1.jpg', 'Guildrunの戦闘画面', '六角形の戦場へヒーローを配置し、オートバトルを見守る。'),
+                      ('../../assets/images/guildrun/screenshot-2.jpg', 'Guildrunの育成画面', '特化先や能力を選び、ヒーローの役割を変えていく。'),
+                      ('../../assets/images/guildrun/screenshot-3.jpg', 'Guildrunの大規模戦闘', '多数のヒーローと敵がぶつかるPvEオートバトル。'),
+                  ],
+              },
+              'guns-and-dragons-beginner-weapon-crafting.md': {
+                  'hero': '../../assets/images/guns-and-dragons/weapon-menu.png',
+                  'section': '武器作成の画面',
+                  'images': [
+                      ('../../assets/images/guns-and-dragons/weapon-tree.webp', 'Guns and Dragonsの武器ツリー', '武器の派生先と必要素材を確認する。'),
+                      ('../../assets/images/guns-and-dragons/starfall-build.webp', 'スターフォールを使ったビルド', '実際に強力だったスターフォール中心の構成。'),
+                      ('../../assets/images/guns-and-dragons/skills-japanese.png', '日本語表示されたスキル選択画面', '日本語で効果を確認しながらビルドを選べる。'),
+                  ],
+              },
+              'guns-and-dragons-playtest-impressions.md': {
+                  'hero': '../../assets/images/guns-and-dragons/battle.png',
+                  'section': 'プレイテストの画面',
+                  'images': [
+                      ('../../assets/images/guns-and-dragons/skills-japanese.png', 'Guns and Dragonsの日本語スキル画面', '日本語表示に大きな違和感はなく、効果も確認しやすい。'),
+                      ('../../assets/images/guns-and-dragons/base-building.png', 'Guns and Dragonsの拠点建築', 'ランの外では拠点を少しずつ発展させていく。'),
+                      ('../../assets/images/guns-and-dragons/stage-clear-softlock.webp', 'ステージクリア後に停止した画面', 'プレイテスト中に遭遇した進行不能状態。'),
+                  ],
+              },
+              'kubb-overview.md': {
+                  'hero': '../../assets/images/kubb/header.jpg',
+                  'section': '公式スクリーンショット',
+                  'images': [
+                      ('../../assets/images/kubb/screenshot-1.jpg', 'KUBBの落ち物パズル画面', '特殊なブロックを積み上げ、列を消していく。'),
+                      ('../../assets/images/kubb/screenshot-2.jpg', 'KUBBのカード選択画面', 'ラン中にカードを選び、ブロックのデッキを組み替える。'),
+                      ('../../assets/images/kubb/screenshot-3.jpg', 'KUBBの異次元ステージ', '重力や盤面ルールが変化する異次元へ挑む。'),
+                  ],
+              },
+              'lazy-witchs-factory-overview.md': {
+                  'hero': '../../assets/images/lazy-witchs-factory/header.jpg',
+                  'section': '公式スクリーンショット',
+                  'images': [
+                      ('../../assets/images/lazy-witchs-factory/momoko-and-familiars.avif', 'モモコと使い魔たち', '魔女モモコと個性豊かな使い魔が工場を動かす。'),
+                      ('../../assets/images/lazy-witchs-factory/familiars.avif', '工場で働く使い魔', '使い魔の特性を見ながら生産ラインを組み立てる。'),
+                      ('../../assets/images/lazy-witchs-factory/sponsors.avif', 'スポンサーを選ぶ画面', 'スポンサーの組み合わせによってランの方向性が変化する。'),
+                  ],
+              },
+              'sir-we-have-an-orc-problem-overview.md': {
+                  'hero': '../../assets/images/sir-we-have-an-orc-problem/massive-orc-horde.webp',
+                  'section': '公式スクリーンショット',
+                  'images': [
+                      ('../../assets/images/sir-we-have-an-orc-problem/turret-placement.webp', 'タレットを配置する画面', '防衛地点へ兵器を置き、押し寄せるオークに備える。'),
+                      ('../../assets/images/sir-we-have-an-orc-problem/upgrade-tree.webp', 'アップグレードツリー', 'ラン中の選択で防衛設備を強化していく。'),
+                      ('../../assets/images/sir-we-have-an-orc-problem/airstrike-horde.webp', 'オークの群れへの空爆', '大量のオークをまとめて迎撃する派手な戦闘。'),
+                  ],
+              },
+              'swarmdustry-demo-impressions.md': {
+                  'hero': '../../assets/images/swarmdustry/title-screen.webp',
+                  'section': '体験版のプレイ画面',
+                  'images': [
+                      ('../../assets/images/swarmdustry/tutorial-factory.webp', 'Swarmdustryの工場チュートリアル', '設備をつなぎ、資源を加工する基本を学ぶ。'),
+                      ('../../assets/images/swarmdustry/genetic-research.webp', 'Swarmdustryの遺伝子研究画面', '研究を進めてユニットや生産能力を伸ばしていく。'),
+                      ('../../assets/images/swarmdustry/inventory-crafting.webp', 'Swarmdustryのインベントリとクラフト', '素材を集めて装備や必要なアイテムを作成する。'),
+                  ],
+              },
+              'vena-overview.md': {
+                  'hero': '../../assets/images/vena/header.jpg',
+                  'section': '公式スクリーンショット',
+                  'images': [
+                      ('../../assets/images/vena/screenshot-1.jpg', '中央のNexusへ資源を送るVenaの盤面', '六角形タイルをつなぎ、中央のNexusへ資源を届ける。'),
+                      ('../../assets/images/vena/screenshot-2.jpg', '複雑な資源網を構築するVena', 'タイルの向きと効果を組み合わせて生産網を伸ばす。'),
+                      ('../../assets/images/vena/screenshot-3.jpg', 'Venaのショップ画面', 'ダイスを振り、次のフェーズで使うタイルやパークを選ぶ。'),
+                  ],
+              },
+              'wanderburg-overview.md': {
+                  'hero': '../../assets/images/wanderburg/header.jpg',
+                  'section': '公式スクリーンショット',
+                  'images': [
+                      ('../../assets/images/wanderburg/screenshot-1.jpg', '動く城で戦場を進むWanderburg', '車輪付きの城を操作し、村や敵の要塞を取り込んでいく。'),
+                      ('../../assets/images/wanderburg/screenshot-2.jpg', '巨大化したWanderburgの城', '兵器や設備を増やし、城そのものを巨大な戦争機械へ育てる。'),
+                      ('../../assets/images/wanderburg/screenshot-3.jpg', 'Wanderburgの大規模戦闘', '大砲や魔導兵器を使い、大量の敵をまとめて迎撃する。'),
+                  ],
+              },
+          }
+
+          external_image = re.compile(r'!\[[^\]]*\]\(https?://[^)]+\)')
+          local_image = re.compile(r'!\[[^\]]*\]\((?!https?://)([^)]+)\)')
+
+          def set_hero(frontmatter: str, hero: str) -> str:
+              lines = frontmatter.splitlines()
+              result = []
+              replaced = False
+              for line in lines:
+                  if re.match(r'^heroImage\s*:', line):
+                      result.append(f"heroImage: '{hero}'")
+                      replaced = True
+                  elif re.match(r'^ogImage\s*:\s*[\'\"]?https?://', line):
+                      continue
+                  else:
+                      result.append(line)
+              if not replaced:
+                  insert_at = next((i + 1 for i, line in enumerate(result) if line.startswith('pubDate:')), len(result))
+                  result.insert(insert_at, f"heroImage: '{hero}'")
+              return '\n'.join(result)
+
+          for filename, config in articles.items():
+              path = BLOG / filename
+              if not path.exists():
+                  raise FileNotFoundError(path)
+              text = path.read_text(encoding='utf-8')
+              parts = text.split('---', 2)
+              if len(parts) != 3:
+                  raise RuntimeError(f'Invalid frontmatter: {filename}')
+              frontmatter = set_hero(parts[1].strip('\n'), config['hero'])
+              body = external_image.sub('', parts[2].lstrip('\n'))
+
+              existing = {match.group(1).split()[0].strip('<>') for match in local_image.finditer(body)}
+              missing = [item for item in config['images'] if item[0] not in existing]
+              current_count = len(existing)
+              target_count = 3 if len(config['images']) >= 3 else 2
+              needed = max(0, target_count - current_count)
+
+              if needed:
+                  blocks = []
+                  for image_path, alt, caption in missing[:needed]:
+                      blocks.append(f'![{alt}]({image_path})\n\n*{caption}*')
+                  gallery = f"\n\n## {config['section']}\n\n" + '\n\n'.join(blocks) + '\n'
+                  marker = '\n## まとめ'
+                  if marker in body:
+                      body = body.replace(marker, gallery + marker, 1)
+                  else:
+                      body = body.rstrip() + gallery + '\n'
+
+              path.write_text(f'---\n{frontmatter}\n---\n\n{body.rstrip()}\n', encoding='utf-8')
+
+          scripts = ROOT / 'scripts'
+          scripts.mkdir(exist_ok=True)
+          validator = scripts / 'check-article-images.mjs'
+          validator.write_text(r'''import fs from 'node:fs';
+          import path from 'node:path';
+
+          const blogDir = path.resolve('src/content/blog');
+          const files = fs.readdirSync(blogDir).filter((name) => /\.mdx?$/.test(name)).sort();
+          const failures = [];
+
+          for (const file of files) {
+            const filePath = path.join(blogDir, file);
+            const source = fs.readFileSync(filePath, 'utf8');
+            const frontmatterMatch = source.match(/^---\n([\s\S]*?)\n---/);
+            const heroMatch = frontmatterMatch?.[1].match(/^heroImage:\s*['\"]?([^'\"\n]+)['\"]?/m);
+            if (!heroMatch) {
+              failures.push(`${file}: heroImage がない`);
+              continue;
+            }
+
+            const hero = heroMatch[1].trim();
+            if (/^https?:\/\//.test(hero)) {
+              failures.push(`${file}: heroImage が外部URL`);
+            } else {
+              const resolvedHero = path.resolve(blogDir, hero);
+              if (!fs.existsSync(resolvedHero)) failures.push(`${file}: heroImage が存在しない (${hero})`);
+            }
+
+            const body = source.replace(/^---\n[\s\S]*?\n---\n?/, '');
+            const remoteImages = [...body.matchAll(/!\[[^\]]*\]\((https?:\/\/[^)]+)\)/g)];
+            if (remoteImages.length) failures.push(`${file}: 本文に外部直リンク画像がある`);
+
+            const localImages = [...body.matchAll(/!\[[^\]]*\]\((?!https?:\/\/)([^)]+)\)/g)]
+              .map((match) => match[1].trim().split(/\s+/)[0].replace(/^<|>$/g, ''));
+            if (localImages.length < 2) failures.push(`${file}: 本文画像が${localImages.length}枚`);
+
+            for (const image of localImages) {
+              const resolved = path.resolve(blogDir, image);
+              if (!fs.existsSync(resolved)) failures.push(`${file}: 本文画像が存在しない (${image})`);
+            }
+
+            console.log(`${file}: hero 1枚 / 本文 ${localImages.length}枚`);
+          }
+
+          if (failures.length) {
+            console.error('\n記事画像チェックに失敗しました。');
+            for (const failure of failures) console.error(`- ${failure}`);
+            process.exit(1);
+          }
+
+          console.log(`\n${files.length}記事の画像チェックに成功しました。`);
+          ''', encoding='utf-8')
+
+          package_path = ROOT / 'package.json'
+          package = json.loads(package_path.read_text(encoding='utf-8'))
+          package.setdefault('scripts', {})['check:article-images'] = 'node scripts/check-article-images.mjs'
+          package_path.write_text(json.dumps(package, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          PY
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate article images
+        run: npm run check:article-images
+
+      - name: Validate production build
+        run: npm run build
+
+      - name: Commit normalized articles and images
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          rm -f .github/workflows/normalize-article-images.yml
+          git add src/content/blog src/assets/images/vena src/assets/images/wanderburg scripts/check-article-images.mjs package.json .github/workflows/normalize-article-images.yml
+          git diff --cached --quiet && exit 0
+          git commit -m 'Normalize article images'
+          git push
