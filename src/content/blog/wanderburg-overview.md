@@ -42,6 +42,10 @@ draft: false
 
 [『Wanderburg』Steamストアページ](https://store.steampowered.com/app/3624140/Wanderburg/?l=japanese)
 
+![動く城で戦場を進むWanderburg](../../assets/images/wanderburg/screenshot-1.avif)
+
+*車輪付きの城を操作し、村や敵の要塞を取り込みながら戦場を進む。画像出典：Steamストア／© Randwerk・Sidekick Publishing*
+
 ## 村や小さな要塞を飲み込んで成長する
 
 本作の大きな特徴は、敵を倒して経験値を得るだけでなく、フィールド上に存在するものを城で直接取り込んでいく点だ。
@@ -66,6 +70,10 @@ draft: false
 兵器は取り付ける位置や攻撃方向によって使い勝手が変わる。側面に配置した大砲を敵へ向けるために進行方向を調整するなど、単に敵から逃げ続けるだけではない立ち回りも必要になりそうだ。
 
 城は背が高く重量感のある動きをするため、一般的なサバイバー系ゲームほど素早く方向転換できない。巨大な城を走らせ、向きを変えながら一斉砲撃する独特の操作感が、本作の特徴になっている。
+
+![兵器を増やして巨大化したWanderburgの城](../../assets/images/wanderburg/screenshot-2.avif)
+
+*大砲や魔導兵器を増やし、小さな移動要塞を巨大な戦争機械へ育てていく。画像出典：Steamストア／© Randwerk・Sidekick Publishing*
 
 ## ランを重ねると選択肢が増える
 
