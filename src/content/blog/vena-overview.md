@@ -2,7 +2,7 @@
 title: "『Vena』はどんなゲーム？六角形タイルで資源網を作る自動化ローグライク"
 description: "六角形タイルをつないで6種類の資源を中央のNexusへ届ける自動化ローグライク『Vena』。ダイスを使うショップ、100種類以上のタイル、日本語対応、体験版の評価をまとめる。"
 pubDate: 2026-08-07
-ogImage: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4165740/header.jpg'
+heroImage: '../../assets/images/vena/header.jpg'
 category: "Games"
 tags: ["Vena", "工場自動化", "ローグライト", "資源管理", "Steam"]
 author: "taha"
@@ -35,6 +35,10 @@ draft: false
 | 体験版公開日 | 2026年2月6日 |
 | 製品版発売予定 | 2026年第4四半期 |
 
+![中央のNexusへ資源を送るVenaの盤面](../../assets/images/vena/screenshot-1.avif)
+
+*六角形タイルをつなぎ、中央のNexusへ複数の資源を届けていく。画像出典：Steamストア／© loerting*
+
 ## 6種類の資源をNexusへ届ける
 
 ゲームは中央に置かれたNexusから始まる。
@@ -52,6 +56,10 @@ Nexusには6本の経路が伸びており、それぞれを通じて6種類の�
 タイルにはコモンからレジェンダリーまで4段階のレアリティがあり、それぞれ異なる効果を持つ。単体で強いタイルを置くだけではなく、生産・変換・複製を連鎖させたときに大きく伸びる設計になっているようだ。
 
 ローグライトなので、毎回同じ部品が手に入るわけではない。理想の工場を決め打ちするのではなく、今回引いたタイルから使える組み合わせを探す必要がある。
+
+![複雑な資源網を構築するVena](../../assets/images/vena/screenshot-2.avif)
+
+*タイルの効果だけでなく、入出力の向きと限られた配置スペースを考えて生産網を伸ばす。画像出典：Steamストア／© loerting*
 
 ## ショップではダイスを振る
 
