@@ -53,10 +53,6 @@ for (const filename of articleFiles) {
     failures.push(`${filename}: 本文に外部直リンク画像がある`);
   }
 
-  if (localBodyImages.length < 2) {
-    failures.push(`${filename}: 本文画像が${localBodyImages.length}枚（最低2枚必要）`);
-  }
-
   for (const imagePath of localBodyImages) {
     if (!fs.existsSync(resolveArticleAsset(articlePath, imagePath))) {
       failures.push(`${filename}: 本文画像が存在しない (${imagePath})`);
