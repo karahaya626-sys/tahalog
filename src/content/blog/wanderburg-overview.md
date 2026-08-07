@@ -2,7 +2,7 @@
 title: "『Wanderburg』はどんなゲーム？動く城を巨大化させるサバイバー系ローグライト"
 description: "車輪付きの城で村や要塞を飲み込み、兵装を追加しながら巨大化する『Wanderburg』。ゲーム内容、日本語対応、体験版の評価、海外コミュニティの反応をまとめる。"
 pubDate: 2026-08-05
-updatedDate: 2026-08-05
+updatedDate: 2026-08-07
 heroImage: '../../assets/images/wanderburg/header.jpg'
 category: "Games"
 tags: ["Wanderburg", "ローグライト", "サバイバー系", "Steam"]
@@ -42,9 +42,9 @@ draft: false
 
 [『Wanderburg』Steamストアページ](https://store.steampowered.com/app/3624140/Wanderburg/?l=japanese)
 
-![動く城で戦場を進むWanderburg](../../assets/images/wanderburg/screenshot-1.avif)
+![動く城で戦場を進むWanderburg](../../assets/images/wanderburg/screenshot-1.jpg)
 
-*車輪付きの城を操作し、村や敵の要塞を取り込みながら戦場を進む。画像出典：Steamストア／© Randwerk・Sidekick Publishing*
+*車輪付きの城を操作し、村や敵の要塞を取り込みながら戦場を進む。画像出典：[GamesRadar+](https://www.gamesradar.com/games/roguelike/this-might-be-the-fastest-ive-gotten-sucked-into-a-roguelike-all-year-building-the-perfect-war-machine-in-this-steam-next-fest-demo-is-so-fun-its-hard-to-stop/)／© Randwerk・Sidekick Publishing*
 
 ## 村や小さな要塞を飲み込んで成長する
 
@@ -71,9 +71,9 @@ draft: false
 
 城は背が高く重量感のある動きをするため、一般的なサバイバー系ゲームほど素早く方向転換できない。巨大な城を走らせ、向きを変えながら一斉砲撃する独特の操作感が、本作の特徴になっている。
 
-![兵器を増やして巨大化したWanderburgの城](../../assets/images/wanderburg/screenshot-2.avif)
+![兵器を増やして巨大化したWanderburgの城](../../assets/images/wanderburg/screenshot-2.jpg)
 
-*大砲や魔導兵器を増やし、小さな移動要塞を巨大な戦争機械へ育てていく。画像出典：Steamストア／© Randwerk・Sidekick Publishing*
+*大砲や魔導兵器を増やし、小さな移動要塞を巨大な戦争機械へ育てていく。画像出典：[GamesRadar+](https://www.gamesradar.com/games/roguelike/this-might-be-the-fastest-ive-gotten-sucked-into-a-roguelike-all-year-building-the-perfect-war-machine-in-this-steam-next-fest-demo-is-so-fun-its-hard-to-stop/)／© Randwerk・Sidekick Publishing*
 
 ## ランを重ねると選択肢が増える
 
@@ -178,4 +178,5 @@ Steamレビューやコミュニティでは、主に次の点が評価されて
 
 - [『Wanderburg』公式Steamページ](https://store.steampowered.com/app/3624140/Wanderburg/?l=japanese)
 - [『Wanderburg Demo』Steamページ](https://store.steampowered.com/app/4268810/Wanderburg_Demo/?l=japanese)
+- [GamesRadar+のWanderburg紹介記事](https://www.gamesradar.com/games/roguelike/this-might-be-the-fastest-ive-gotten-sucked-into-a-roguelike-all-year-building-the-perfect-war-machine-in-this-steam-next-fest-demo-is-so-fun-its-hard-to-stop/)
 - [Randwerk公式サイト](https://www.randwerk.com/)
