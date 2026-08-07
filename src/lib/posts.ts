@@ -2,14 +2,34 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 
 export type BlogPost = CollectionEntry<'blog'>;
 
+const postOgImages: Record<string, string> = {
+  'laundry-room-circulight-mega-r': '/images/laundry-room-circulight/hero.svg',
+};
+
+function withPostOgImage(post: BlogPost): BlogPost {
+  const ogImage = post.data.ogImage ?? postOgImages[post.id];
+
+  if (!ogImage) {
+    return post;
+  }
+
+  return {
+    ...post,
+    data: {
+      ...post.data,
+      ogImage,
+    },
+  };
+}
+
 export async function getPublishedPosts(): Promise<BlogPost[]> {
   const posts = await getCollection('blog', ({ data }) => {
     return import.meta.env.DEV || !data.draft;
   });
 
-  return posts.sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-  );
+  return posts
+    .map(withPostOgImage)
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 }
 
 export function getPostUrl(post: BlogPost): string {
