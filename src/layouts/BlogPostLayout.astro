@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import DefaultPostImage from '../assets/about-tahalog-desk.jpg';
 import ArticleSidebar from '../components/ArticleSidebar.astro';
 import PostCard from '../components/PostCard.astro';
+import RakutenMotionWidget from '../components/RakutenMotionWidget.astro';
 import type { BlogPost } from '../lib/posts';
 import {
   formatDate,
@@ -80,6 +81,12 @@ const relatedPosts = getRelatedPosts(post, publishedPosts);
           )
         }
       </div>
+
+      <p class="affiliate-disclosure">
+        <span class="affiliate-disclosure__badge">PR</span>
+        <span>当サイトはアフィリエイト広告を利用しています。</span>
+        <a href="/pr-policy/">広告について</a>
+      </p>
     </header>
 
     <figure class="hero-image page-shell">
@@ -100,6 +107,7 @@ const relatedPosts = getRelatedPosts(post, publishedPosts);
     <div class="article-layout page-shell">
       <div class="prose">
         <slot />
+        <RakutenMotionWidget variant="mobile" />
       </div>
 
       <ArticleSidebar currentPost={post} posts={publishedPosts} />
@@ -216,6 +224,40 @@ const relatedPosts = getRelatedPosts(post, publishedPosts);
   .dates time {
     margin-left: 0.35rem;
     color: var(--ink);
+  }
+
+  .affiliate-disclosure {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.55rem;
+    max-width: 47rem;
+    margin: 1rem 0 0;
+    color: var(--muted);
+    font-size: 0.72rem;
+    line-height: 1.6;
+  }
+
+  .affiliate-disclosure__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.12rem 0.4rem;
+    border: 1px solid var(--line-strong);
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  .affiliate-disclosure a {
+    color: var(--muted);
+    font-weight: 700;
+  }
+
+  .affiliate-disclosure a:hover {
+    color: var(--accent);
   }
 
   .hero-image {
