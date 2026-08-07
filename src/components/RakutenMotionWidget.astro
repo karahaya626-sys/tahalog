@@ -1,0 +1,125 @@
+---
+interface Props {
+  variant: 'sidebar' | 'mobile';
+}
+
+const { variant } = Astro.props;
+const isSidebar = variant === 'sidebar';
+---
+
+<section
+  class:list={[
+    'affiliate-widget',
+    isSidebar ? 'affiliate-widget--sidebar' : 'affiliate-widget--mobile',
+  ]}
+  aria-label="広告"
+>
+  <div class="affiliate-widget__heading">
+    <span class="affiliate-widget__title">おすすめアイテム</span>
+    <span class="affiliate-widget__badge">PR</span>
+  </div>
+
+  <div class="affiliate-widget__body">
+    {
+      isSidebar ? (
+        <>
+          <!-- MAF Rakuten Widget FROM HERE -->
+          <script is:inline type="text/javascript">MafRakutenWidgetParam=function() { return{ size:'148x600',design:'slide',recommend:'on',auto_mode:'on',a_id:'5734682', border:'off'};};</script>
+          <script is:inline type="text/javascript" src="https://dn.msmstatic.com/site/rakuten/widget.js"></script>
+          <!-- MAF Rakuten Widget TO HERE -->
+        </>
+      ) : (
+        <>
+          <!-- MAF Rakuten Widget FROM HERE -->
+          <script is:inline type="text/javascript">MafRakutenWidgetParam=function() { return{ size:'300x250',design:'slide',recommend:'on',auto_mode:'on',a_id:'5734682', border:'off'};};</script>
+          <script is:inline type="text/javascript" src="https://dn.msmstatic.com/site/rakuten/widget.js"></script>
+          <!-- MAF Rakuten Widget TO HERE -->
+        </>
+      )
+    }
+  </div>
+
+  <a class="affiliate-widget__policy" href="/pr-policy/">広告について</a>
+</section>
+
+<style>
+  .affiliate-widget {
+    min-width: 0;
+    padding: 1rem;
+    border: 1px solid var(--line-strong);
+    background: rgba(251, 247, 237, 0.72);
+    box-shadow: 0 12px 32px rgba(48, 39, 24, 0.07);
+  }
+
+  .affiliate-widget__heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .affiliate-widget__title {
+    color: var(--ink);
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+
+  .affiliate-widget__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    padding: 0.18rem 0.45rem;
+    border: 1px solid var(--line-strong);
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  .affiliate-widget__body {
+    display: flex;
+    overflow: hidden;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .affiliate-widget__policy {
+    display: inline-block;
+    margin-top: 0.8rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .affiliate-widget__policy:hover {
+    color: var(--accent);
+  }
+
+  .affiliate-widget--mobile {
+    display: none;
+    width: min(100%, 22rem);
+    margin: 3.5rem auto 0;
+  }
+
+  @media (max-width: 1040px) {
+    .affiliate-widget--sidebar {
+      display: none;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .affiliate-widget--mobile {
+      display: block;
+    }
+
+    .affiliate-widget--mobile .affiliate-widget__body {
+      overflow-x: auto;
+      justify-content: flex-start;
+    }
+  }
+</style>
