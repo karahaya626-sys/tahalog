@@ -413,7 +413,13 @@ const categories = [...categoryCounts.entries()].sort(([a], [b]) => {
     list-style: none;
   }
 
-  .toc-list a {
+  :global(.toc-list li) {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  :global(.toc-list a) {
     display: -webkit-box;
     overflow: hidden;
     padding: 0.55rem 0.65rem;
@@ -427,8 +433,8 @@ const categories = [...categoryCounts.entries()].sort(([a], [b]) => {
     -webkit-line-clamp: 2;
   }
 
-  .toc-list a:hover,
-  .toc-list a:focus-visible {
+  :global(.toc-list a:hover),
+  :global(.toc-list a:focus-visible) {
     border-left-color: var(--accent);
     background: rgba(221, 92, 62, 0.07);
     color: var(--ink);
