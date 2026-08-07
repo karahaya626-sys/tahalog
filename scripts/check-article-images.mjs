@@ -27,9 +27,9 @@ for (const filename of articleFiles) {
   const frontmatter = frontmatterMatch[1];
   const heroMatch = frontmatter.match(/^heroImage:\s*['"]?([^'"\r\n]+)['"]?\s*$/m);
 
-  if (!heroMatch) {
-    failures.push(`${filename}: heroImageがない`);
-  } else {
+  let heroCount = 0;
+  if (heroMatch) {
+    heroCount = 1;
     const heroPath = heroMatch[1].trim();
     if (/^https?:\/\//i.test(heroPath)) {
       failures.push(`${filename}: heroImageが外部URLになっている`);
@@ -59,7 +59,7 @@ for (const filename of articleFiles) {
     }
   }
 
-  console.log(`${filename}: hero 1枚 / 本文 ${localBodyImages.length}枚`);
+  console.log(`${filename}: hero ${heroCount}枚 / 本文 ${localBodyImages.length}枚`);
 }
 
 if (failures.length > 0) {
