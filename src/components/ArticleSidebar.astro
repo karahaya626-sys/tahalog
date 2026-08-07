@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import DefaultPostImage from '../assets/about-tahalog-desk.jpg';
 import type { BlogPost } from '../lib/posts';
 import { formatDate, getPostUrl } from '../lib/posts';
+import RakutenMotionWidget from './RakutenMotionWidget.astro';
 
 interface Props {
   currentPost: BlogPost;
@@ -140,6 +141,8 @@ const sameTopicLabel =
         </section>
       )
     }
+
+    <RakutenMotionWidget variant="sidebar" />
   </div>
 </aside>
 
