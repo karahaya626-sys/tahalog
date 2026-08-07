@@ -109,7 +109,7 @@ const isSidebar = variant === 'sidebar';
   }
 
   .affiliate-widget--mobile {
-    display: none;
+    display: block;
     width: min(100%, 22rem);
     margin: 3.5rem auto 0;
   }
@@ -121,10 +121,6 @@ const isSidebar = variant === 'sidebar';
   }
 
   @media (max-width: 720px) {
-    .affiliate-widget--mobile {
-      display: block;
-    }
-
     .affiliate-widget--mobile .affiliate-widget__body {
       overflow-x: auto;
       justify-content: flex-start;
