@@ -1,0 +1,118 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="PR・広告ポリシー | taha.log()"
+  description="taha.log()におけるアフィリエイト広告、PR表記、商品・サービス紹介の方針について説明します。"
+>
+  <section class="policy page-shell">
+    <header class="policy__header">
+      <p class="section-kicker">// disclosure</p>
+      <h1 class="section-title">PR / AD Policy</h1>
+      <p class="lead">taha.log()における広告・アフィリエイトリンクの取り扱いについて。</p>
+    </header>
+
+    <div class="policy__body">
+      <section>
+        <h2>アフィリエイト広告について</h2>
+        <p>
+          taha.log()では、サイト運営費の一部を補うため、もしもアフィリエイトなどのアフィリエイトサービスを利用する場合がある。
+        </p>
+        <p>
+          記事内の広告リンクを経由して商品・サービスが購入された場合、運営者に紹介料が支払われることがある。原則として、アフィリエイトリンクを利用したことによって読者の購入価格に追加料金が発生するものではない。
+        </p>
+        <p>
+          Amazon.co.jpや楽天市場などの商品ページへのリンクについても、アフィリエイト広告を含む場合がある。
+        </p>
+      </section>
+
+      <section>
+        <h2>PR・広告であることの表示</h2>
+        <p>
+          アフィリエイト広告を含む記事では、記事の分かりやすい位置に「アフィリエイト広告を含む」「PR」など、広告を含むことが分かる表示を行う。
+        </p>
+        <p>
+          商品提供や依頼を受けて作成した記事がある場合も、その事実を記事内で明記する。広告であることを隠した形で商品やサービスを紹介しない。
+        </p>
+      </section>
+
+      <section>
+        <h2>記事内容と広告の関係</h2>
+        <p>
+          広告リンクの有無だけを理由に、特定の商品を過度に高く評価することはしない。実際に使ったものは実体験として、未使用の商品や検討中の設備は「検討中」「採用予定」などと区別して記載する。
+        </p>
+        <p>
+          メーカー公式情報、販売ページ、一般的な情報などを参照した場合は、可能な範囲で実体験と区別する。ほかの選択肢を必要以上に否定せず、「わが家ではこう判断した」という立場で記事を作成する。
+        </p>
+      </section>
+
+      <section>
+        <h2>価格・在庫・仕様について</h2>
+        <p>
+          商品価格、在庫、キャンペーン、製品仕様などは変更される場合がある。記事内の情報は執筆・更新時点のものであり、購入前にはリンク先の販売ページやメーカー公式サイトで最新情報を確認してほしい。
+        </p>
+      </section>
+
+      <section>
+        <h2>Amazonについて</h2>
+        <p>
+          Amazon.co.jpの商品を紹介する場合、利用中のアフィリエイトサービスおよび各プログラムの規約に従って広告リンクを掲載する。
+        </p>
+        <p>
+          Amazonアソシエイト・プログラムへ直接参加する場合は、同プログラムが定める所定の参加者表示もサイト上に掲載する。
+        </p>
+      </section>
+
+      <p class="updated">制定：2026年8月7日</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .policy {
+    padding-block: clamp(4rem, 8vw, 7rem) 2rem;
+  }
+
+  .policy__header {
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .lead {
+    max-width: 42rem;
+    margin: 1.2rem 0 0;
+    color: var(--ink-soft);
+    line-height: 1.9;
+  }
+
+  .policy__body {
+    width: min(720px, 100%);
+    margin-top: 3rem;
+  }
+
+  .policy__body section + section {
+    margin-top: 3rem;
+  }
+
+  h2 {
+    margin: 0 0 1rem;
+    font-family: var(--font-mono);
+    font-size: clamp(1.25rem, 3vw, 1.65rem);
+    letter-spacing: -0.03em;
+  }
+
+  .policy__body p {
+    margin: 0 0 1.2rem;
+    color: var(--ink-soft);
+    line-height: 2;
+  }
+
+  .updated {
+    margin-top: 3.5rem !important;
+    padding-top: 1.2rem;
+    border-top: 1px dashed var(--line);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+  }
+</style>
