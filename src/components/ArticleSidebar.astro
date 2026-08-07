@@ -61,7 +61,7 @@ const categories = [...categoryCounts.entries()].sort(([a], [b]) => {
   <div class="article-sidebar__inner">
     {
       sameTopicPosts.length > 0 && (
-        <section class="sidebar-section">
+        <section class="sidebar-section sidebar-desktop">
           <p class="sidebar-section__eyebrow">// same topic</p>
           <h2>{sameTopicLabel}</h2>
           <ul class="sidebar-list">
@@ -110,7 +110,7 @@ const categories = [...categoryCounts.entries()].sort(([a], [b]) => {
 
     {
       recentPosts.length > 0 && (
-        <section class="sidebar-section">
+        <section class="sidebar-section sidebar-desktop">
           <p class="sidebar-section__eyebrow">// latest logs</p>
           <h2>最近の記事</h2>
           <ul class="sidebar-list">
@@ -160,7 +160,7 @@ const categories = [...categoryCounts.entries()].sort(([a], [b]) => {
 
     {
       categories.length > 0 && (
-        <section class="sidebar-section sidebar-section--compact">
+        <section class="sidebar-section sidebar-section--compact sidebar-desktop">
           <p class="sidebar-section__eyebrow">// categories</p>
           <h2>カテゴリ</h2>
           <ul class="category-list">
@@ -180,7 +180,7 @@ const categories = [...categoryCounts.entries()].sort(([a], [b]) => {
       )
     }
 
-    <section class="sidebar-section sidebar-about">
+    <section class="sidebar-section sidebar-about sidebar-desktop">
       <p class="sidebar-section__eyebrow">// about this log</p>
       <h2>taha.log()</h2>
       <p>
@@ -189,7 +189,7 @@ const categories = [...categoryCounts.entries()].sort(([a], [b]) => {
       <a class="sidebar-section__more" href="/about/">このブログについて →</a>
     </section>
 
-    <section class="sidebar-section sidebar-ad" aria-label="広告">
+    <section class="sidebar-section sidebar-ad sidebar-ad--desktop sidebar-desktop" aria-label="広告">
       <div class="sidebar-ad__heading">
         <div>
           <p class="sidebar-section__eyebrow">// recommended items</p>
@@ -205,10 +205,28 @@ const categories = [...categoryCounts.entries()].sort(([a], [b]) => {
       <p class="sidebar-ad__note">楽天市場の商品を自動表示している。</p>
     </section>
 
-    <section class="sidebar-section sidebar-toc" data-article-toc hidden>
+    <section class="sidebar-section sidebar-toc sidebar-desktop" data-article-toc hidden>
       <p class="sidebar-section__eyebrow">// contents</p>
       <h2>この記事の目次</h2>
       <ol class="toc-list" data-article-toc-list></ol>
+    </section>
+
+    <section class="sidebar-section sidebar-ad sidebar-ad--mobile" aria-label="広告">
+      <div class="sidebar-ad__heading">
+        <div>
+          <p class="sidebar-section__eyebrow">// recommended items</p>
+          <h2>おすすめアイテム</h2>
+        </div>
+        <span class="pr-badge">PR</span>
+      </div>
+      <div class="sidebar-ad__widget">
+        <!-- MAF Rakuten Widget FROM HERE -->
+        <script is:inline type="text/javascript">MafRakutenWidgetParam=function() { return{ size:'300x250',design:'slide',recommend:'on',auto_mode:'on',a_id:'5734682', border:'off'};};</script><script is:inline type="text/javascript" src="https://dn.msmstatic.com/site/rakuten/widget.js"></script>
+        <!-- MAF Rakuten Widget TO HERE -->
+      </div>
+      <p class="sidebar-ad__note">
+        アフィリエイト広告を利用している。詳しくは<a href="/pr-policy/">PR / AD Policy</a>へ。
+      </p>
     </section>
   </div>
 </aside>
@@ -438,6 +456,10 @@ const categories = [...categoryCounts.entries()].sort(([a], [b]) => {
     line-height: 1.7;
   }
 
+  .sidebar-ad__note a {
+    color: inherit;
+  }
+
   .sidebar-toc {
     position: sticky;
     top: 6rem;
@@ -482,9 +504,33 @@ const categories = [...categoryCounts.entries()].sort(([a], [b]) => {
     color: var(--accent);
   }
 
+  .sidebar-ad--mobile {
+    display: none;
+  }
+
   @media (max-width: 1040px) {
     .article-sidebar {
+      width: min(760px, 100%);
+      margin-inline: auto;
+    }
+
+    .article-sidebar__inner {
+      display: block;
+      margin-top: 2.5rem;
+    }
+
+    .sidebar-desktop {
       display: none;
+    }
+
+    .sidebar-ad--mobile {
+      display: block;
+      width: min(100%, 23rem);
+      margin-inline: auto;
+    }
+
+    .sidebar-ad--mobile .sidebar-ad__widget {
+      min-height: 250px;
     }
   }
 </style>
