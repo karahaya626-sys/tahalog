@@ -159,14 +159,6 @@ const categories = [...categoryCounts.entries()].sort(([a], [b]) => {
       )
     }
 
-    <section class="sidebar-section sidebar-toc" data-article-toc hidden>
-      <p class="sidebar-section__eyebrow">// contents</p>
-      <h2>目次</h2>
-      <nav aria-label="この記事の目次">
-        <ol class="toc-list" data-article-toc-list></ol>
-      </nav>
-    </section>
-
     {
       categories.length > 0 && (
         <section class="sidebar-section sidebar-section--compact sidebar-extra">
@@ -199,6 +191,14 @@ const categories = [...categoryCounts.entries()].sort(([a], [b]) => {
     </section>
 
     <RakutenMotionWidget variant="sidebar" />
+
+    <section class="sidebar-section sidebar-toc" data-article-toc hidden>
+      <p class="sidebar-section__eyebrow">// contents</p>
+      <h2>目次</h2>
+      <nav aria-label="この記事の目次">
+        <ol class="toc-list" data-article-toc-list></ol>
+      </nav>
+    </section>
   </div>
 </aside>
 
