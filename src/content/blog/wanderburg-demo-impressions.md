@@ -58,6 +58,10 @@ draft: false
 
 **Vehicle、Captain、Crew、Module、Artifact**と複数のカテゴリがあり、体験版ではまだ選べないものも含めて多くの項目が表示されている。
 
+![ラン開始前のビルド選択画面](../../assets/images/wanderburg-play/loadout.avif)
+
+*Vehicle、Captain、Crew、Module、Artifactなど複数のカテゴリが用意されている。筆者撮影。*
+
 初期状態だけを見るとシンプルだが、アンロックが進めばかなり組み合わせが増えそうである。
 
 正式版では、この部分がかなり楽しみだ。
@@ -69,6 +73,10 @@ draft: false
 同じCannonでもダメージを伸ばすか、クールダウンを短くするかなど、強化方向が分かれている。
 
 体験版序盤では選択肢が多すぎないためテンポを止めずに選べるが、何度か遊ぶと「今回はこの戦い方に寄せよう」というビルドらしさも見えてきた。
+
+![ラン中のモジュールアップグレード](../../assets/images/wanderburg-play/upgrade.avif)
+
+*ラン中には3択でモジュールやクルーを強化する。筆者撮影。*
 
 ## スピード＋ラムの近接特化がかなり刺さった
 
@@ -96,6 +104,10 @@ draft: false
 - Castle Size：3
 - Vehicles Destroyed：69
 - Units Consumed：706
+
+![スピードとラムを中心にしたランの結果](../../assets/images/wanderburg-play/end-run.avif)
+
+*スピード＋ラム寄りの構成で2体のボスを撃破したラン。筆者撮影。*
 
 最初に遊んだときは単純に戦闘テンポの良さが印象に残ったが、何度かランを重ねるとビルドを変える面白さも見えてきた。
 
