@@ -159,6 +159,14 @@ const categories = [...categoryCounts.entries()].sort(([a], [b]) => {
       )
     }
 
+    <section class="sidebar-section sidebar-toc" data-article-toc hidden>
+      <p class="sidebar-section__eyebrow">// contents</p>
+      <h2>目次</h2>
+      <nav aria-label="この記事の目次">
+        <ol class="toc-list" data-article-toc-list></ol>
+      </nav>
+    </section>
+
     {
       categories.length > 0 && (
         <section class="sidebar-section sidebar-section--compact sidebar-extra">
@@ -191,12 +199,6 @@ const categories = [...categoryCounts.entries()].sort(([a], [b]) => {
     </section>
 
     <RakutenMotionWidget variant="sidebar" />
-
-    <section class="sidebar-section sidebar-toc" data-article-toc hidden>
-      <p class="sidebar-section__eyebrow">// contents</p>
-      <h2>この記事の目次</h2>
-      <ol class="toc-list" data-article-toc-list></ol>
-    </section>
   </div>
 </aside>
 
@@ -213,8 +215,10 @@ const categories = [...categoryCounts.entries()].sort(([a], [b]) => {
 
       const item = document.createElement('li');
       const link = document.createElement('a');
+      const label = heading.textContent?.trim() || `セクション ${index + 1}`;
       link.href = `#${heading.id}`;
-      link.textContent = heading.textContent?.trim() || `セクション ${index + 1}`;
+      link.textContent = label;
+      link.title = label;
       item.appendChild(link);
       tocList.appendChild(item);
     });
@@ -391,45 +395,47 @@ const categories = [...categoryCounts.entries()].sort(([a], [b]) => {
   .sidebar-toc {
     position: sticky;
     top: 6rem;
+    overflow-y: auto;
+    max-height: calc(100vh - 7rem);
+    padding: 0.9rem;
+  }
+
+  .sidebar-toc h2 {
+    margin-bottom: 0.55rem;
+    font-size: 0.98rem;
   }
 
   .toc-list {
     display: grid;
-    gap: 0;
+    gap: 0.22rem;
     margin: 0;
     padding: 0;
     list-style: none;
-    counter-reset: toc;
-  }
-
-  .toc-list li {
-    counter-increment: toc;
-  }
-
-  .toc-list li + li {
-    border-top: 1px solid var(--line);
   }
 
   .toc-list a {
-    display: grid;
-    grid-template-columns: 1.6rem minmax(0, 1fr);
-    gap: 0.4rem;
-    padding-block: 0.65rem;
+    display: -webkit-box;
+    overflow: hidden;
+    padding: 0.55rem 0.65rem;
+    border-left: 2px solid transparent;
+    background: rgba(255, 255, 255, 0.18);
     color: var(--ink-soft);
-    font-size: 0.72rem;
-    line-height: 1.55;
+    font-size: 0.76rem;
+    line-height: 1.6;
     text-decoration: none;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
 
-  .toc-list a::before {
-    color: var(--accent);
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    content: counter(toc, decimal-leading-zero);
+  .toc-list a:hover,
+  .toc-list a:focus-visible {
+    border-left-color: var(--accent);
+    background: rgba(221, 92, 62, 0.07);
+    color: var(--ink);
   }
 
-  .toc-list a:hover {
-    color: var(--accent);
+  :global(.prose h2[id]) {
+    scroll-margin-top: 6rem;
   }
 
   @media (max-width: 1040px) {
