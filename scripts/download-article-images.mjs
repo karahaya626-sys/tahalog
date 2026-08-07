@@ -23,6 +23,22 @@ const assets = [
     destination: 'src/assets/images/wanderburg/screenshot-2.avif',
     url: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3624140/extras/e26fc58ea12a3dadbc4fb82bb2545f82.avif?t=1776354662',
   },
+  {
+    destination: 'src/assets/images/moonlighter/header.jpg',
+    url: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/606150/b6b0789b397ed98c8c5871dd2f99945a8fea0332/header.jpg?t=1782880501',
+  },
+  {
+    destination: 'src/assets/images/moonlighter/screenshot-1.jpg',
+    url: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/606150/ss_12301c80d516d688eb1d18e214df8459679e8e60.1920x1080.jpg?t=1782880501',
+  },
+  {
+    destination: 'src/assets/images/moonlighter/screenshot-2.jpg',
+    url: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/606150/ss_1ea2e271edeed3d9a78687316f1464050776984d.1920x1080.jpg?t=1782880501',
+  },
+  {
+    destination: 'src/assets/images/moonlighter/screenshot-3.jpg',
+    url: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/606150/ss_3a7c6a55fd94bee28c2cf1fa5e13e51de17b75ac.1920x1080.jpg?t=1782880501',
+  },
 ];
 
 const root = process.cwd();
