@@ -16,12 +16,12 @@ const assets = [
     url: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4165740/extras/23336b2169b9cc03dc38b6e896ef66b2.avif?t=1780866011',
   },
   {
-    destination: 'src/assets/images/wanderburg/screenshot-1.avif',
-    url: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3624140/extras/9ee8a002038fb47b68c47a6168182349.avif?t=1776354662',
+    destination: 'src/assets/images/wanderburg/screenshot-1.jpg',
+    url: 'https://cdn.mos.cms.futurecdn.net/yciqmHmPQaY2kyoMecwNTG.jpg',
   },
   {
-    destination: 'src/assets/images/wanderburg/screenshot-2.avif',
-    url: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3624140/extras/e26fc58ea12a3dadbc4fb82bb2545f82.avif?t=1776354662',
+    destination: 'src/assets/images/wanderburg/screenshot-2.jpg',
+    url: 'https://cdn.mos.cms.futurecdn.net/GxL8XzQjt8JACWSnJG6qXG.jpg',
   },
   {
     destination: 'src/assets/images/moonlighter/header.jpg',
