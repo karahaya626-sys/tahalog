@@ -235,6 +235,8 @@ const categories = [...categoryCounts.entries()].sort(([a], [b]) => {
 
   .article-sidebar__inner {
     display: grid;
+    height: 100%;
+    align-content: start;
     gap: 2.2rem;
   }
 
@@ -450,6 +452,7 @@ const categories = [...categoryCounts.entries()].sort(([a], [b]) => {
     }
 
     .article-sidebar__inner {
+      height: auto;
       grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
       margin-top: 1.5rem;
     }
