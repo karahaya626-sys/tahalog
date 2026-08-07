@@ -30,10 +30,18 @@ const isSidebar = variant === 'sidebar';
         </>
       ) : (
         <>
-          <!-- MAF Rakuten Widget FROM HERE -->
-          <script is:inline type="text/javascript">MafRakutenWidgetParam=function() { return{ size:'600x200',design:'slide',recommend:'on',auto_mode:'on',a_id:'5734682', border:'off'};};</script>
-          <script is:inline type="text/javascript" src="https://dn.msmstatic.com/site/rakuten/widget.js"></script>
-          <!-- MAF Rakuten Widget TO HERE -->
+          <div class="article-widget article-widget--desktop">
+            <!-- MAF Rakuten Widget FROM HERE -->
+            <script is:inline type="text/javascript">MafRakutenWidgetParam=function() { return{ size:'600x200',design:'slide',recommend:'on',auto_mode:'on',a_id:'5734682', border:'off'};};</script>
+            <script is:inline type="text/javascript" src="https://dn.msmstatic.com/site/rakuten/widget.js"></script>
+            <!-- MAF Rakuten Widget TO HERE -->
+          </div>
+          <div class="article-widget article-widget--mobile">
+            <!-- MAF Rakuten Widget FROM HERE -->
+            <script is:inline type="text/javascript">MafRakutenWidgetParam=function() { return{ size:'300x250',design:'slide',recommend:'on',auto_mode:'on',a_id:'5734682', border:'off'};};</script>
+            <script is:inline type="text/javascript" src="https://dn.msmstatic.com/site/rakuten/widget.js"></script>
+            <!-- MAF Rakuten Widget TO HERE -->
+          </div>
         </>
       )
     }
@@ -94,6 +102,10 @@ const isSidebar = variant === 'sidebar';
     min-height: 200px;
   }
 
+  .article-widget--mobile {
+    display: none;
+  }
+
   .affiliate-widget__policy {
     display: inline-block;
     margin-top: 0.8rem;
@@ -121,9 +133,22 @@ const isSidebar = variant === 'sidebar';
   }
 
   @media (max-width: 720px) {
+    .affiliate-widget--mobile {
+      width: min(100%, 22rem);
+    }
+
     .affiliate-widget--mobile .affiliate-widget__body {
-      overflow-x: auto;
-      justify-content: flex-start;
+      min-height: 250px;
+      overflow: hidden;
+      justify-content: center;
+    }
+
+    .article-widget--desktop {
+      display: none;
+    }
+
+    .article-widget--mobile {
+      display: block;
     }
   }
 </style>
