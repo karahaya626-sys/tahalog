@@ -94,6 +94,22 @@ const isSidebar = variant === 'sidebar';
     width: 100%;
   }
 
+  /*
+   * 記事本文の .prose img { width: 100% } が楽天ウィジェット内部の
+   * 商品画像や1pxの計測画像へ波及すると、計測画像が巨大化して余白に見える。
+   * ウィジェット内だけ画像スタイルを元に戻して干渉を防ぐ。
+   */
+  .affiliate-widget :global(img) {
+    width: auto !important;
+    max-width: none !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
   .affiliate-widget--sidebar .affiliate-widget__body {
     min-height: 600px;
   }
