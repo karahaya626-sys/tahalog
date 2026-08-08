@@ -21,6 +21,34 @@ const year = new Date().getFullYear();
   </div>
 </footer>
 
+<script>
+  const platformInfo = document.querySelector<HTMLElement>('.platform-info');
+
+  if (platformInfo) {
+    const platformValue = platformInfo.querySelector<HTMLElement>('.platform-info__value')?.textContent?.trim() ?? '';
+    const platformNote = platformInfo.querySelector<HTMLElement>('.platform-info__note')?.textContent?.trim() ?? '';
+    const platformText = [platformValue, platformNote].filter(Boolean).join(' / ');
+    const platformLabels = new Set(['対応OS', 'Steam対応OS', 'プラットフォーム', '対応プラットフォーム']);
+    let syncedExistingRow = false;
+
+    document.querySelectorAll<HTMLTableRowElement>('.prose table tr').forEach((row) => {
+      const cells = row.querySelectorAll<HTMLTableCellElement>('th, td');
+      if (cells.length < 2) return;
+
+      const label = cells[0]?.textContent?.trim() ?? '';
+      if (!platformLabels.has(label)) return;
+
+      cells[0].textContent = '対応プラットフォーム';
+      cells[1].textContent = platformText;
+      syncedExistingRow = true;
+    });
+
+    if (syncedExistingRow) {
+      platformInfo.hidden = true;
+    }
+  }
+</script>
+
 <style>
   .site-footer {
     margin-top: 7rem;
