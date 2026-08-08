@@ -31,7 +31,7 @@ Steamストアでは2026年8月6日リリースと案内されており、製品
 | 開発・販売 | Sleepless Wizards |
 | ジャンル | 落ち物パズル・デッキ構築・ローグライト |
 | プレイ人数 | シングルプレイ |
-| 対応OS | Windows / macOS / Linux |
+| 対応プラットフォーム | PC（Steam：Windows / macOS / Linux） / PS5・Xbox・Nintendo Switch版は現時点で発表なし |
 | 日本語 | インターフェースに対応 |
 | 操作 | キーボード・ゲームパッド |
 | 製品版のブロック数 | 65種類 |
