@@ -43,12 +43,6 @@ const otherOpeners: Record<string, string[]> = {
   ],
 };
 
-function truncate(value: string, maxLength: number): string {
-  const chars = Array.from(value.trim());
-  if (chars.length <= maxLength) return value.trim();
-  return `${chars.slice(0, maxLength).join('')}…`;
-}
-
 function stableIndex(value: string, length: number): number {
   if (length <= 1) return 0;
   return Array.from(value).reduce((total, char) => total + (char.codePointAt(0) ?? 0), 0) % length;
@@ -59,13 +53,8 @@ function buildArticleText(post: BlogPost): string {
     ? gameOpeners
     : (otherOpeners[post.data.category] ?? ['📝 新しく記事にした！']);
   const opener = openers[stableIndex(post.id, openers.length)];
-  const title = truncate(post.data.title, 62);
-  const description = truncate(post.data.description, 54);
-  const closer = post.data.category === 'Games'
-    ? '気になったポイントをざっくりまとめた👇'
-    : '選んだ理由や気になったところをまとめた👇';
 
-  return `${opener}\n\n${title}\n\n${description}\n\n${closer}`;
+  return `${opener}\n\n${post.data.title}`;
 }
 
 function buildIntent(text: string, url: string, hashtags: string[]): string {
@@ -92,11 +81,6 @@ const introCopyText = buildCopyText(introText, `${SITE_URL}/`, introHashtags);
     <header class="x-helper__header">
       <p class="eyebrow">// PRIVATE TOOL</p>
       <h1>X投稿アシスト</h1>
-      <p>
-        投稿文を少し人間っぽく、テンション高めに自動生成する管理用ページ。
-        内容を確認して「Xで投稿」を押せば、あとは投稿ボタンを押すだけ。
-      </p>
-      <p class="private-note">このページはCloudflare Accessで本人だけ閲覧できる状態にする前提。</p>
     </header>
 
     <section class="post-section" aria-labelledby="intro-post-title">
@@ -184,7 +168,6 @@ const introCopyText = buildCopyText(introText, `${SITE_URL}/`, introHashtags);
   }
 
   .x-helper__header {
-    max-width: 700px;
     margin-bottom: 4rem;
   }
 
@@ -198,25 +181,10 @@ const introCopyText = buildCopyText(introText, `${SITE_URL}/`, introHashtags);
   }
 
   h1 {
-    margin: 0 0 1.2rem;
+    margin: 0;
     color: var(--ink);
     font-size: clamp(2.3rem, 6vw, 4rem);
     letter-spacing: -0.055em;
-  }
-
-  .x-helper__header > p {
-    margin: 0;
-    color: var(--ink-soft);
-    line-height: 1.9;
-  }
-
-  .x-helper__header .private-note {
-    margin-top: 1rem;
-    padding: 0.75rem 0.9rem;
-    border-left: 3px solid var(--accent);
-    background: rgba(221, 92, 62, 0.08);
-    color: var(--muted);
-    font-size: 0.8rem;
   }
 
   .post-section + .post-section {
