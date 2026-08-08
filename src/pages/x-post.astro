@@ -1,0 +1,302 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { formatDate, getPostUrl, getPublishedPosts, type BlogPost } from '../lib/posts';
+
+const SITE_URL = 'https://tahalog.com';
+const recentPosts = (await getPublishedPosts()).slice(0, 12);
+
+const introText = `🎮 taha.log() はじめました。\n\nSteam・インディーゲームを中心に、気になったゲームや体験版、アップデート情報などをゆるく記録していく個人ブログです。\n\n日本語情報がまだ少ないゲームも積極的に拾っていく予定。`;
+const introHashtags = ['Steam', 'インディーゲーム'];
+
+const categoryHashtags: Record<string, string[]> = {
+  Games: ['Steam', 'インディーゲーム'],
+  House: ['家づくり'],
+  Gadgets: ['ガジェット'],
+  AI: ['AI'],
+  Dev: ['個人開発'],
+};
+
+function truncate(value: string, maxLength: number): string {
+  const chars = Array.from(value.trim());
+  if (chars.length <= maxLength) return value.trim();
+  return `${chars.slice(0, maxLength).join('')}…`;
+}
+
+function buildArticleText(post: BlogPost): string {
+  const prefix = post.data.category === 'Games' ? '🎮 新しい記事を公開' : '📝 新しい記事を公開';
+  return `${prefix}\n\n${truncate(post.data.title, 70)}\n\n${truncate(post.data.description, 42)}`;
+}
+
+function buildIntent(text: string, url: string, hashtags: string[]): string {
+  const params = new URLSearchParams({ text, url });
+  if (hashtags.length > 0) params.set('hashtags', hashtags.join(','));
+  return `https://x.com/intent/tweet?${params.toString()}`;
+}
+
+function buildCopyText(text: string, url: string, hashtags: string[]): string {
+  const hashtagText = hashtags.map((tag) => `#${tag}`).join(' ');
+  return [text, url, hashtagText].filter(Boolean).join('\n\n');
+}
+
+const introIntent = buildIntent(introText, `${SITE_URL}/`, introHashtags);
+const introCopyText = buildCopyText(introText, `${SITE_URL}/`, introHashtags);
+---
+
+<BaseLayout
+  title="X投稿アシスト | taha.log()"
+  description="taha.log()の記事をXへ投稿するための補助ページ。"
+  seo={{ noindex: true }}
+>
+  <section class="x-helper page-shell">
+    <header class="x-helper__header">
+      <p class="eyebrow">// X POST HELPER</p>
+      <h1>X投稿アシスト</h1>
+      <p>
+        投稿文を確認して「Xで投稿」を押すと、本文・URL・ハッシュタグを入力した状態でXの投稿画面が開く。
+        最終投稿だけ手動で行う半自動方式である。
+      </p>
+    </header>
+
+    <section class="post-section" aria-labelledby="intro-post-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">// FIRST POST</p>
+          <h2 id="intro-post-title">サイト紹介ポスト</h2>
+        </div>
+        <span class="status">固定用</span>
+      </div>
+
+      <article class="post-card">
+        <pre>{introCopyText}</pre>
+        <div class="post-card__actions">
+          <a class="primary-action" href={introIntent} target="_blank" rel="noopener noreferrer">Xで投稿 →</a>
+          <button type="button" data-copy-post={introCopyText}>投稿文をコピー</button>
+        </div>
+      </article>
+    </section>
+
+    <section class="post-section" aria-labelledby="article-posts-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">// RECENT ARTICLES</p>
+          <h2 id="article-posts-title">最近の記事</h2>
+        </div>
+        <span class="status">{recentPosts.length}件</span>
+      </div>
+
+      <div class="article-posts">
+        {
+          recentPosts.map((post) => {
+            const text = buildArticleText(post);
+            const url = `${SITE_URL}${getPostUrl(post)}`;
+            const hashtags = categoryHashtags[post.data.category] ?? [];
+            const intent = buildIntent(text, url, hashtags);
+            const copyText = buildCopyText(text, url, hashtags);
+
+            return (
+              <article class="article-post-card">
+                <div class="article-post-card__meta">
+                  <span>{post.data.category}</span>
+                  <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+                </div>
+                <h3>{post.data.title}</h3>
+                <pre>{copyText}</pre>
+                <div class="post-card__actions">
+                  <a class="primary-action" href={intent} target="_blank" rel="noopener noreferrer">Xで投稿 →</a>
+                  <button type="button" data-copy-post={copyText}>投稿文をコピー</button>
+                  <a class="sub-action" href={getPostUrl(post)} target="_blank" rel="noopener noreferrer">記事を確認</a>
+                </div>
+              </article>
+            );
+          })
+        }
+      </div>
+    </section>
+  </section>
+</BaseLayout>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-post]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const text = button.dataset.copyPost;
+      if (!text) return;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        const original = button.textContent;
+        button.textContent = 'コピーした';
+        window.setTimeout(() => {
+          button.textContent = original;
+        }, 1400);
+      } catch {
+        button.textContent = 'コピーできませんでした';
+      }
+    });
+  });
+</script>
+
+<style>
+  .x-helper {
+    width: min(920px, calc(100% - 2rem));
+    padding-block: clamp(4rem, 8vw, 7rem);
+  }
+
+  .x-helper__header {
+    max-width: 700px;
+    margin-bottom: 4rem;
+  }
+
+  .eyebrow {
+    margin: 0 0 0.55rem;
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  h1 {
+    margin: 0 0 1.2rem;
+    color: var(--ink);
+    font-size: clamp(2.3rem, 6vw, 4rem);
+    letter-spacing: -0.055em;
+  }
+
+  .x-helper__header > p:last-child {
+    margin: 0;
+    color: var(--ink-soft);
+    line-height: 1.9;
+  }
+
+  .post-section + .post-section {
+    margin-top: 4.5rem;
+  }
+
+  .section-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .section-heading h2 {
+    margin: 0;
+    color: var(--ink);
+    font-size: clamp(1.45rem, 3vw, 1.9rem);
+  }
+
+  .status {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+  }
+
+  .post-card,
+  .article-post-card {
+    padding: clamp(1.1rem, 3vw, 1.5rem);
+    border: 1px solid var(--line-strong);
+    background: rgba(251, 247, 237, 0.72);
+    box-shadow: 0 12px 32px rgba(48, 39, 24, 0.07);
+  }
+
+  .article-posts {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .article-post-card__meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+  }
+
+  .article-post-card__meta span {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .article-post-card h3 {
+    margin: 0.7rem 0 1rem;
+    color: var(--ink);
+    font-size: 1.08rem;
+    line-height: 1.55;
+  }
+
+  pre {
+    overflow-x: auto;
+    margin: 0;
+    padding: 1rem;
+    border: 1px dashed var(--line-strong);
+    background: rgba(255, 255, 255, 0.42);
+    color: var(--ink-soft);
+    font-family: inherit;
+    font-size: 0.88rem;
+    line-height: 1.75;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .post-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.7rem;
+    margin-top: 1rem;
+  }
+
+  .post-card__actions a,
+  .post-card__actions button {
+    min-height: 2.6rem;
+    padding: 0.65rem 0.9rem;
+    border: 1px solid var(--line-strong);
+    background: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .post-card__actions .primary-action {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--paper-light);
+  }
+
+  .post-card__actions a:hover,
+  .post-card__actions button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .post-card__actions .primary-action:hover {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: white;
+  }
+
+  .post-card__actions .sub-action {
+    margin-left: auto;
+    border-color: transparent;
+    color: var(--muted);
+  }
+
+  @media (max-width: 600px) {
+    .section-heading {
+      align-items: start;
+    }
+
+    .post-card__actions .sub-action {
+      width: 100%;
+      margin-left: 0;
+      padding-left: 0;
+    }
+  }
+</style>
