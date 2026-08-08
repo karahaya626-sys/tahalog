@@ -1,16 +1,16 @@
 ---
-title: "『Wanderburg』初心者攻略｜序盤の進め方・装備一覧・おすすめビルド【体験版】"
-description: "『Wanderburg』体験版の初心者向け攻略。序盤の進め方、Captain・Crew・Module・Artifact一覧、AutomaticとAbility、レア度、Speed＋Front Ramビルド、ボス戦のコツをまとめる。"
+title: "『Wanderburg』初心者向けガイド｜装備一覧・ビルドの基本・序盤のコツ【体験版】"
+description: "『Wanderburg』体験版の初心者向けガイド。Captain・Crew・Module・Artifactの装備一覧、AutomaticとAbility、レア度、ビルドの考え方、序盤やボス戦で意識したいコツをまとめる。"
 pubDate: 2026-08-08
 updatedDate: 2026-08-08
-heroImage: '../../assets/images/wanderburg-play/loadout.avif'
+heroImage: '../../assets/images/wanderburg-guide/hero.svg'
 category: "Games"
-tags: ["Wanderburg", "攻略", "初心者", "ローグライト", "Steam"]
+tags: ["Wanderburg", "初心者ガイド", "装備一覧", "ローグライト", "Steam"]
 author: "taha"
 draft: false
 ---
 
-『Wanderburg（ワンダーバーグ）』の体験版を何度か遊び、アンロック画面や強化候補もある程度確認できたので、初心者向けに序盤の進め方をまとめる。
+『Wanderburg（ワンダーバーグ）』の体験版を何度か遊び、アンロック画面や強化候補もある程度確認できたので、**初心者向けガイドとして、装備の種類やビルドの基本、序盤で意識したいこと**をまとめる。
 
 本作は単純に武器を増やすだけではなく、**Captain、Crew、Module、Artifactを組み合わせ、ラン中はAutomaticやAbilityを強化していく**ゲームである。
 
@@ -180,7 +180,7 @@ Speed系も伸ばし、敵へ城そのものを叩き込む構成にしたとこ
 
 ## 海外ではMines＋Speed特化も人気
 
-ここからは筆者のプレイ結果ではなく、海外コミュニティの攻略例である。
+ここからは筆者のプレイ結果ではなく、海外コミュニティのビルド例である。
 
 Steamコミュニティでは、**Mines＋Speed**を推す投稿があり、強化優先度として「Mines Ability → Mines Cooldown → Mines passive → Ram Cooldown」が挙げられている。
 

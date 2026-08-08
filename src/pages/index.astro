@@ -5,7 +5,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getPublishedPosts } from '../lib/posts';
 
 const allPosts = await getPublishedPosts();
-const posts = allPosts.slice(0, 3);
+const posts = allPosts.slice(0, 6);
 const now = new Date();
 const currentYear = now.getFullYear();
 const fieldDate = new Intl.DateTimeFormat('ja-JP', {
@@ -407,11 +407,6 @@ const categories = [...new Set(allPosts.map((post) => post.data.category))]
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .post-grid :global(article:last-child) {
-      grid-column: 1 / -1;
-      width: calc(50% - 0.675rem);
-    }
-
     .about-note {
       grid-template-columns: 1fr 1fr;
     }
@@ -456,11 +451,6 @@ const categories = [...new Set(allPosts.map((post) => post.data.category))]
 
     .post-grid {
       grid-template-columns: 1fr;
-    }
-
-    .post-grid :global(article:last-child) {
-      grid-column: auto;
-      width: auto;
     }
 
     .about-note {
