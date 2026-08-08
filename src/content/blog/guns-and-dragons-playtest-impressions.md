@@ -5,6 +5,7 @@ pubDate: 2026-08-02
 updatedDate: 2026-08-04
 heroImage: '../../assets/images/guns-and-dragons/battle.png'
 category: Games
+tags: ["Guns & Dragons", "ローグライト", "FPS", "Steam", "プレイテスト"]
 ---
 
 > ※本記事は、2026年7月30日から8月10日まで実施されている初回Steamプレイテスト版を約1時間遊んだ時点の感想に、その後の追加プレイで分かった内容を追記しています。開発中のため、正式版では内容が変更される可能性があります。
