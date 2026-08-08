@@ -16,8 +16,39 @@ const categoryHashtags: Record<string, string[]> = {
   Dev: ['個人開発'],
 };
 
+const articleKeyPoints: Record<string, string> = {
+  'astro-cloudflare-pages-blog-build-log': 'Astro＋Cloudflare Pagesでブログを作るまでの流れと、実際に詰まったポイントをまとめた。',
+  'ball-x-pit-overview': '60種類以上のボール融合と拠点建築を組み合わせた、Steamで「圧倒的に好評」のローグライト。',
+  'demon-lord-just-a-block-overview': '自分が動くと敵も動く半ターン制。Steamでは約1,900件・96％好評。',
+  'echoes-of-mystralia-overview': 'Memoryを組み合わせて魔法そのものを自作。8月11日に早期アクセス開始予定。',
+  'emberward-first-impressions': 'テトリスのようなブロックで迷路を作るローグライトTD。約10時間遊んだ感想。',
+  'factomancer-demo-play-report': '工場は日ごとにリセットされず、前日までの生産ラインへ継ぎ足しながら育てていく。',
+  'factomancer-official-overview': '工場建設にランダムイベント、呪文、レリックを組み合わせたローグライト。',
+  'guildrun-overview': '戦闘は自動、編成と育成が主役。PvEに特化したローグライク・オートバトラー。',
+  'guns-and-dragons-beginner-weapon-crafting': '上位武器を狙うならルーンの使い方が重要。武器作成の流れを整理。',
+  'guns-and-dragons-playtest-impressions': 'Gunfire Reborn寄りのローグライトFPS。プレイテストを実際に遊んだ感想。',
+  'hello-tahalog': 'taha.log()を始めたときの最初の記録。',
+  'house-reasons': '平屋やコンパクトな間取りなど、家づくりで「なぜそうしたか」を記録。',
+  'kubb-overview': '65種類のブロックに災害・異次元まで加わる、落ち物パズル×デッキ構築ローグライト。',
+  'laundry-room-circulight-mega-r': '2帖のランドリールームでサーキュライトを選んだ理由とモデル比較をまとめた。',
+  'lazy-witchs-factory-overview': '30分で工場を作って借金返済。悪魔との契約で生産ルールまで変わる。',
+  'moonbrella-overview': 'ジャンプボタンなし。傘だけで移動するメトロイドヴァニアで、体験版はSteamで98％好評。',
+  'moonlighter-free-steam-2026': '8月9日10時までSteamで100％オフ。期限内に入手すれば永久保持。',
+  'sir-we-have-an-orc-problem-overview': '数万体のオークを火力で迎え撃つ、周回強化型のタワーディフェンス。',
+  'swarmdustry-demo-impressions': 'ベルトや電線ではなく虫が物流と電力を担当。体験版を約1時間プレイ。',
+  'vena-overview': '六角形タイルをつないで資源網を作る、ボードゲーム感のある自動化ローグライク。',
+  'wanderburg-beginner-guide': '序盤で迷いやすい操作や強化のポイントを、体験版ベースで整理。',
+  'wanderburg-demo-impressions': '大きくて不安定な城を操作する感覚が面白い。体験版を実際に遊んだ感想。',
+  'wanderburg-overview': '車輪付きの城で村や要塞を取り込み、兵器を増やしながら巨大化していく。',
+};
+
 function buildArticleText(post: BlogPost): string {
-  return post.data.title;
+  const postId = post.id.replace(/\.(md|mdx)$/, '');
+  const keyPoint = articleKeyPoints[postId];
+
+  return keyPoint
+    ? `${post.data.title}\n\n${keyPoint}`
+    : post.data.title;
 }
 
 function buildIntent(text: string, url: string, hashtags: string[]): string {
