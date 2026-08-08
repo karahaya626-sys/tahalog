@@ -16,47 +16,8 @@ const categoryHashtags: Record<string, string[]> = {
   Dev: ['個人開発'],
 };
 
-const articleOpeners: Record<string, string> = {
-  'astro-cloudflare-pages-blog-build-log': '💻 Astro＋Cloudflare Pagesでブログを作った流れをまとめた。',
-  'ball-x-pit-overview': '🎮 BALL x PIT、気になって調べてみたらかなり面白そうだった。',
-  'demon-lord-just-a-block-overview': '👀 ブロックを使うこの発想、かなり気になった。',
-  'echoes-of-mystralia-overview': '✨ 雰囲気から気になったので、どんなゲームか調べてみた。',
-  'emberward-first-impressions': '🔥 Emberward、遊んでみたらかなり好きなタイプだった。',
-  'factomancer-demo-play-report': '🏭 Factomancerの体験版を遊んだので、気になったところをまとめた。',
-  'factomancer-official-overview': '🏭 工場×ローグライト好きとしてFactomancerはかなり気になる。',
-  'guildrun-overview': '🎮 Guildrun、気になったのでどんなゲームか調べてみた。',
-  'guns-and-dragons-beginner-weapon-crafting': '🔫 Guns & Dragons、武器作成まわりが分かりにくかったので整理した。',
-  'guns-and-dragons-playtest-impressions': '🔥 Guns & Dragonsのプレイテストを遊んだので感想をまとめた。',
-  'hello-tahalog': '📝 taha.log()を始めたので、最初のログ。',
-  'house-reasons': '🏠 家づくりで「なぜこうしたか」をあとから見返せるようにまとめた。',
-  'kubb-overview': '🧩 落ち物パズル×デッキ構築。KUBB、かなり気になる。',
-  'laundry-room-circulight-mega-r': '🌀 2帖ランドリールームのサーキュライト選び、かなり迷ったのでまとめた。',
-  'lazy-witchs-factory-overview': '🏭 魔女×工場自動化。こういう組み合わせはかなり気になる。',
-  'moonbrella-overview': '🌙 Moonbrella、気になったのでどんなゲームか調べてみた。',
-  'moonlighter-free-steam-2026': '🎁 MoonlighterのSteam無料配布情報をまとめた。',
-  'sir-we-have-an-orc-problem-overview': '👀 Sir, We Have an Orc Problem、タイトルからもう気になる。',
-  'swarmdustry-demo-impressions': '🏭 Swarmdustryの体験版を遊んだ。工場好きとしてかなり気になる内容だった。',
-  'vena-overview': '🎮 Vena、気になったので特徴をざっくり整理した。',
-  'wanderburg-beginner-guide': '🏰 Wanderburg、序盤で迷いやすいところをまとめた。',
-  'wanderburg-demo-impressions': '🏰 Wanderburgの体験版を遊んだ。移動要塞を育てるのがかなり良い。',
-  'wanderburg-overview': '🏰 城ごと動く。Wanderburg、この時点でもう気になる。',
-};
-
-const fallbackOpeners: Record<string, string> = {
-  Games: '🎮 気になったので記事にまとめた！',
-  House: '🏠 家づくりで気になったことをまとめた。',
-  Gadgets: '🔧 選ぶときに気になったことをまとめた。',
-  AI: '🤖 AIまわりで気になったことをまとめた。',
-  Dev: '💻 開発まわりで気になったことをまとめた。',
-};
-
 function buildArticleText(post: BlogPost): string {
-  const postId = post.id.replace(/\.(md|mdx)$/, '');
-  const opener = articleOpeners[postId]
-    ?? fallbackOpeners[post.data.category]
-    ?? '📝 新しく記事にした！';
-
-  return `${opener}\n\n${post.data.title}`;
+  return post.data.title;
 }
 
 function buildIntent(text: string, url: string, hashtags: string[]): string {
