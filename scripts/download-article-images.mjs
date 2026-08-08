@@ -54,6 +54,18 @@ const assets = [
     destination: 'src/assets/images/moonlighter/screenshot-3.jpg',
     url: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/606150/ss_3a7c6a55fd94bee28c2cf1fa5e13e51de17b75ac.1920x1080.jpg?t=1782880501',
   },
+  {
+    destination: 'src/assets/images/demon-lord-just-a-block/hero.jpg',
+    url: 'https://gaming-cdn.com/images/products/21695/screenshot/demon-lord-just-a-block-pc-steam-wallpaper-3.jpg?v=1770130142',
+  },
+  {
+    destination: 'src/assets/images/demon-lord-just-a-block/screenshot-1.jpg',
+    url: 'https://shared.cdn.queniuqe.com/store_item_assets/steam/apps/3720420/a88e38c1a7ee957e4e1bbaf566d2e22f6b8d06fa/ss_a88e38c1a7ee957e4e1bbaf566d2e22f6b8d06fa.1920x1080.jpg?t=1777690212',
+  },
+  {
+    destination: 'src/assets/images/demon-lord-just-a-block/screenshot-2.jpg',
+    url: 'https://shared.cdn.queniuqe.com/store_item_assets/steam/apps/3720420/18e228eec558d52cf2a8b38c2ad023ee33de70b0/ss_18e228eec558d52cf2a8b38c2ad023ee33de70b0.1920x1080.jpg?t=1777690212',
+  },
 ];
 
 const root = process.cwd();
