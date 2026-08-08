@@ -82,6 +82,22 @@ const assets = [
     destination: 'src/assets/images/echoes-of-mystralia/screenshot-3.jpg',
     url: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/974480/ss_20e52ea24e51ee6a6d7574a5f482645c7e393d2d.1920x1080.jpg?t=1741082452',
   },
+  {
+    destination: 'src/assets/images/moonbrella/header.jpg',
+    url: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3433800/347bfc9eb9c52666711a273c6fb8cf9652bbd715/header.jpg?t=1781400369',
+  },
+  {
+    destination: 'src/assets/images/moonbrella/screenshot-1.jpg',
+    url: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3433800/71c2aad49211558bec393b5413dbc008c5d02028/ss_71c2aad49211558bec393b5413dbc008c5d02028.1920x1080.jpg?t=1771300222',
+  },
+  {
+    destination: 'src/assets/images/moonbrella/screenshot-2.jpg',
+    url: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3433800/ss_26e7d7d9ff5b8afc84f5e1fdf5208d6db6ff30de.1920x1080.jpg?t=1746157716',
+  },
+  {
+    destination: 'src/assets/images/moonbrella/screenshot-3.jpg',
+    url: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3433800/ss_b3cf8941963a091918c3630765dd842dbcad6493.1920x1080.jpg?t=1746157716',
+  },
 ];
 
 const root = process.cwd();
