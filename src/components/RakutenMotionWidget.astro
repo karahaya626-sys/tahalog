@@ -30,18 +30,24 @@ const isSidebar = variant === 'sidebar';
         </>
       ) : (
         <>
-          <div class="article-widget article-widget--desktop">
-            <!-- MAF Rakuten Widget FROM HERE -->
-            <script is:inline type="text/javascript">MafRakutenWidgetParam=function() { return{ size:'600x200',design:'slide',recommend:'on',auto_mode:'on',a_id:'5734682', border:'off'};};</script>
-            <script is:inline type="text/javascript" src="https://dn.msmstatic.com/site/rakuten/widget.js"></script>
-            <!-- MAF Rakuten Widget TO HERE -->
-          </div>
-          <div class="article-widget article-widget--mobile">
-            <!-- MAF Rakuten Widget FROM HERE -->
-            <script is:inline type="text/javascript">MafRakutenWidgetParam=function() { return{ size:'300x250',design:'slide',recommend:'on',auto_mode:'on',a_id:'5734682', border:'off'};};</script>
-            <script is:inline type="text/javascript" src="https://dn.msmstatic.com/site/rakuten/widget.js"></script>
-            <!-- MAF Rakuten Widget TO HERE -->
-          </div>
+          <iframe
+            class="article-widget-frame article-widget-frame--desktop"
+            src="/affiliate/rakuten-article-desktop.html"
+            title="楽天おすすめアイテム"
+            width="600"
+            height="200"
+            loading="lazy"
+            scrolling="no"
+          ></iframe>
+          <iframe
+            class="article-widget-frame article-widget-frame--mobile"
+            src="/affiliate/rakuten-article-mobile.html"
+            title="楽天おすすめアイテム"
+            width="300"
+            height="250"
+            loading="lazy"
+            scrolling="no"
+          ></iframe>
         </>
       )
     }
@@ -94,22 +100,6 @@ const isSidebar = variant === 'sidebar';
     width: 100%;
   }
 
-  /*
-   * 記事本文の .prose img { width: 100% } が楽天ウィジェット内部の
-   * 商品画像や1pxの計測画像へ波及すると、計測画像が巨大化して余白に見える。
-   * ウィジェット内だけ画像スタイルを元に戻して干渉を防ぐ。
-   */
-  .affiliate-widget :global(img) {
-    width: auto !important;
-    max-width: none !important;
-    height: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    background: transparent !important;
-    box-shadow: none !important;
-  }
-
   .affiliate-widget--sidebar .affiliate-widget__body {
     min-height: 600px;
   }
@@ -118,8 +108,24 @@ const isSidebar = variant === 'sidebar';
     min-height: 200px;
   }
 
-  .article-widget--mobile {
+  .article-widget-frame {
+    display: block;
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+
+  .article-widget-frame--desktop {
+    width: 600px;
+    height: 200px;
+  }
+
+  .article-widget-frame--mobile {
     display: none;
+    width: 300px;
+    height: 250px;
   }
 
   .affiliate-widget__policy {
@@ -155,15 +161,13 @@ const isSidebar = variant === 'sidebar';
 
     .affiliate-widget--mobile .affiliate-widget__body {
       min-height: 250px;
-      overflow: hidden;
-      justify-content: center;
     }
 
-    .article-widget--desktop {
+    .article-widget-frame--desktop {
       display: none;
     }
 
-    .article-widget--mobile {
+    .article-widget-frame--mobile {
       display: block;
     }
   }
