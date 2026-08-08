@@ -38,6 +38,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           攻略サイトというより、あとから自分でも振り返れるログ。初めて遊んだときに感じたことや、海外コミュニティで見かけた情報も、自分の体験と分けながら残していきます。
         </p>
 
+        <p>
+          Xでは記事の更新情報に加えて、Steamで見つけた気になるゲームや体験版などもゆるく投稿しています。
+        </p>
+
         <div class="focus-list" aria-label="主なテーマ">
           <span>Games</span>
           <span>AI</span>
@@ -45,7 +49,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <span>Gadgets</span>
         </div>
 
-        <a class="articles-link" href="/blog/">記事を読む <span aria-hidden="true">→</span></a>
+        <div class="profile-links">
+          <a class="articles-link" href="/blog/">記事を読む <span aria-hidden="true">→</span></a>
+          <a
+            class="x-link"
+            href="https://x.com/tahalogcom"
+            target="_blank"
+            rel="me noopener noreferrer"
+          >
+            X / @tahalogcom <span aria-hidden="true">↗</span>
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -137,11 +151,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-size: 0.75rem;
   }
 
-  .articles-link {
+  .profile-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 2.2rem;
+  }
+
+  .articles-link,
+  .x-link {
     display: inline-flex;
     align-items: center;
     gap: 0.7rem;
-    margin-top: 2.2rem;
     padding: 0.9rem 1.1rem;
     border: 1px solid var(--accent);
     color: var(--accent);
@@ -151,7 +172,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     text-decoration: none;
   }
 
-  .articles-link:hover {
+  .x-link {
+    border-color: var(--line-strong);
+    color: var(--ink-soft);
+  }
+
+  .articles-link:hover,
+  .x-link:hover {
+    border-color: var(--accent);
     background: var(--accent);
     color: var(--paper-light);
   }
