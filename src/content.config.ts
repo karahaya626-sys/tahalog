@@ -24,7 +24,6 @@ const blog = defineCollection({
 
       author: z.string().default('taha'),
       draft: z.boolean().default(false),
-      noindex: z.boolean().default(false),
     }),
 });
 
