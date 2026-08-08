@@ -31,6 +31,7 @@ const { tag, posts } = Astro.props;
 <BaseLayout
   title={`#${tag}の記事 | taha.log()`}
   description={`taha.log()の「${tag}」タグが付いた記事一覧です。`}
+  seo={{ noindex: true }}
 >
   <section class="archive page-shell">
     <header class="archive__header">
