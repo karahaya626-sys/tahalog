@@ -66,6 +66,22 @@ const assets = [
     destination: 'src/assets/images/demon-lord-just-a-block/screenshot-2.jpg',
     url: 'https://shared.cdn.queniuqe.com/store_item_assets/steam/apps/3720420/18e228eec558d52cf2a8b38c2ad023ee33de70b0/ss_18e228eec558d52cf2a8b38c2ad023ee33de70b0.1920x1080.jpg?t=1777690212',
   },
+  {
+    destination: 'src/assets/images/echoes-of-mystralia/hero.jpg',
+    url: 'https://echoesofmystralia.com/wp-content/uploads/2026/02/Echoes_of_Mystralia_keyart_16x9_demo_EN.jpg',
+  },
+  {
+    destination: 'src/assets/images/echoes-of-mystralia/screenshot-1.jpg',
+    url: 'https://echoesofmystralia.com/wp-content/uploads/2026/02/Echoes_of_Mystralia_screenshots_combat_spell_01.jpg',
+  },
+  {
+    destination: 'src/assets/images/echoes-of-mystralia/screenshot-2.jpg',
+    url: 'https://echoesofmystralia.com/wp-content/uploads/2026/02/Echoes_of_Mystralia_screenshots_memory.jpg',
+  },
+  {
+    destination: 'src/assets/images/echoes-of-mystralia/screenshot-3.jpg',
+    url: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/974480/ss_20e52ea24e51ee6a6d7574a5f482645c7e393d2d.1920x1080.jpg?t=1741082452',
+  },
 ];
 
 const root = process.cwd();
