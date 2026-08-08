@@ -9,7 +9,10 @@ export default defineConfig({
   integrations: [
     mdx(),
     sitemap({
-      filter: (page) => page !== 'https://tahalog.com/404/',
+      filter: (page) => {
+        const { pathname } = new URL(page);
+        return pathname !== '/404/' && !pathname.startsWith('/tag/');
+      },
     }),
   ],
 
