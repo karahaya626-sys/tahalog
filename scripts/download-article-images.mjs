@@ -4,6 +4,21 @@ import process from 'node:process';
 
 const assets = [
   {
+    destination: 'src/assets/images/ball-x-pit/header.jpg',
+    url: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2062430/5e7885a3802fe7d38b92fdeb44888b4828a842ba/header_alt_assets_2.jpg?t=1786035856',
+    force: true,
+  },
+  {
+    destination: 'src/assets/images/ball-x-pit/gameplay.jpg',
+    url: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2062430/9ec0c5e5675c79ae2ff721f4ba2aa7844107588e/ss_9ec0c5e5675c79ae2ff721f4ba2aa7844107588e.1920x1080.jpg?t=1786035856',
+    force: true,
+  },
+  {
+    destination: 'src/assets/images/ball-x-pit/naturalist-update.jpg',
+    url: 'https://i.ytimg.com/vi/1J8s-2ZR0T4/maxresdefault.jpg',
+    force: true,
+  },
+  {
     destination: 'src/assets/images/vena/header.jpg',
     url: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4165740/846a303db5b2fcc00f354cb79258a4ae4842cd0a/header.jpg?t=1780866011',
   },
@@ -52,10 +67,10 @@ async function isUsableFile(filePath) {
   }
 }
 
-async function download({ destination, url }) {
+async function download({ destination, url, force = false }) {
   const outputPath = path.resolve(root, destination);
 
-  if (await isUsableFile(outputPath)) {
+  if (!force && await isUsableFile(outputPath)) {
     console.log(`skip: ${destination}`);
     return;
   }
