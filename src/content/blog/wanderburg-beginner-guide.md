@@ -2,7 +2,7 @@
 title: "『Wanderburg』初心者向けガイド｜装備一覧・ビルドの基本・序盤のコツ【体験版】"
 description: "『Wanderburg』体験版の初心者向けガイド。Captain・Crew・Module・Artifactの装備一覧、AutomaticとAbility、レア度、ビルドの考え方、序盤やボス戦で意識したいコツをまとめる。"
 pubDate: 2026-08-08
-updatedDate: 2026-08-08
+updatedDate: 2026-08-09
 heroImage: '../../assets/images/wanderburg-guide/hero.svg'
 category: "Games"
 tags: ["Wanderburg", "初心者ガイド", "装備一覧", "ローグライト", "Steam"]
@@ -18,7 +18,7 @@ draft: false
 
 この記事では筆者がDemo 1.5で実際に確認した内容を中心に、海外コミュニティで見かけたビルド例も分けて紹介する。
 
-> ※2026年8月8日時点の体験版（Demo 1.5）をもとにしている。正式版や今後のアップデートで性能・名称・バランスが変わる可能性がある。
+> ※2026年8月9日時点の体験版（Demo 1.5）をもとにしている。正式版や今後のアップデートで性能・名称・バランスが変わる可能性がある。
 
 ゲーム自体の紹介は[『Wanderburg』はどんなゲーム？](/blog/wanderburg-overview/)、実際に遊んだ感想は[『Wanderburg』体験版プレイ感想](/blog/wanderburg-demo-impressions/)でまとめている。
 
@@ -36,7 +36,7 @@ draft: false
 
 ラン開始前の画面には、Vehicle、Captain、Crew、Module、Artifactが並んでいる。
 
-![ラン開始前のビルド選択画面](../../assets/images/wanderburg-play/loadout.avif)
+![ラン開始前のビルド選択画面](../../assets/images/wanderburg-play/loadout.png)
 
 *筆者撮影。Demo 1.5では複数カテゴリにかなりのアンロック枠が用意されている。*
 
@@ -95,7 +95,7 @@ Moduleは城そのものに取り付ける兵装・機能である。
 
 WanderburgのModuleで特に覚えておきたいのが、**AutomaticとAbilityが別物**という点である。
 
-![Automatic・Ability・Cooldownのアップグレード](../../assets/images/wanderburg-play/upgrade.avif)
+![Automatic・Ability・Cooldownのアップグレード](../../assets/images/wanderburg-play/upgrade.png)
 
 *筆者撮影。CannonにはAbility側とAutomatic側があり、Cooldown強化では両方の発動間隔が短くなっている。*
 
@@ -174,9 +174,28 @@ Speed系も伸ばし、敵へ城そのものを叩き込む構成にしたとこ
 
 もちろん1ランだけで「最強ビルド」と断定するつもりはないが、少なくとも特化ビルドがしっかり機能することは確認できた。
 
-![Speed＋Front Ramビルドのリザルト](../../assets/images/wanderburg-play/end-run.avif)
+![Speed＋Front Ramビルドのリザルト](../../assets/images/wanderburg-play/end-run.png)
 
 *筆者撮影。10分53秒生存、Upgrade Level 24、ボス2体を撃破したラン。*
+
+## 4体目のボス撃破でDemoクリア
+
+その後さらにランを進め、筆者のプレイでは**4体目のボスを倒したところで「Game Won!」となり、Demo 1.5をクリアできた**。
+
+このクリアランで特に手応えがあったのは**Top Mortar**である。範囲へまとめて砲撃できるため扱いやすく、筆者の体感では最後までかなり頼れる主力になった。
+
+ただし、これだけで「Mortarが最強」と断定するつもりはない。前述のSpeed＋Front Ramでもボスへ大きなダメージを出せたので、**近接ならRam、遠距離・範囲ならMortarのように、使いやすいModuleへしっかり寄せる**のが分かりやすいと感じた。
+
+クリア画面で確認できた記録は以下の通りである。
+
+- Time Survived：19分31秒
+- Gold Collected：8,750
+- Upgrade Level：48
+- Castle Size：4
+- Vehicles Destroyed：192
+- Units Consumed：844
+
+画面には現在所持Goldとして9,294も表示されているが、ラン中に集めたGoldは「Gold Collected」の8,750である。
 
 ## 海外ではMines＋Speed特化も人気
 
