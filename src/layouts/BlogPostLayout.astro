@@ -518,6 +518,12 @@ const relatedPosts = getRelatedPosts(post, publishedPosts);
       padding: 0.4rem;
     }
 
+    .hero-image :global(img) {
+      height: auto;
+      max-height: none;
+      object-fit: contain;
+    }
+
     .prose :global(h2) {
       margin-top: 3.3rem;
     }
