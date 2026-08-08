@@ -4,6 +4,7 @@ import DefaultPostImage from '../assets/about-tahalog-desk.jpg';
 import ArticleSidebar from '../components/ArticleSidebar.astro';
 import PostCard from '../components/PostCard.astro';
 import RakutenMotionWidget from '../components/RakutenMotionWidget.astro';
+import { getGamePlatformInfo } from '../lib/gamePlatforms';
 import type { BlogPost } from '../lib/posts';
 import {
   formatDate,
@@ -38,6 +39,7 @@ const imageAlt = heroImage || remoteDisplayImage
 const publishedPosts = await getPublishedPosts();
 const indexableTags = getIndexableTags(publishedPosts);
 const relatedPosts = getRelatedPosts(post, publishedPosts);
+const gamePlatformInfo = category === 'Games' ? getGamePlatformInfo(tags) : undefined;
 ---
 
 <BaseLayout
@@ -81,6 +83,18 @@ const relatedPosts = getRelatedPosts(post, publishedPosts);
           )
         }
       </div>
+
+      {
+        gamePlatformInfo && (
+          <div class="platform-info" aria-label="対応プラットフォーム">
+            <span class="platform-info__label">対応プラットフォーム</span>
+            <span class="platform-info__value">{gamePlatformInfo.platforms}</span>
+            {gamePlatformInfo.note && (
+              <span class="platform-info__note">{gamePlatformInfo.note}</span>
+            )}
+          </div>
+        )
+      }
 
       <p class="affiliate-disclosure">
         <span class="affiliate-disclosure__badge">PR</span>
@@ -224,6 +238,36 @@ const relatedPosts = getRelatedPosts(post, publishedPosts);
   .dates time {
     margin-left: 0.35rem;
     color: var(--ink);
+  }
+
+  .platform-info {
+    display: grid;
+    gap: 0.2rem;
+    max-width: 47rem;
+    margin: 1rem 0 0;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid var(--line);
+    background: rgba(251, 247, 237, 0.52);
+    line-height: 1.6;
+  }
+
+  .platform-info__label {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+
+  .platform-info__value {
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .platform-info__note {
+    color: var(--muted);
+    font-size: 0.68rem;
   }
 
   .affiliate-disclosure {
