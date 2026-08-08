@@ -28,7 +28,7 @@ Steamで次に遊ぶゲームとして、工場建設×ローグライトの『F
 | 開発・販売 | Voltige Games |
 | ジャンル | 工場建設・自動化・ローグライト |
 | プレイ人数 | シングルプレイ |
-| 対応OS | Windows / macOS |
+| 対応プラットフォーム | PC（Steam：Windows / macOS） / PS5・Xbox・Nintendo Switch版は現時点で発表なし |
 | 日本語 | インターフェース・字幕に対応 |
 | 正式版の発売予定 | 2026年第4四半期 |
 | 体験版 | Steamで無料配信中 |
