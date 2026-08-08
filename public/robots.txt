@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /x-post/
 
 Sitemap: https://tahalog.com/sitemap-index.xml
