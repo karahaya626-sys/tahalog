@@ -11,7 +11,11 @@ export default defineConfig({
     sitemap({
       filter: (page) => {
         const { pathname } = new URL(page);
-        return pathname !== '/404/' && !pathname.startsWith('/tag/');
+        return (
+          pathname !== '/404/' &&
+          pathname !== '/x-post/' &&
+          !pathname.startsWith('/tag/')
+        );
       },
     }),
   ],
