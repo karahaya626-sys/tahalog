@@ -3,12 +3,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "predev": "node scripts/download-article-images.mjs",
+    "predev": "node scripts/download-article-images.mjs && node scripts/restore-wanderburg-png.mjs",
     "dev": "astro dev",
-    "prebuild": "node scripts/download-article-images.mjs",
+    "prebuild": "node scripts/download-article-images.mjs && node scripts/restore-wanderburg-png.mjs",
     "build": "node scripts/check-article-images.mjs && astro check && astro build",
     "preview": "astro preview",
-    "precheck": "node scripts/download-article-images.mjs",
+    "precheck": "node scripts/download-article-images.mjs && node scripts/restore-wanderburg-png.mjs",
     "check": "astro check",
     "check:article-images": "node scripts/check-article-images.mjs"
   },
