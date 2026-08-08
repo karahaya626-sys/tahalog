@@ -31,7 +31,7 @@ Steam公式では「ブロック崩し、ボール融合、基地建設を組み
 | 販売 | Devolver Digital |
 | 発売日 | 2025年10月15日 |
 | ジャンル | ブロック崩し・ローグライト・拠点建築 |
-| Steam対応OS | Windows / macOS |
+| 対応プラットフォーム | PC（Steam：Windows / macOS） / PS5 / Xbox Series X|S / Nintendo Switch / Nintendo Switch 2 |
 | 日本語 | インターフェイス・字幕に対応 |
 
 基本となる戦闘では、画面下からボールを発射し、壁や敵に反射させながら迫ってくる敵を倒していく。
